@@ -2,4 +2,6 @@
 
 set -ouex pipefail
 
-dnf install -y @cosmic-desktop @cosmic-desktop-apps
+# Install COSMIC desktop and exclude non-cosmic apps
+dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko
+
