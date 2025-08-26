@@ -6,5 +6,5 @@ set -ouex pipefail
 dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
 # Remove unused Bluefin-dx apps
-dnf remove sysprof
+dnf remove -y sysprof
 
