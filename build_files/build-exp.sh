@@ -1,4 +1,5 @@
 #!/bin/bash
+# BUILD.SH FOR EXPERIMENTAL IMAGE
 
 set -ouex pipefail
 
