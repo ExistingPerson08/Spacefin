@@ -22,7 +22,7 @@ esac
 dnf install -y showtime gnome-firmware
 
 # Add to justfile
-echo "import \"/usr/share/amyos/just/amy.just\"" >>/usr/share/ublue-os/justfile
+echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 
 # Remove incompatible just recipes
 for recipe in "rebase-helper" "devmode" "toggle-devmode"; do
