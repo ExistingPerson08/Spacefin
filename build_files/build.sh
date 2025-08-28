@@ -25,7 +25,7 @@ dnf install -y showtime gnome-firmware
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 
 # Remove incompatible just recipes
-for recipe in "rebase-helper" "devmode" "toggle-devmode"; do
+for recipe in "rebase-helper" "devmode" "toggle-devmode" "rollback-helper" ; do
   if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
     echo "Error: Recipe $recipe not found in any just file"
     exit 1
