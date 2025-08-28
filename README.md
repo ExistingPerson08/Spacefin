@@ -10,7 +10,12 @@
 And coming soon:
  - Separate cosmic and gnome apps like Voyager OS does with XFCE
  - Themes and more
- - Standalone COSMIC only image that is not based on Bluefin but on [Universal Blue main image](https://github.com/ublue-os/main).
+ - Standalone COSMIC only image that is not based on Bluefin but on [Universal Blue main image](https://github.com/ublue-os/main) that will be main Spacefin image.
+ - "Hybrid" image with both COSMIC and GNOME that will replace current "main" image
+
+## Contributing
+
+Ideas and pull requests are welcome 🎉. I would also appreciate a suggestion for a better name 😉.
 
 ## How to install
 
