@@ -1,13 +1,16 @@
-Bluefin based image with COSMIC desktop installed. **This image is WIP!**
+# ⚠️ THIS IMAGE IS CURRENTLY IN ALPHA ⚠️
 
-## Features
+[Bluefin](https://github.com/ublue-os/bluefin) based image with COSMIC desktop installed. 
+
+## About
 
  - Latest or tagged cosmic desktop
+ - Custom just commands
 
 And coming soon:
  - Separate cosmic and gnome apps like Voyager OS does with XFCE
- - Setup ujust (modified rebase-helper, setup-cosmic-flatpak-repo)
  - Themes and more
+ - Standalone COSMIC only image that is not based on Bluefin but on [Universal Blue main image](https://github.com/ublue-os/main).
 
 ## How to install
 
