@@ -6,7 +6,7 @@ case "$1" in
     "main")
         # Using tagged Cosmic desktop in main image
         dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
-        dnf install -y --skip-unavailable gnome-wallpapers fastfetch rclone restic samba samba-dcerpc samba-ldb-ldap-modules samba-winbind-clients samba-winbind-modules tailscale wireguard-tools zsh fish firewall-config
+        dnf install -y --skip-unavailable gnome-backgrounds fastfetch rclone restic samba samba-dcerpc samba-ldb-ldap-modules samba-winbind-clients samba-winbind-modules tailscale wireguard-tools zsh fish firewall-config
         ;;
     "hybrid")
         # Using tagged Cosmic  desktop in hybrid image
