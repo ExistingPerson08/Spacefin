@@ -21,7 +21,7 @@ Ideas and pull requests are welcome 🎉. I would also appreciate a suggestion f
 
 There are 3 variants: Main, hybrid and experimental.
 
-Main image is based on [Universal Blue main image](https://github.com/ublue-os/main) and has only COSMIC desktop. It has most features that Bluefin has. **This image does not recive updates now and most things do not work!**. You can rebase from Fedora COSMIC atomic with:
+Main image is based on [Universal Blue main image](https://github.com/ublue-os/main) and has only COSMIC desktop. It has most features that Bluefin has. **This image does not recive updates now and most things do not work!** You can rebase from Fedora COSMIC atomic with:
 
 ```bash
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin:latest
