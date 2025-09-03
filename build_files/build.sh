@@ -33,6 +33,14 @@ case "$1" in
 
         # Add to justfile
         echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
+
+        # Remove incompatible just recipes
+        for recipe in "devmode" "toggle-devmode" ; do
+          if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
+            echo "Skipping"
+          fi
+          sed -i "s/^$recipe:/_$recipe:/" /usr/share/ublue-os/just/*.just
+        done
         ;;
 esac
 
