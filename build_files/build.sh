@@ -5,8 +5,11 @@ set -ouex pipefail
 case "$1" in
     "main")
         # Using tagged Cosmic desktop in main image
-        dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
-        dnf install -y --skip-unavailable gnome-backgrounds fastfetch rclone restic samba samba-dcerpc samba-ldb-ldap-modules samba-winbind-clients samba-winbind-modules tailscale wireguard-tools zsh fish firewall-config
+        # dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
+        # dnf install -y --skip-unavailable gnome-backgrounds fastfetch rclone restic samba samba-dcerpc samba-ldb-ldap-modules samba-winbind-clients samba-winbind-modules tailscale wireguard-tools zsh fish firewall-config
+        # Use latest Cosmic desktop for testing - remove this in Beta
+        dnf copr enable -y ryanabx/cosmic-epoch
+        dnf install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
         ;;
     "hybrid")
         # Using tagged Cosmic  desktop in hybrid image
