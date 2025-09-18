@@ -15,16 +15,16 @@ case "$1" in
         # Using tagged Cosmic  desktop in hybrid image
         dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
-        # Add to justfile
-        echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
-
         # Remove incompatible just recipes
-        for recipe in "devmode" "toggle-devmode" ; do
+        for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" ; do
           if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
             echo "Skipping"
           fi
           sed -i "s/^$recipe:/_$recipe:/" /usr/share/ublue-os/just/*.just
         done
+
+        # Add to justfile
+        echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
         ;;
     "exp")
         # Using latest (nightly) Cosmic desktop in exp image
@@ -33,6 +33,14 @@ case "$1" in
 
         # Remove unused Bluefin-dx apps
         dnf remove -y sysprof
+
+        # Remove incompatible just recipes
+        for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" ; do
+          if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
+            echo "Skipping"
+          fi
+          sed -i "s/^$recipe:/_$recipe:/" /usr/share/ublue-os/just/*.just
+        done
 
         # Add to justfile
         echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
