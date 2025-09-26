@@ -1,6 +1,6 @@
 # ⚠️ THIS IMAGE IS CURRENTLY IN ALPHA ⚠️
 
-Spacefin is [Bluefin](https://github.com/ublue-os/bluefin) inspired image with COSMIC desktop installed. 
+Spacefin is [Bluefin](https://github.com/ublue-os/bluefin) based image with COSMIC desktop installed. 
 
 ## Features
 
@@ -11,7 +11,7 @@ Spacefin is [Bluefin](https://github.com/ublue-os/bluefin) inspired image with C
 
 And coming soon:
  - Separate cosmic and gnome apps like Voyager OS does with XFCE
- - Themes and more
+ - Custom COSMIC theme
 
 ## Contributing
 
