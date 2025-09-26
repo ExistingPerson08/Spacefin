@@ -9,8 +9,8 @@ case "$1" in
         
         # Remove GNOME desktop and duplicated apps
         dnf5 -y group remove gnome-desktop
-        dnf remove gdm gnome-shell gnome-session
-        dnf remove gnome-tweaks nautilus
+        dnf -y remove gdm gnome-shell gnome-session
+        dnf -y remove gnome-tweaks nautilus
         ;;
     "hybrid")
         # Using tagged Cosmic  desktop in hybrid image
