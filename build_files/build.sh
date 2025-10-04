@@ -11,8 +11,12 @@ case "$1" in
         dnf5 -y group remove gnome-desktop
         dnf -y remove gdm gnome-shell gnome-session
         dnf -y remove gnome-tweaks nautilus
+
+        dnf copr enable -y kylegospo/system76-scheduler
+        dnf install -y system76-scheduler
         
         systemctl enable cosmic-greeter
+        systemctl enable com.system76.Scheduler
         ;;
     "hybrid")
         # Using tagged Cosmic  desktop in hybrid image
@@ -58,3 +62,6 @@ dnf remove -y ptyxis
 
 # Remove Bazaar due old version
 dnf remove -y bazaar
+
+# Cleanup
+dnf clean all -y
