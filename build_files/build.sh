@@ -64,4 +64,7 @@ dnf remove -y ptyxis
 dnf remove -y bazaar
 
 # Cleanup
+dnf copr remove -y scottames/ghostty
+dnf copr remove -y kylegospo/system76-scheduler
+dnf copr remove -y ryanabx/cosmic-epoch
 dnf clean all -y
