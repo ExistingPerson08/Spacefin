@@ -10,6 +10,8 @@ case "$1" in
         # Use latest Cosmic desktop for testing - remove this in Beta
         dnf copr enable -y ryanabx/cosmic-epoch
         dnf install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
+        dnf install -y gdm
+        systemctl enable gdm
         ;;
     "hybrid")
         # Using tagged Cosmic  desktop in hybrid image
