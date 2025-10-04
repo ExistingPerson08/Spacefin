@@ -55,3 +55,6 @@ dnf install -y showtime gnome-firmware
 dnf copr enable -y scottames/ghostty
 dnf install -y ghostty
 dnf remove -y ptyxis
+
+# Remove Bazaar due old version
+dnf remove -y bazaar
