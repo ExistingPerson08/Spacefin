@@ -8,10 +8,10 @@ Spacefin is [Bluefin](https://github.com/ublue-os/bluefin) based image with COSM
  - Custom just commands
  - Standalone COSMIC only image
  - "Hybrid" image with both COSMIC and GNOME
+ - Separated COSMIC and GNOME apps
 
 And coming soon:
- - Separate cosmic and gnome apps like Voyager OS does with XFCE
- - Custom COSMIC theme
+- Custom COSMIC theme
 
 ## Contributing
 
