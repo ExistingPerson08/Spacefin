@@ -59,4 +59,7 @@ esac
 # (native version is better than flatpak)
 dnf install -y showtime gnome-firmware
 
-
+# Use ghostty instead of ptyxis
+dnf copr enable -y scottames/ghostty
+dnf install -y ghostty
+dnf remove -y ptyxis
