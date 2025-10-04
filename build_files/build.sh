@@ -17,6 +17,9 @@ case "$1" in
         
         systemctl enable cosmic-greeter
         systemctl enable com.system76.Scheduler
+
+        # Cleanup
+        dnf copr remove -y kylegospo/system76-scheduler
         ;;
     "hybrid")
         # Using tagged Cosmic  desktop in hybrid image
@@ -26,6 +29,9 @@ case "$1" in
         # Using latest (nightly) Cosmic desktop in exp image
         dnf copr enable -y ryanabx/cosmic-epoch
         dnf install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
+
+        # Cleanup
+        dnf copr remove -y ryanabx/cosmic-epoch
 
         # Remove unused Bluefin-dx apps
         dnf remove -y sysprof
@@ -64,4 +70,5 @@ dnf remove -y ptyxis
 dnf remove -y bazaar
 
 # Cleanup
+dnf copr remove -y scottames/ghostty
 dnf clean all -y
