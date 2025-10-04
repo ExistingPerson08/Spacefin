@@ -11,11 +11,6 @@ case "$1" in
         dnf5 -y group remove gnome-desktop
         dnf -y remove gdm gnome-shell gnome-session
         dnf -y remove gnome-tweaks nautilus
-        dnf -y remove tuned tuned-ppd
-
-        # Install system76 apps
-        dnf copr enable -y szydell/system76
-        dnf install -y system76-power
 
         dnf copr enable -y kylegospo/system76-scheduler
         dnf install -y system76-scheduler
