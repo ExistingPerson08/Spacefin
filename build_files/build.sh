@@ -11,6 +11,8 @@ case "$1" in
         dnf5 -y group remove gnome-desktop
         dnf -y remove gdm gnome-shell gnome-session
         dnf -y remove gnome-tweaks nautilus
+        
+        systemctl enable cosmic-greeter
         ;;
     "hybrid")
         # Using tagged Cosmic  desktop in hybrid image
@@ -49,4 +51,7 @@ echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/j
 # (native version is better than flatpak)
 dnf install -y showtime gnome-firmware
 
-
+# Use ghostty instead of ptyxis
+dnf copr enable -y scottames/ghostty
+dnf install -y ghostty
+dnf remove -y ptyxis
