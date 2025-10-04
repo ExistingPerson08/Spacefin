@@ -16,7 +16,6 @@ case "$1" in
         dnf install -y system76-scheduler
         
         systemctl enable cosmic-greeter
-        systemctl enable system76-power
         systemctl enable com.system76.Scheduler
         ;;
     "hybrid")
