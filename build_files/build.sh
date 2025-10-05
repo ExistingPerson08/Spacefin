@@ -60,5 +60,6 @@ dnf remove -y ptyxis
 dnf remove -y bazaar
 
 # Cleanup
+dnf remove epiphany htop nvtop
 dnf copr remove -y scottames/ghostty
 dnf clean all -y
