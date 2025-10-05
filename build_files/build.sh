@@ -32,17 +32,7 @@ case "$1" in
 
         # Cleanup
         dnf copr remove -y ryanabx/cosmic-epoch
-
-        # Remove unused Bluefin-dx apps
         dnf remove -y sysprof
-
-        # Remove incompatible just recipes
-        for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" ; do
-          if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
-            echo "Skipping"
-          fi
-          sed -i "s/^$recipe:/_$recipe:/" /usr/share/ublue-os/just/*.just
-        done
         ;;
 esac
 
