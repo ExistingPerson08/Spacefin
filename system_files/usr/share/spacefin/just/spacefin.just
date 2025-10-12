@@ -18,5 +18,5 @@ post-install:
 
   # Install apps
   brew install bbrew better-pkg
-  flatpak install --system -y dev.edfloreshz.CosmicTweaks io.github.flattool.Warehouse io.github.kolunmi.Bazaar com.ranfdev.DistroShelf org.gnome.FileRoller com.github.tchx84.Flatseal be.alexandervanhee.gradia org.gnome.Calculator page.kramo.Cartridges io.missioncenter.MissionCenter org.gnome.Characters org.gnome.Decibels org.gnome.World.PikaBackup org.gnome.Logs
+  flatpak install --system -y dev.edfloreshz.CosmicTweaks io.github.flattool.Warehouse io.github.kolunmi.Bazaar com.ranfdev.DistroShelf org.gnome.FileRoller com.github.tchx84.Flatseal be.alexandervanhee.gradia org.gnome.Calculator page.kramo.Cartridges
   echo "Post install setup finished!"
