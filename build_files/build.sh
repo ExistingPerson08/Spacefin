@@ -10,7 +10,7 @@ case "$1" in
         # Remove GNOME desktop and duplicated apps
         dnf5 -y group remove gnome-desktop
         dnf -y remove gdm gnome-shell gnome-session
-        dnf -y remove gnome-tweaks nautilus
+        dnf -y remove nautilus
 
         dnf copr enable -y kylegospo/system76-scheduler
         dnf install -y system76-scheduler
