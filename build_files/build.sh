@@ -59,6 +59,13 @@ dnf remove -y ptyxis
 # Remove Bazaar due old version
 dnf remove -y bazaar
 
+# Add Flatpak preinstall
+dnf5 -y copr enable ublue-os/flatpak-test
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
+dnf5 -y copr disable ublue-os/flatpak-test
+
 # Cleanup
 dnf remove -y htop nvtop gnome-tweaks
 dnf copr remove -y scottames/ghostty
