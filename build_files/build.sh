@@ -10,7 +10,7 @@ case "$1" in
         # Remove GNOME desktop and duplicated apps
         dnf5 -y group remove gnome-desktop
         dnf -y remove gdm gnome-shell gnome-session
-        dnf -y remove gnome-tweaks nautilus
+        dnf -y remove nautilus
 
         dnf copr enable -y kylegospo/system76-scheduler
         dnf install -y system76-scheduler
@@ -32,17 +32,7 @@ case "$1" in
 
         # Cleanup
         dnf copr remove -y ryanabx/cosmic-epoch
-
-        # Remove unused Bluefin-dx apps
         dnf remove -y sysprof
-
-        # Remove incompatible just recipes
-        for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" ; do
-          if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
-            echo "Skipping"
-          fi
-          sed -i "s/^$recipe:/_$recipe:/" /usr/share/ublue-os/just/*.just
-        done
         ;;
 esac
 
@@ -69,6 +59,20 @@ dnf remove -y ptyxis
 # Remove Bazaar due old version
 dnf remove -y bazaar
 
+# Add Flatpak preinstall
+dnf5 -y copr enable ublue-os/flatpak-test
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
+dnf5 -y copr disable ublue-os/flatpak-test
+
+# Autostart bazaar
+systemctl --global enable bazaar.service
+
+# run flatpak preinstall once at startup
+systemctl enable flatpak-preinstall.service
+
 # Cleanup
+dnf remove -y htop nvtop gnome-tweaks
 dnf copr remove -y scottames/ghostty
 dnf clean all -y
