@@ -30,7 +30,12 @@ case "$1" in
         dnf copr enable -y ryanabx/cosmic-epoch
         dnf install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
+        # Add niri
+        dnf copr enable -y yalter/niri 
+        dnf install -y niri
+
         # Cleanup
+        dnf copr remove -y yalter/niri 
         dnf copr remove -y ryanabx/cosmic-epoch
         dnf remove -y sysprof
         ;;
