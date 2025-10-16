@@ -1,5 +1,6 @@
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS ctx
+RUN rm -rf /usr/share/cosmic/
 COPY build_files /
 
 # Base Image
