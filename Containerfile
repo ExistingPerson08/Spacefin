@@ -3,7 +3,7 @@ FROM scratch AS ctx
 COPY build_files /
 
 # Base Image
-FROM ghcr.io/ublue-os/bluefin:stable as spacefin
+FROM ghcr.io/ublue-os/base-main as spacefin
 COPY system_files /
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
