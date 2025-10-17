@@ -6,11 +6,6 @@ case "$1" in
     "main")
         # Using tagged Cosmic desktop in main image
         dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
-        
-        # Remove GNOME desktop and duplicated apps
-        dnf5 -y group remove gnome-desktop
-        dnf -y remove gdm gnome-shell gnome-session
-        dnf -y remove nautilus
 
         dnf copr enable -y kylegospo/system76-scheduler
         dnf install -y system76-scheduler
