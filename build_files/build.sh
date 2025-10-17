@@ -11,6 +11,8 @@ dnf copr enable -y bazzite-org/bazzite-multilib
 
 case "$1" in
     "main")
+        IMAGE_NAME="main"
+        
         # Using tagged Cosmic desktop in main image
         dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
@@ -24,6 +26,8 @@ case "$1" in
         dnf copr remove -y kylegospo/system76-scheduler
         ;;
     "hybrid")
+        IMAGE_NAME="hybrid"
+        
         # Using tagged Cosmic  desktop in hybrid image
         dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
@@ -48,6 +52,7 @@ case "$1" in
           --exclude=gnome-extensions-app
         ;;
     "exp")
+        IMAGE_NAME="exp"
         # Using latest (nightly) Cosmic desktop in exp image
         dnf copr enable -y ryanabx/cosmic-epoch
         dnf install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
@@ -158,6 +163,24 @@ systemctl enable brew-setup.service
 systemctl disable brew-upgrade.timer
 systemctl disable brew-update.timer
 systemctl disable waydroid-container.service
+
+# Write image info
+IMAGE_INFO="/usr/share/ublue-os/image-info.json"
+IMAGE_VENDOR="existingperson08"
+image_flavor="main"
+IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
+
+cat >$IMAGE_INFO <<EOF
+{
+  "image-name": "$IMAGE_NAME",
+  "image-flavor": "$image_flavor",
+  "image-vendor": "$IMAGE_VENDOR",
+  "image-ref": "$IMAGE_REF",
+  "image-tag":"latest",
+  "base-image-name": "fedora",
+  "fedora-version": "42"
+}
+EOF
 
 # Cleanup
 for repo in terra terra-extras; do
