@@ -11,7 +11,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh main && \
 
-COPY system_files /
+RUN cp system_files /
 
 # Enable custom services
 RUN systemctl --global enable bazaar.service
