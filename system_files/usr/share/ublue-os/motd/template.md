@@ -11,9 +11,9 @@
 
 %TIP%
 
-- **󰊤** [Issues](https://issues.projectbluefin.io)
-- **󰈙** [Documentation](http://docs.projectbluefin.io)
-- **󰊌** [Discuss](https://community.projectbluefin.io)
-- **󰊌** [Leave Feedback](https://feedback.projectbluefin.io)
+- **󰊤** [Issues](https://github.com/ExistingPerson08/Spacefin/issues)
+- **󰈙** [Documentation](https://github.com/ExistingPerson08/Spacefin/wiki)
+- **󰊌** [Discuss](https://github.com/ExistingPerson08/Spacefin/discussions)
 
 %KEY_WARN%
+
