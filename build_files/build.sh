@@ -6,6 +6,7 @@ dnf install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/ter
 dnf install -y terra-release-extras
 dnf copr enable -y ublue-os/packages
 dnf copr enable -y bazzite-org/bazzite
+dnf copr enable -y bazzite-org/bazzite-multilib
 
 case "$1" in
     "main")
@@ -26,10 +27,10 @@ case "$1" in
         dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
         # Setup GNOME
-        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin gnome-tweaks
+        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin gnome-tweaks gnome-shell-extension-apps-menu gnome-shell-extension-background-logo
         dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
         dnf5 versionlock add gnome-shell
-        dnf5 -y install nautilus-gsconnect gnome-shell-extension-appindicator gnome-shell-extension-user-theme gnome-shell-extension-gsconnect gnome-shell-extension-compiz-windows-effect gnome-shell-extension-blur-my-shell gnome-shell-extension-hanabi gnome-shell-extension-hotedge gnome-shell-extension-caffeine gnome-shell-extension-desktop-cube
+        dnf5 -y install nautilus-gsconnect gnome-shell-extension-appindicator gnome-shell-extension-user-theme gnome-shell-extension-gsconnect gnome-shell-extension-compiz-windows-effect gnome-shell-extension-blur-my-shell gnome-shell-extension-hanabi gnome-shell-extension-hotedge gnome-shell-extension-caffeine gnome-shell-extension-desktop-cube --exclude=gnome-extensions-app
         ;;
     "exp")
         # Using latest (nightly) Cosmic desktop in exp image
@@ -41,21 +42,65 @@ case "$1" in
         dnf install -y niri
 
         # Setup GNOME
-        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin gnome-tweaks
+        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin gnome-tweaks gnome-shell-extension-apps-menu gnome-shell-extension-background-logo
         dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
         dnf5 versionlock add gnome-shell
-        dnf5 -y install nautilus-gsconnect gnome-shell-extension-appindicator gnome-shell-extension-user-theme gnome-shell-extension-gsconnect gnome-shell-extension-compiz-windows-effect gnome-shell-extension-blur-my-shell gnome-shell-extension-hanabi gnome-shell-extension-hotedge gnome-shell-extension-caffeine gnome-shell-extension-desktop-cube
+        dnf5 -y install nautilus-gsconnect gnome-shell-extension-appindicator gnome-shell-extension-user-theme gnome-shell-extension-gsconnect gnome-shell-extension-compiz-windows-effect gnome-shell-extension-blur-my-shell gnome-shell-extension-hanabi gnome-shell-extension-hotedge gnome-shell-extension-caffeine gnome-shell-extension-desktop-cube --exclude=gnome-extensions-app
 
         # Install apps for experimental image
         dnf install -y youtube-music zed codium codium-marketplace
-        dnf install -y steam gamescope-session-steam
+        dnf install -y steam gamescope-session-steam gamescope gamescope-session waydroid
 
         # Cleanup
         dnf copr remove -y yalter/niri 
         dnf copr remove -y ryanabx/cosmic-epoch
-        dnf remove -y sysprof
         ;;
 esac
+
+# Swap patched packages
+declare -A toswap=(
+    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
+    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="pipewire bluez xorg-x11-server-Xwayland"
+    ["terra-extras"]="switcheroo-control"
+    ["terra-mesa"]="mesa-filesystem"
+    ["copr:copr.fedorainfracloud.org:ublue-os:staging"]="fwupd"
+)
+
+for repo in "${!toswap[@]}"; do
+    for package in ${toswap[$repo]}; do
+        dnf5 -y swap --repo="$repo" "$package" "$package"
+    done
+done
+
+dnf5 versionlock add \
+    pipewire \
+    pipewire-alsa \
+    pipewire-gstreamer \
+    pipewire-jack-audio-connection-kit \
+    pipewire-jack-audio-connection-kit-libs \
+    pipewire-libs \
+    pipewire-plugin-libcamera \
+    pipewire-pulseaudio \
+    pipewire-utils \
+    wireplumber \
+    wireplumber-libs \
+    bluez \
+    bluez-cups \
+    bluez-libs \
+    bluez-obexd \
+    xorg-x11-server-Xwayland \
+    switcheroo-control \
+    mesa-dri-drivers \
+    mesa-filesystem \
+    mesa-libEGL \
+    mesa-libGL \
+    mesa-libgbm \
+    mesa-va-drivers \
+    mesa-vulkan-drivers \
+    fwupd \
+    fwupd-plugin-flashrom \
+    fwupd-plugin-modem-manager \
+    fwupd-plugin-uefi-capsule-data
 
 # Remove incompatible just recipes
 for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" ; do
@@ -69,7 +114,8 @@ done
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 
 # Install additional packages
-dnf install -y fastfetch 
+dnf install -y fastfetch ublue-brew
+dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 
 # Install additional GNOME apps
 # (native version is better than flatpak)
@@ -89,9 +135,18 @@ dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak
 dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
 dnf5 -y copr disable ublue-os/flatpak-test
 
+# Setup systemd services
+systemctl enable brew-setup.service
+systemctl disable brew-upgrade.timer
+systemctl disable brew-update.timer
+systemctl disable waydroid-container.service
+
 # Cleanup
-rm /etc/yum.repos.d/terra.repo
+for repo in terra terra-extras; do
+    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/$repo.repo
+done
 dnf copr remove -y bazzite-org/bazzite
+dnf copr remove -y bazzite-org/bazzite-multilib
 dnf copr remove -y ublue-os/packages
-dnf remove -y htop nvtop firefox firefox-langpacks
+dnf remove -y htop nvtop firefox firefox-langpacks toolbox
 dnf clean all -y
