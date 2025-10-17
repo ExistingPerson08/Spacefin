@@ -67,6 +67,6 @@ dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak
 dnf5 -y copr disable ublue-os/flatpak-test
 
 # Cleanup
-dnf remove -y htop nvtop gnome-tweaks
+dnf remove -y htop nvtop gnome-tweaks firefox
 dnf copr remove -y scottames/ghostty
 dnf clean all -y
