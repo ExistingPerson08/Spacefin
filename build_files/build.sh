@@ -31,7 +31,21 @@ case "$1" in
         dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin gnome-tweaks gnome-shell-extension-apps-menu gnome-shell-extension-background-logo
         dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
         dnf5 versionlock add gnome-shell
-        dnf5 -y install nautilus-gsconnect gnome-shell-extension-appindicator gnome-shell-extension-user-theme gnome-shell-extension-gsconnect gnome-shell-extension-compiz-windows-effect gnome-shell-extension-blur-my-shell gnome-shell-extension-hanabi gnome-shell-extension-hotedge gnome-shell-extension-caffeine gnome-shell-extension-desktop-cube --exclude=gnome-extensions-app
+        dnf5 -y install \
+          nautilus-gsconnect \
+          gnome-shell-extension-appindicator \
+          gnome-shell-extension-user-theme \
+          gnome-shell-extension-gsconnect \
+          gnome-shell-extension-compiz-windows-effect \
+          gnome-shell-extension-blur-my-shell \
+          gnome-shell-extension-hanabi \
+          gnome-shell-extension-hotedge \
+          gnome-shell-extension-caffeine \
+          gnome-shell-extension-desktop-cube \
+          gnome-shell-extension-just-perfection \
+          steamdeck-gnome-presets \
+          gnome-shell-extension-logo-menu \
+          --exclude=gnome-extensions-app
         ;;
     "exp")
         # Using latest (nightly) Cosmic desktop in exp image
@@ -46,10 +60,26 @@ case "$1" in
         dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin gnome-tweaks gnome-shell-extension-apps-menu gnome-shell-extension-background-logo
         dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
         dnf5 versionlock add gnome-shell
-        dnf5 -y install nautilus-gsconnect gnome-shell-extension-appindicator gnome-shell-extension-user-theme gnome-shell-extension-gsconnect gnome-shell-extension-compiz-windows-effect gnome-shell-extension-blur-my-shell gnome-shell-extension-hanabi gnome-shell-extension-hotedge gnome-shell-extension-caffeine gnome-shell-extension-desktop-cube --exclude=gnome-extensions-app
+        dnf5 -y install \
+          nautilus-gsconnect \
+          gnome-shell-extension-appindicator \
+          gnome-shell-extension-user-theme \
+          gnome-shell-extension-gsconnect \
+          gnome-shell-extension-compiz-windows-effect \
+          gnome-shell-extension-blur-my-shell \
+          gnome-shell-extension-hanabi \
+          gnome-shell-extension-hotedge \
+          gnome-shell-extension-caffeine \
+          gnome-shell-extension-desktop-cube \
+          gnome-shell-extension-just-perfection \
+          steamdeck-gnome-presets \
+          gnome-shell-extension-logo-menu \
+          --exclude=gnome-extensions-app
 
         # Install apps for experimental image
         dnf install -y youtube-music zed codium codium-marketplace
+        dnf install -y qemu qemu-char-spice qemu-device-display-virtio-gpu qemu-device-display-virtio-vga qemu-device-usb-redirect qemu-img qemu-system-x86-core qemu-user-binfmt qemu-user-static
+        dnf install -y flatpak-builder virt-manager virt-v2v virt-viewer
         dnf install -y steam gamescope-session-steam gamescope gamescope-session waydroid
 
         # Cleanup
@@ -102,7 +132,7 @@ done
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 
 # Install additional packages
-dnf install -y fastfetch ublue-brew ublue-motd
+dnf install -y fastfetch ublue-brew ublue-motd firewall-config fish bluefin-cli-logos ublue-polkit-rule
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 
 # Install additional GNOME apps

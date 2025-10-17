@@ -1,17 +1,18 @@
 # ⚠️ THIS IMAGE IS CURRENTLY IN ALPHA ⚠️
 
-Spacefin is [Bluefin](https://github.com/ublue-os/bluefin) based image with COSMIC desktop installed. 
+Spacefin is custom Fedora Atomic image with COSMIC desktop installed. 
 
 ## Features
 
  - Latest or tagged cosmic desktop
+ - Codecs and drivers out-of-the box
  - Custom just commands
+ - Custom COSMIC and GNOME theme
  - Standalone COSMIC only image
  - "Hybrid" image with both COSMIC and GNOME
 
 And coming soon:
  - Separate cosmic and gnome apps like Voyager OS does with XFCE
- - Custom COSMIC theme
 
 ## Contributing
 
