@@ -1,17 +1,25 @@
-# ⚠️ THIS IMAGE IS CURRENTLY IN ALPHA ⚠️
+<div align="center">
+ <h1>⚠️ THIS IMAGE IS CURRENTLY IN ALPHA ⚠️</h1>
+ <img src="assets/desktop.png" width="80%">
+</div>
+<br>
 
-Spacefin is [Bluefin](https://github.com/ublue-os/bluefin) based image with COSMIC desktop installed. 
+Spacefin is custom Fedora Atomic image with COSMIC desktop installed. 
 
 ## Features
 
  - Latest or tagged cosmic desktop
+ - Codecs and drivers out-of-the box
  - Custom just commands
+ - Patched `switcheroo-control`, `mesa` and `gnome-shell`
+ - Homebrew and Distrobox preinstalled
+ - Custom COSMIC and GNOME theme
  - Standalone COSMIC only image
  - "Hybrid" image with both COSMIC and GNOME
+ - "Experimental" developer oriented image
 
 And coming soon:
  - Separate cosmic and gnome apps like Voyager OS does with XFCE
- - Custom COSMIC theme
 
 ## Contributing
 
@@ -21,21 +29,26 @@ Ideas and pull requests are welcome 🎉. I would also appreciate a suggestion f
 
 There are 3 variants: Main, hybrid and experimental.
 
-Main image is based on Bluefin, but has removed GNOME desktop. **This image does not recive updates now and most things do not work!** You can rebase from Bluefin or Fedora Cosmic atomic with:
+Main image has only COSMIC desktop. You can rebase from Fedora Cosmic atomic with:
 
 ```bash
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin:latest
 ```
 
-Hybrid image is based on Bluefin stable and has tagged Cosmic desktop and GNOME 48. You can rebase from Bluefin or Fedora Silverblue with:
+Hybrid image has COSMIC desktop and GNOME desktop. You can rebase from Bluefin or Fedora Silverblue with:
 
 ```bash
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-hybrid:latest
 ```
 
-Experimental image is based on modified Bluefin-dx stable daily and has latest (nightly) Cosmic desktop from COPR and latest GNOME desktop from Fedora repos. You can rebase from Bluefin or Fedora Silverblue with:
+Experimental image is developer oriented and has latest (nightly) Cosmic desktop from COPR and latest GNOME desktop from Fedora repos. You can rebase from Bluefin or Fedora Silverblue with:
 
 ```bash
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-exp:latest
 ```
 
+## Screenshots
+
+<div align="center">
+<img src="assets/Gnome.png" width="70%">
+</div>
