@@ -71,12 +71,6 @@ dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak
 dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
 dnf5 -y copr disable ublue-os/flatpak-test
 
-# Autostart bazaar
-systemctl --global enable bazaar.service
-
-# run flatpak preinstall once at startup
-systemctl enable flatpak-preinstall.service
-
 # Cleanup
 dnf remove -y htop nvtop gnome-tweaks
 dnf copr remove -y scottames/ghostty
