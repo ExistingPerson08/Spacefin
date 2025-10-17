@@ -2,6 +2,11 @@
 
 set -ouex pipefail
 
+dnf install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+dnf install -y terra-release-extras
+dnf copr enable -y ublue-os/packages
+dnf copr enable -y bazzite-org/bazzite
+
 case "$1" in
     "main")
         # Using tagged Cosmic desktop in main image
@@ -19,6 +24,12 @@ case "$1" in
     "hybrid")
         # Using tagged Cosmic  desktop in hybrid image
         dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
+
+        # Setup GNOME
+        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin gnome-tweaks
+        dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
+        dnf5 versionlock add gnome-shell
+        dnf5 -y install nautilus-gsconnect gnome-shell-extension-appindicator gnome-shell-extension-user-theme gnome-shell-extension-gsconnect gnome-shell-extension-compiz-windows-effect gnome-shell-extension-blur-my-shell gnome-shell-extension-hanabi gnome-shell-extension-hotedge gnome-shell-extension-caffeine gnome-shell-extension-desktop-cube
         ;;
     "exp")
         # Using latest (nightly) Cosmic desktop in exp image
@@ -28,6 +39,16 @@ case "$1" in
         # Add niri
         dnf copr enable -y yalter/niri 
         dnf install -y niri
+
+        # Setup GNOME
+        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin gnome-tweaks
+        dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
+        dnf5 versionlock add gnome-shell
+        dnf5 -y install nautilus-gsconnect gnome-shell-extension-appindicator gnome-shell-extension-user-theme gnome-shell-extension-gsconnect gnome-shell-extension-compiz-windows-effect gnome-shell-extension-blur-my-shell gnome-shell-extension-hanabi gnome-shell-extension-hotedge gnome-shell-extension-caffeine gnome-shell-extension-desktop-cube
+
+        # Install apps for experimental image
+        dnf install -y youtube-music zed codium codium-marketplace
+        dnf install -y steam gamescope-session-steam
 
         # Cleanup
         dnf copr remove -y yalter/niri 
@@ -47,12 +68,14 @@ done
 # Add to justfile
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 
+# Install additional packages
+dnf install -y fastfetch 
+
 # Install additional GNOME apps
 # (native version is better than flatpak)
 dnf install -y showtime gnome-firmware
 
 # Use ghostty instead of ptyxis
-dnf copr enable -y scottames/ghostty
 dnf install -y ghostty
 dnf remove -y ptyxis
 
@@ -67,6 +90,8 @@ dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak
 dnf5 -y copr disable ublue-os/flatpak-test
 
 # Cleanup
-dnf remove -y htop nvtop gnome-tweaks
-dnf copr remove -y scottames/ghostty
+rm /etc/yum.repos.d/terra.repo
+dnf copr remove -y bazzite-org/bazzite
+dnf copr remove -y ublue-os/packages
+dnf remove -y htop nvtop firefox firefox-langpacks
 dnf clean all -y
