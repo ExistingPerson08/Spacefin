@@ -4,13 +4,18 @@ COPY build_files /
 
 # Base Image
 FROM ghcr.io/ublue-os/bluefin:stable as spacefin
-COPY system_files /
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /ctx/build.sh main && \
-    ostree container commit
+    /ctx/build.sh main
 
+COPY system_files /
+
+# Enable custom services
+RUN systemctl --global enable bazaar.service
+RUN systemctl enable flatpak-preinstall.service
+
+RUN ostree container commit
 RUN bootc container lint
