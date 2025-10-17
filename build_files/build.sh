@@ -61,7 +61,7 @@ esac
 # Swap patched packages
 declare -A toswap=(
     ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
-    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="pipewire bluez xorg-x11-server-Xwayland"
+    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="bluez xorg-x11-server-Xwayland"
     ["terra-extras"]="switcheroo-control"
     ["terra-mesa"]="mesa-filesystem"
     ["copr:copr.fedorainfracloud.org:ublue-os:staging"]="fwupd"
@@ -74,15 +74,6 @@ for repo in "${!toswap[@]}"; do
 done
 
 dnf5 versionlock add \
-    pipewire \
-    pipewire-alsa \
-    pipewire-gstreamer \
-    pipewire-jack-audio-connection-kit \
-    pipewire-jack-audio-connection-kit-libs \
-    pipewire-libs \
-    pipewire-plugin-libcamera \
-    pipewire-pulseaudio \
-    pipewire-utils \
     wireplumber \
     wireplumber-libs \
     bluez \
@@ -115,7 +106,7 @@ done
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 
 # Install additional packages
-dnf install -y fastfetch ublue-brew
+dnf install -y fastfetch ublue-brew ublue-motd
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 
 # Install additional GNOME apps
