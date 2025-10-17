@@ -61,7 +61,7 @@ esac
 # Swap patched packages
 declare -A toswap=(
     ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
-    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="bluez xorg-x11-server-Xwayland"
+    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="xorg-x11-server-Xwayland"
     ["terra-extras"]="switcheroo-control"
     ["terra-mesa"]="mesa-filesystem"
     ["copr:copr.fedorainfracloud.org:ublue-os:staging"]="fwupd"
@@ -76,10 +76,6 @@ done
 dnf5 versionlock add \
     wireplumber \
     wireplumber-libs \
-    bluez \
-    bluez-cups \
-    bluez-libs \
-    bluez-obexd \
     xorg-x11-server-Xwayland \
     switcheroo-control \
     mesa-dri-drivers \
