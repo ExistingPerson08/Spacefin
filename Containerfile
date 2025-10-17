@@ -13,5 +13,9 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 
 COPY system_files /
 
+# Enable custom services
+RUN systemctl --global enable bazaar.service
+    systemctl enable flatpak-preinstall.service
+
 RUN ostree container commit
 RUN bootc container lint
