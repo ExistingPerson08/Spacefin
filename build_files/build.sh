@@ -3,6 +3,8 @@
 set -ouex pipefail
 
 dnf install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+dnf install -y terra-release-extras
+dnf copr enable -y ublue-os/packages
 
 case "$1" in
     "main")
@@ -22,7 +24,10 @@ case "$1" in
         # Using tagged Cosmic  desktop in hybrid image
         dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
-        # Install GNOME extensions
+        # Setup GNOME
+        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin
+        dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
+        dnf5 versionlock add gnome-shell
         dnf5 -y install nautilus-gsconnect gnome-shell-extension-appindicator gnome-shell-extension-user-theme gnome-shell-extension-gsconnect gnome-shell-extension-compiz-windows-effect gnome-shell-extension-blur-my-shell gnome-shell-extension-hanabi gnome-shell-extension-hotedge gnome-shell-extension-caffeine gnome-shell-extension-desktop-cube
         ;;
     "exp")
@@ -34,7 +39,10 @@ case "$1" in
         dnf copr enable -y yalter/niri 
         dnf install -y niri
 
-        # Install GNOME extensions
+        # Setup GNOME
+        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin
+        dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
+        dnf5 versionlock add gnome-shell
         dnf5 -y install nautilus-gsconnect gnome-shell-extension-appindicator gnome-shell-extension-user-theme gnome-shell-extension-gsconnect gnome-shell-extension-compiz-windows-effect gnome-shell-extension-blur-my-shell gnome-shell-extension-hanabi gnome-shell-extension-hotedge gnome-shell-extension-caffeine gnome-shell-extension-desktop-cube
 
         # Install apps for experimental image
@@ -82,5 +90,6 @@ dnf5 -y copr disable ublue-os/flatpak-test
 
 # Cleanup
 rm /etc/yum.repos.d/terra.repo
-dnf remove -y htop nvtop gnome-tweaks firefox gnome-software gnome-software-rpm-plugin
+dnf copr remove -y ublue-os/packages
+dnf remove -y htop nvtop gnome-tweaks firefox firefox-langpacks
 dnf clean all -y
