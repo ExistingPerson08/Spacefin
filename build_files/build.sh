@@ -5,6 +5,7 @@ set -ouex pipefail
 dnf install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
 dnf install -y terra-release-extras
 dnf copr enable -y ublue-os/packages
+dnf copr enable -y ublue-os/staging
 dnf copr enable -y bazzite-org/bazzite
 dnf copr enable -y bazzite-org/bazzite-multilib
 
@@ -148,5 +149,6 @@ done
 dnf copr remove -y bazzite-org/bazzite
 dnf copr remove -y bazzite-org/bazzite-multilib
 dnf copr remove -y ublue-os/packages
+dnf copr remove -y ublue-os/staging
 dnf remove -y htop nvtop firefox firefox-langpacks toolbox
 dnf clean all -y
