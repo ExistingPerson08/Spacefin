@@ -9,9 +9,9 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /ctx/build.sh main && \
+    /ctx/build.sh main
 
-RUN cp system_files /
+COPY system_files /
 
 # Enable custom services
 RUN systemctl --global enable bazaar.service
