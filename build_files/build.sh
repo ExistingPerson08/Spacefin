@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 
+dnf install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+
 case "$1" in
     "main")
         # Using tagged Cosmic desktop in main image
@@ -29,6 +31,10 @@ case "$1" in
         dnf copr enable -y yalter/niri 
         dnf install -y niri
 
+        # Install apps for experimental image
+        dnf install -y youtube-music zed codium codium-marketplace
+        dnf install -y steam gamescope-session-steam
+
         # Cleanup
         dnf copr remove -y yalter/niri 
         dnf copr remove -y ryanabx/cosmic-epoch
@@ -47,12 +53,14 @@ done
 # Add to justfile
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 
+# Install additional packages
+dnf install -y fastfetch 
+
 # Install additional GNOME apps
 # (native version is better than flatpak)
 dnf install -y showtime gnome-firmware
 
 # Use ghostty instead of ptyxis
-dnf copr enable -y scottames/ghostty
 dnf install -y ghostty
 dnf remove -y ptyxis
 
@@ -67,6 +75,7 @@ dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak
 dnf5 -y copr disable ublue-os/flatpak-test
 
 # Cleanup
-dnf remove -y htop nvtop gnome-tweaks firefox
+rm /etc/yum.repos.d/terra.repo
+dnf remove -y htop nvtop gnome-tweaks firefox gnome-software gnome-software-rpm-plugin
 dnf copr remove -y scottames/ghostty
 dnf clean all -y
