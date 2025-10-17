@@ -132,7 +132,7 @@ done
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 
 # Install additional packages
-dnf install -y fastfetch ublue-brew ublue-motd firewall-config fish bluefin-cli-logos ublue-polkit-rule
+dnf install -y fastfetch ublue-brew ublue-motd firewall-config fish bluefin-cli-logos
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 
 # Install additional GNOME apps
