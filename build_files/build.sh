@@ -93,6 +93,62 @@ case "$1" in
         ;;
 esac
 
+# Install Kernel akmods
+dnf5 -y remove --no-autoremove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-tools kernel-tools-libs kernel-uki-virt
+
+dnf5 -y install \
+    /tmp/kernel-rpms/kernel-[0-9]*.rpm \
+    /tmp/kernel-rpms/kernel-core-*.rpm \
+    /tmp/kernel-rpms/kernel-modules-*.rpm \
+    /tmp/kernel-rpms/kernel-tools-[0-9]*.rpm \
+    /tmp/kernel-rpms/kernel-tools-libs-[0-9]*.rpm \
+    /tmp/kernel-rpms/kernel-devel-*.rpm
+
+dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-tools kernel-tools-libs
+
+dnf5 -y install \
+    /tmp/akmods-rpms/kmods/*kvmfr*.rpm \
+    /tmp/akmods-rpms/kmods/*xone*.rpm \
+    /tmp/akmods-rpms/kmods/*openrazer*.rpm \
+    /tmp/akmods-rpms/kmods/*v4l2loopback*.rpm \
+    /tmp/akmods-rpms/kmods/*wl*.rpm \
+    /tmp/akmods-rpms/kmods/*framework-laptop*.rpm \
+    /tmp/akmods-extra-rpms/kmods/*nct6687*.rpm \
+    /tmp/akmods-extra-rpms/kmods/*gcadapter_oc*.rpm \
+    /tmp/akmods-extra-rpms/kmods/*zenergy*.rpm \
+    /tmp/akmods-extra-rpms/kmods/*vhba*.rpm \
+    /tmp/akmods-extra-rpms/kmods/*gpd-fan*.rpm \
+    /tmp/akmods-extra-rpms/kmods/*ayaneo-platform*.rpm \
+    /tmp/akmods-extra-rpms/kmods/*ayn-platform*.rpm \
+    /tmp/akmods-extra-rpms/kmods/*bmi260*.rpm \
+    /tmp/akmods-extra-rpms/kmods/*ryzen-smu*.rpm
+
+# Install Bazzite kernel
+dnf5 -y config-manager setopt "*rpmfusion*".enabled=0
+dnf5 -y copr enable bieszczaders/kernel-cachyos-addons
+dnf5 -y install scx-scheds
+dnf5 -y copr disable bieszczaders/kernel-cachyos-addons
+
+declare -A toswap=(
+    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="ostree bootc rpm-ostree rpm-ostree-libs tuned tuned-ppd"
+)
+
+for repo in "${!toswap[@]}"; do
+    echo "Provádím dnf5 swap pro repo: $repo"
+    for package in ${toswap[$repo]}; do
+        dnf5 -y swap --repo="$repo" "$package" "$package"
+    done
+done
+
+unset -v toswap repo package
+
+dnf5 versionlock add \
+    ostree \
+    ostree-libs \
+    bootc \
+    rpm-ostree \
+    rpm-ostree-libs \
+
 # Swap patched packages
 declare -A toswap=(
     ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
