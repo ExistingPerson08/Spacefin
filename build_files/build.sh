@@ -85,7 +85,7 @@ case "$1" in
         dnf install -y youtube-music zed codium codium-marketplace
         dnf install -y qemu qemu-char-spice qemu-device-display-virtio-gpu qemu-device-display-virtio-vga qemu-device-usb-redirect qemu-img qemu-system-x86-core qemu-user-binfmt qemu-user-static
         dnf install -y flatpak-builder virt-manager virt-v2v virt-viewer libvirt libvirt-nss
-        dnf install -y waydroid scrcpy watchman
+        dnf install -y waydroid scrcpy
 
         systemctl enable libvirt-workaround.service
 
