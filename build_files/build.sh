@@ -139,6 +139,7 @@ echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/j
 # Install additional packages
 dnf install -y fastfetch ublue-brew ublue-motd firewall-config fish bluefin-cli-logos
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
+dnf install -y steamdeck-backgrounds gnome-backgrounds
 
 # Install additional GNOME apps
 # (native version is better than flatpak)
