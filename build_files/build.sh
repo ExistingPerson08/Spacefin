@@ -52,7 +52,7 @@ case "$1" in
           --exclude=gnome-extensions-app
         ;;
     "exp")
-        IMAGE_NAME="exp"
+        IMAGE_NAME="experimental"
         # Using latest (nightly) Cosmic desktop in exp image
         dnf copr enable -y ryanabx/cosmic-epoch
         dnf install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
@@ -84,8 +84,10 @@ case "$1" in
         # Install apps for experimental image
         dnf install -y youtube-music zed codium codium-marketplace
         dnf install -y qemu qemu-char-spice qemu-device-display-virtio-gpu qemu-device-display-virtio-vga qemu-device-usb-redirect qemu-img qemu-system-x86-core qemu-user-binfmt qemu-user-static
-        dnf install -y flatpak-builder virt-manager virt-v2v virt-viewer
+        dnf install -y flatpak-builder virt-manager virt-v2v virt-viewer libvirt libvirt-nss
         dnf install -y waydroid scrcpy watchman
+
+        systemctl enable libvirt-workaround.service
 
         # Cleanup
         dnf copr remove -y yalter/niri 
@@ -139,6 +141,12 @@ echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/j
 # Install additional packages
 dnf install -y fastfetch ublue-brew ublue-motd firewall-config fish bluefin-cli-logos
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
+
+# Starship Shell Prompt
+ghcurl "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" --retry 3 -o /tmp/starship.tar.gz
+tar -xzf /tmp/starship.tar.gz -C /tmp
+install -c -m 0755 /tmp/starship /usr/bin
+echo 'eval "$(starship init bash)"' >>/etc/bashrc
 
 # Install additional GNOME apps
 # (native version is better than flatpak)
