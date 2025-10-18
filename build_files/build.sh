@@ -85,8 +85,7 @@ case "$1" in
         dnf install -y youtube-music zed codium codium-marketplace
         dnf install -y qemu qemu-char-spice qemu-device-display-virtio-gpu qemu-device-display-virtio-vga qemu-device-usb-redirect qemu-img qemu-system-x86-core qemu-user-binfmt qemu-user-static
         dnf install -y flatpak-builder virt-manager virt-v2v virt-viewer
-        dnf install -y steam gamescope-session-steam gamescope gamescope-session waydroid
-
+        
         # Cleanup
         dnf copr remove -y yalter/niri 
         dnf copr remove -y ryanabx/cosmic-epoch
@@ -124,6 +123,41 @@ dnf5 versionlock add \
     fwupd-plugin-flashrom \
     fwupd-plugin-modem-manager \
     fwupd-plugin-uefi-capsule-data
+
+# Install Steam, winetricks and gamescope
+
+dnf5 -y swap \
+    --repo copr:copr.fedorainfracloud.org:bazzite-org:bazzite \
+    ibus ibus
+dnf5 versionlock add ibus
+
+dnf5 -y install \
+    gamescope.x86_64 \
+    gamescope-libs.x86_64 \
+    gamescope-libs.i686 \
+    gamescope-shaders \
+    jupiter-sd-mounting-btrfs \
+    umu-launcher \
+    dbus-x11 \
+    xdg-user-dirs \
+    gobject-introspection \
+    libFAudio.x86_64 \
+    libFAudio.i686 \
+    vkBasalt.x86_64 \
+    vkBasalt.i686 \
+    mangohud.x86_64 \
+    mangohud.i686 \
+    libobs_vkcapture.x86_64 \
+    libobs_glcapture.x86_64 \
+    libobs_vkcapture.i686 \
+    libobs_glcapture.i686 \
+    VK_hdr_layer
+
+dnf5 -y --setopt=install_weak_deps=False install steam
+dnf5 -y remove gamemode
+
+/ctx/ghcurl "https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks" --retry 3 -Lo /usr/bin/winetricks
+chmod +x /usr/bin/winetricks
 
 # Remove incompatible just recipes
 for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" ; do
