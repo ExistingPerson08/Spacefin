@@ -87,8 +87,6 @@ case "$1" in
         dnf install -y flatpak-builder virt-manager virt-v2v virt-viewer libvirt libvirt-nss
         dnf install -y waydroid scrcpy
 
-        systemctl enable libvirt-workaround.service
-
         # Cleanup
         dnf copr remove -y yalter/niri 
         dnf copr remove -y ryanabx/cosmic-epoch
