@@ -131,7 +131,7 @@ dnf5 -y swap \
     ibus ibus
 dnf5 versionlock add ibus
 
-dnf5 -y --skip-broken install \
+dnf5 -y install --skip-broken \
     gamescope.x86_64 \
     gamescope-libs.x86_64 \
     gamescope-libs.i686 \
@@ -144,7 +144,7 @@ dnf5 -y --skip-broken install \
     libFAudio.x86_64 \
     libFAudio.i686 \
 
-dnf5 -y --setopt=install_weak_deps=False --skip-broken install steam
+dnf5 -y --setopt=install_weak_deps=False install --skip-broken steam
 dnf5 -y remove gamemode
 
 /ctx/ghcurl "https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks" --retry 3 -Lo /usr/bin/winetricks
