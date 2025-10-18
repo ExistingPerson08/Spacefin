@@ -143,9 +143,7 @@ dnf install -y fastfetch ublue-brew ublue-motd firewall-config fish bluefin-cli-
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 
 # Starship Shell Prompt
-curl "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz" --retry 3 -o /tmp/starship.tar.gz
-tar -xzf /tmp/starship.tar.gz -C /tmp
-install -c -m 0755 /tmp/starship /usr/bin
+curl -sS https://starship.rs/install.sh | sh
 echo 'eval "$(starship init bash)"' >>/etc/bashrc
 
 # Install additional GNOME apps
