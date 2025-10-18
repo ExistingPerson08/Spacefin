@@ -147,9 +147,6 @@ dnf5 -y install --skip-broken \
 dnf5 -y --setopt=install_weak_deps=False install --skip-broken steam
 dnf5 -y remove gamemode
 
-/ctx/ghcurl "https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks" --retry 3 -Lo /usr/bin/winetricks
-chmod +x /usr/bin/winetricks
-
 # Remove incompatible just recipes
 for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" ; do
   if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
