@@ -94,6 +94,9 @@ case "$1" in
 esac
 
 # Install Kernel akmods
+echo "::group::Executing install-kernel-akmods"
+trap 'echo "::endgroup::"' EXIT
+
 dnf5 -y remove --no-autoremove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-tools kernel-tools-libs kernel-uki-virt
 
 dnf5 -y install \
