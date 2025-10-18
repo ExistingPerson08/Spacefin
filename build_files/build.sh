@@ -32,7 +32,7 @@ case "$1" in
         dnf install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
         # Setup GNOME
-        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin gnome-tweaks gnome-shell-extension-apps-menu gnome-shell-extension-background-logo
+        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-ostree gnome-tweaks gnome-shell-extension-apps-menu gnome-shell-extension-background-logo yelp
         dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
         dnf5 versionlock add gnome-shell
         dnf5 -y install \
@@ -52,7 +52,7 @@ case "$1" in
           --exclude=gnome-extensions-app
         ;;
     "exp")
-        IMAGE_NAME="exp"
+        IMAGE_NAME="experimental"
         # Using latest (nightly) Cosmic desktop in exp image
         dnf copr enable -y ryanabx/cosmic-epoch
         dnf install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
@@ -62,7 +62,7 @@ case "$1" in
         dnf install -y niri
 
         # Setup GNOME
-        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-plugin gnome-tweaks gnome-shell-extension-apps-menu gnome-shell-extension-background-logo
+        dnf remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-ostree gnome-tweaks gnome-shell-extension-apps-menu gnome-shell-extension-background-logo yelp
         dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
         dnf5 versionlock add gnome-shell
         dnf5 -y install \
@@ -84,8 +84,8 @@ case "$1" in
         # Install apps for experimental image
         dnf install -y youtube-music zed codium codium-marketplace
         dnf install -y qemu qemu-char-spice qemu-device-display-virtio-gpu qemu-device-display-virtio-vga qemu-device-usb-redirect qemu-img qemu-system-x86-core qemu-user-binfmt qemu-user-static
-        dnf install -y flatpak-builder virt-manager virt-v2v virt-viewer
-        dnf install -y steam gamescope-session-steam gamescope gamescope-session waydroid
+        dnf install -y flatpak-builder virt-manager virt-v2v virt-viewer libvirt libvirt-nss
+        dnf install -y waydroid scrcpy
 
         # Cleanup
         dnf copr remove -y yalter/niri 
