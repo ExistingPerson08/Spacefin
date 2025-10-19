@@ -133,8 +133,6 @@ declare -A toswap=(
     ["terra-extras"]="switcheroo-control"
     ["terra-mesa"]="mesa-filesystem"
     ["copr:copr.fedorainfracloud.org:ublue-os:staging"]="fwupd"
-    ["copr:copr.fedorainfracloud.org:sentry:kernel-blu"]="kernel"
-    ["copr:copr.fedorainfracloud.org:sentry:kernel-blu"]="kernel-headers"
 )
 
 for repo in "${!toswap[@]}"; do
@@ -143,7 +141,7 @@ for repo in "${!toswap[@]}"; do
     done
 done
 
-echo "Swap kernel for kernel blu!!!!!!"
+# Use kernel-blu
 dnf5 -y swap --repo=copr:copr.fedorainfracloud.org:sentry:kernel-blu kernel kernel
 
 dnf5 versionlock add \
