@@ -143,6 +143,9 @@ for repo in "${!toswap[@]}"; do
     done
 done
 
+echo "Swap kernel for kernel blu!!!!!!"
+dnf5 -y swap --repo=copr:copr.fedorainfracloud.org:sentry:kernel-blu kernel kernel
+
 dnf5 versionlock add \
     wireplumber \
     wireplumber-libs \
