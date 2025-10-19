@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo bootc rollback
+reboot
