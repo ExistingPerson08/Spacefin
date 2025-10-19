@@ -8,17 +8,18 @@ dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable ublue-os/staging
 dnf5 -y copr enable bazzite-org/bazzite
 dnf5 -y copr enable bazzite-org/bazzite-multilib
+dnf5 -y copr enable bazzite-org/rom-properties
 
 case "$1" in
     "main")
         IMAGE_NAME="main"
-        
+
         # Using tagged Cosmic desktop in main image
         dnf5 install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
         dnf5 copr enable -y kylegospo/system76-scheduler
         dnf5 install -y system76-scheduler
-        
+
         systemctl enable cosmic-greeter
         systemctl enable com.system76.Scheduler
 
@@ -27,12 +28,23 @@ case "$1" in
         ;;
     "hybrid")
         IMAGE_NAME="hybrid"
-        
+
         # Using tagged Cosmic  desktop in hybrid image
         dnf5 install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
         # Setup GNOME
-        dnf5 remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-ostree gnome-tweaks gnome-shell-extension-apps-menu gnome-shell-extension-background-logo yelp
+        dnf5 remove -y \
+            gnome-classic-session \
+            gnome-tour \
+            gnome-extensions-app \
+            gnome-system-monitor \
+            gnome-software \
+            gnome-software-rpm-ostree \
+            gnome-tweaks \
+            gnome-shell-extension-apps-menu \
+            gnome-shell-extension-background-logo \
+            yelp \
+            gnome-initial-setup
         dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
         dnf5 versionlock add gnome-shell
         dnf5 -y install \
@@ -49,6 +61,7 @@ case "$1" in
           gnome-shell-extension-just-perfection \
           steamdeck-gnome-presets \
           gnome-shell-extension-logo-menu \
+          rom-properties-gtk3 \
           --exclude=gnome-extensions-app
         ;;
     "exp")
@@ -57,12 +70,19 @@ case "$1" in
         dnf5 copr enable -y ryanabx/cosmic-epoch
         dnf5 install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
-        # Add niri
-        dnf5 copr enable -y yalter/niri 
-        dnf5 install -y niri
-
         # Setup GNOME
-        dnf5 remove -y gnome-classic-session gnome-tour gnome-extensions-app gnome-system-monitor gnome-software gnome-software-rpm-ostree gnome-tweaks gnome-shell-extension-apps-menu gnome-shell-extension-background-logo yelp
+        dnf5 remove -y \
+            gnome-classic-session \
+            gnome-tour \
+            gnome-extensions-app \
+            gnome-system-monitor \
+            gnome-software \
+            gnome-software-rpm-ostree \
+            gnome-tweaks \
+            gnome-shell-extension-apps-menu \
+            gnome-shell-extension-background-logo \
+            yelp \
+            gnome-initial-setup
         dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
         dnf5 versionlock add gnome-shell
         dnf5 -y install \
@@ -79,6 +99,7 @@ case "$1" in
           gnome-shell-extension-just-perfection \
           steamdeck-gnome-presets \
           gnome-shell-extension-logo-menu \
+          rom-properties-gtk3 \
           --exclude=gnome-extensions-app
 
         # Install apps for experimental image
@@ -95,8 +116,10 @@ case "$1" in
             waydroid \
             scrcpy
 
+        # Add Waydroid just command
+        echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
+
         # Cleanup
-        dnf5 copr remove -y yalter/niri 
         dnf5 copr remove -y ryanabx/cosmic-epoch
         ;;
 esac
@@ -134,7 +157,7 @@ dnf5 versionlock add \
     fwupd-plugin-uefi-capsule-data
 
 # Remove incompatible just recipes
-for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" ; do
+for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" "update" ; do
   if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
     echo "Skipping"
   fi
@@ -145,7 +168,7 @@ done
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 
 # Install additional packages
-dnf5 install -y fastfetch ublue-brew ublue-motd firewall-config fish bluefin-cli-logos showtime gnome-firmware
+dnf5 install -y fastfetch ublue-brew ublue-motd firewall-config fish bluefin-cli-logos showtime gnome-firmware duperemove
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 dnf5 install -y steamdeck-backgrounds gnome-backgrounds
 
@@ -191,9 +214,17 @@ EOF
 for repo in terra terra-extras; do
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/$repo.repo
 done
+dnf5 -y copr remove bazzite-org/rom-properties
 dnf5 -y copr remove ublue-os/packages
 dnf5 -y copr remove ublue-os/staging
 dnf5 -y copr remove bazzite-org/bazzite
 dnf5 -y copr remove bazzite-org/bazzite-multilib
 dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox
 dnf5 clean all -y
+
+# Finalize
+rm -rf /tmp/* || true
+find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \;
+find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 \! -name rpm-ostree -exec rm -fr {} \;
+mkdir -p /var/tmp
+chmod -R 1777 /var/tmp
