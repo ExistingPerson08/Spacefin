@@ -156,6 +156,20 @@ dnf5 versionlock add \
     fwupd-plugin-modem-manager \
     fwupd-plugin-uefi-capsule-data
 
+# Setup firmware
+firmware="linux-firmware-whence qcom-wwan-firmware linux-firmware amd-gpu-firmware amd-ucode-firmware atheros-firmware brcmfmac-firmware cirrus-audio-firmware intel-audio-firmware intel-gpu-firmware intel-vsc-firmware iwlegacy-firmware iwlwifi-dvm-firmware iwlwifi-mvm-firmware libertas-firmware mt7xxx-firmware nvidia-gpu-firmware nxpwireless-firmware realtek-firmware tiwilink-firmware"
+dnf5 -y remove --no-autoremove $firmware
+dnf5 -y install --repo="copr:copr.fedorainfracloud.org:bazzite-org:bazzite" $firmware
+
+git clone https://github.com/hhd-dev/hwfirm /tmp/hwfirm --depth 1
+cp -r /tmp/hwfirm/cirrus/* /usr/lib/firmware/cirrus/
+cp -r /tmp/hwfirm/rtl_bt/* /usr/lib/firmware/rtl_bt/
+cp -r /tmp/hwfirm/awinic/* /usr/lib/firmware/
+cp -r /tmp/hwfirm/tas/*    /usr/lib/firmware/
+rm -rf /tmp/hwfirm/
+
+rm /usr/lib/firmware/rtl_bt/rtl8822cu_config.bin.xz
+
 # Remove incompatible just recipes
 for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" "update" ; do
   if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
@@ -219,7 +233,7 @@ dnf5 -y copr remove ublue-os/packages
 dnf5 -y copr remove ublue-os/staging
 dnf5 -y copr remove bazzite-org/bazzite
 dnf5 -y copr remove bazzite-org/bazzite-multilib
-dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox
+dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper
 dnf5 clean all -y
 
 # Finalize
