@@ -114,7 +114,8 @@ case "$1" in
             restic \
             rclone \
             waydroid \
-            scrcpy
+            scrcpy \
+            quickemu
 
         # Add Waydroid just command
         echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
