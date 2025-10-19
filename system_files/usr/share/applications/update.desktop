@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=System update
+Comment=Update system, Flatpaks and Brew packages
+Exec=bash -c "update; echo; echo 'Press ENTER to close...'; read -r"
+Icon=/usr/share/icons/BeautySolar/apps/scalable/system-software-update_fedora.svg
+Terminal=true
+Type=Application
+Categories=System;Utility;
