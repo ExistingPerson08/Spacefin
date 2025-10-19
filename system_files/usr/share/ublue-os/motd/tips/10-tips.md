@@ -18,3 +18,6 @@ Use `docker compose` for multi-container development if devcontainers don't fit 
 Check out DevPod for open-source, client-only development environments that work with any IDE
 `ujust install-k8s-dev-tools` gets you started with Kubernetes development tools like kind and kubectl
 Spacefin separates the OS from your development environment - embrace the cloud-native workflow
+*Want to control your device from your phone?* The KDE Connect app functions with all Spacefin images~[More info](https://kdeconnect.kde.org/)
+Spacefin uses ZSTD compression in BTRFS by default, and deduplicates files across your entire drive.
+We recommend BTRFS or EXT4 over NTFS for all external drives.
