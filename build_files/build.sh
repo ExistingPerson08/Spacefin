@@ -183,7 +183,18 @@ done
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 
 # Install additional packages
-dnf5 install -y fastfetch ublue-brew ublue-motd firewall-config fish bluefin-cli-logos showtime gnome-firmware duperemove
+dnf5 install -y \
+    fastfetch \
+    ublue-brew \
+    ublue-motd \
+    firewall-config \
+    fish \
+    bluefin-cli-logos \
+    showtime \
+    gnome-firmware \
+    duperemove \
+    java-latest-openjdk-devel
+
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 dnf5 install -y steamdeck-backgrounds gnome-backgrounds
 
