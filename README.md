@@ -11,12 +11,25 @@ Spacefin is custom Fedora Atomic image with COSMIC desktop installed.
  - Latest or tagged cosmic desktop
  - Codecs and drivers out-of-the box
  - Custom just commands
- - Patched `switcheroo-control`, `mesa` and `gnome-shell`
+ - Patched `switcheroo-control`, `mesa` and `xwayland`
+ - [Kernel-blu](https://copr.fedorainfracloud.org/coprs/sentry/kernel-blu/) as kernel
+ - Java preinstalled and set for running .jar files
  - Homebrew and Distrobox preinstalled
- - Custom COSMIC and GNOME theme
+ - Custom COSMIC theme
+    - with focus on tilling and minimalism
+ - Preconfigured GNOME desktop
+    - GSConnect set up by default
+    - patches to enable fractional scalling, VRR and more
+    - Preinstalled useful extensions
+    - [Hanabi extension](https://github.com/jeffshee/gnome-ext-hanabi) for live wallpapers
  - Standalone COSMIC only image
  - "Hybrid" image with both COSMIC and GNOME
  - "Experimental" developer oriented image
+    - Fish and zsh shells
+    - Zed and VSCodium preinstalled and preconfigured
+    - Restic and rclone
+    - Waydroid for running Android apps
+    - Scrcpy for mirroring Android screen
 
 And coming soon:
  - Separate cosmic and gnome apps like Voyager OS does with XFCE
