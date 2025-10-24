@@ -251,7 +251,7 @@ ln -s /var/lib/snapd/snap /snap
 
 # Cleanup
 for repo in terra terra-extras rpmfusion-free-release rpmfusion-nonfree-release rpmfusion-free rpmfusion-nonfree; do
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/$repo.repo
+    rm /etc/yum.repos.d/$repo.repo
 done
 dnf5 -y copr remove kylegospo/system76-scheduler
 dnf5 -y copr remove bazzite-org/rom-properties
