@@ -39,3 +39,6 @@ install-nix:
 install-snap:
     sudo rpm-ostree install snapd
     echo "Snapd installed. Reboot to use snap!"
+
+fix-bazaar-config:
+    flatpak override --user io.github.kolunmi.Bazaar --filesystem=host-etc
