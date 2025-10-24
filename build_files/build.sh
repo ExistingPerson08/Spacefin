@@ -9,7 +9,6 @@ dnf5 -y copr enable ublue-os/staging
 dnf5 -y copr enable bazzite-org/bazzite
 dnf5 -y copr enable bazzite-org/bazzite-multilib
 dnf5 -y copr enable bazzite-org/rom-properties
-dnf5 -y copr enable kylegospo/system76-scheduler
 dnf5 -y copr enable sentry/kernel-blu
 
 case "$1" in
@@ -176,10 +175,6 @@ rm -rf /tmp/hwfirm/
 
 rm /usr/lib/firmware/rtl_bt/rtl8822cu_config.bin.xz
 
-# Enable system76-schenduler
-dnf5 install -y system76-scheduler
-systemctl enable com.system76.Scheduler
-
 # Remove incompatible just recipes
 for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" "update" ; do
   if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
@@ -249,7 +244,6 @@ EOF
 for repo in terra terra-extras; do
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/$repo.repo
 done
-dnf5 -y copr remove kylegospo/system76-scheduler
 dnf5 -y copr remove bazzite-org/rom-properties
 dnf5 -y copr remove ublue-os/packages
 dnf5 -y copr remove ublue-os/staging
