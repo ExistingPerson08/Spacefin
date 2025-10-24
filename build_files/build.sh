@@ -10,6 +10,7 @@ dnf5 -y copr enable bazzite-org/bazzite
 dnf5 -y copr enable bazzite-org/bazzite-multilib
 dnf5 -y copr enable bazzite-org/rom-properties
 dnf5 -y copr enable kylegospo/system76-scheduler
+dnf5 -y copr enable sentry/kernel-blu
 
 case "$1" in
     "main")
@@ -138,6 +139,10 @@ for repo in "${!toswap[@]}"; do
     done
 done
 
+# Use kernel-blu
+dnf5 -y install llvm19-filesystem llvm19-libs
+dnf5 -y swap --repo=copr:copr.fedorainfracloud.org:sentry:kernel-blu kernel kernel
+
 dnf5 versionlock add \
     wireplumber \
     wireplumber-libs \
@@ -154,6 +159,8 @@ dnf5 versionlock add \
     fwupd-plugin-flashrom \
     fwupd-plugin-modem-manager \
     fwupd-plugin-uefi-capsule-data \
+    kernel \
+    kernel-headers
 
 # Setup firmware
 firmware="linux-firmware-whence qcom-wwan-firmware linux-firmware amd-gpu-firmware amd-ucode-firmware atheros-firmware brcmfmac-firmware cirrus-audio-firmware intel-audio-firmware intel-gpu-firmware intel-vsc-firmware iwlegacy-firmware iwlwifi-dvm-firmware iwlwifi-mvm-firmware libertas-firmware mt7xxx-firmware nvidia-gpu-firmware nxpwireless-firmware realtek-firmware tiwilink-firmware"
