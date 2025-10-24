@@ -250,7 +250,7 @@ mkdir /snap
 ln -s /var/lib/snapd/snap /snap
 
 # Cleanup
-for repo in terra terra-extras rpmfusion-free-release rpmfusion-nonfree-release rpmfusion-free rpmfusion-nonfree; do
+for repo in terra terra-extras rpmfusion-free rpmfusion-nonfree; do
     rm /etc/yum.repos.d/$repo.repo
 done
 dnf5 -y copr remove kylegospo/system76-scheduler
