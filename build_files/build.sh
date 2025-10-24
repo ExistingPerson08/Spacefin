@@ -3,7 +3,7 @@
 set -ouex pipefail
 
 dnf5 install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
-dnf5 install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+dnf5 install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
 dnf5 install -y terra-release-extras
 dnf5 -y copr enable ublue-os/packages
@@ -172,7 +172,7 @@ rm -rf /tmp/hwfirm/
 rm /usr/lib/firmware/rtl_bt/rtl8822cu_config.bin.xz
 
 # Install missing drivers from rpm-fusion
-dnf5 install broadcom-wl
+dnf5 install -y broadcom-wl
 
 # Enable system76-schenduler
 dnf5 install -y system76-scheduler
