@@ -55,6 +55,8 @@ case "$1" in
           gnome-shell-extension-just-perfection \
           steamdeck-gnome-presets \
           gnome-shell-extension-logo-menu \
+          gnome-shell-extension-pop-shell \
+          xprop \
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
         ;;
@@ -93,6 +95,8 @@ case "$1" in
           gnome-shell-extension-just-perfection \
           steamdeck-gnome-presets \
           gnome-shell-extension-logo-menu \
+          gnome-shell-extension-pop-shell \
+          xprop \
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
 
