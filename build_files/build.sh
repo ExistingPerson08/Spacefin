@@ -3,6 +3,8 @@
 set -ouex pipefail
 
 dnf5 install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+dnf5 install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
 dnf5 install -y terra-release-extras
 dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable ublue-os/staging
@@ -114,7 +116,7 @@ case "$1" in
             waydroid \
             scrcpy \
             quickemu
-
+            
         # Add Waydroid just command
         echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
 
@@ -168,6 +170,9 @@ cp -r /tmp/hwfirm/tas/*    /usr/lib/firmware/
 rm -rf /tmp/hwfirm/
 
 rm /usr/lib/firmware/rtl_bt/rtl8822cu_config.bin.xz
+
+# Install missing drivers from rpm-fusion
+dnf5 install broadcom-wl
 
 # Enable system76-schenduler
 dnf5 install -y system76-scheduler
@@ -238,8 +243,14 @@ cat >$IMAGE_INFO <<EOF
 }
 EOF
 
+# Workaround to make nix and snaps work
+# They are not installed by default
+mkdir /nix
+mkdir /snap
+ln -s /var/lib/snapd/snap /snap
+
 # Cleanup
-for repo in terra terra-extras; do
+for repo in terra terra-extras rpmfusion-free-release rpmfusion-nonfree-release rpmfusion-free rpmfusion-nonfree; do
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/$repo.repo
 done
 dnf5 -y copr remove kylegospo/system76-scheduler
