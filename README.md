@@ -12,7 +12,8 @@ Spacefin is custom Fedora Atomic image with COSMIC desktop installed.
  - Codecs and drivers out-of-the box
  - Custom just commands
  - Patched `switcheroo-control`, `mesa` and `xwayland`
- - [Kernel-blu](https://copr.fedorainfracloud.org/coprs/sentry/kernel-blu/) as kernel
+ - Kernel with hardware patches and akmods
+ - System76-schenduler enabled by default
  - Java preinstalled and set for running .jar files
  - Homebrew and Distrobox preinstalled
  - Custom COSMIC theme
