@@ -125,8 +125,8 @@ sections:
   - title: "Spacefin Recommends"
     subtitle: "Our Favorite Applications"
     rows: 3
-    light-banner: file:///run/host/etc/bazaar/11-bluefin-day.jxl
-    dark-banner: file:///run/host/etc/bazaar/11-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/recommended.jpg
+    dark-banner: file:///run/host/etc/bazaar/recommended.jpg
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -155,8 +155,8 @@ sections:
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
-    light-banner: file:///run/host/etc/bazaar/01-bluefin-day.jxl
-    dark-banner: file:///run/host/etc/bazaar/01-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/internet.jpg
+    dark-banner: file:///run/host/etc/bazaar/internet.jpg
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: start
@@ -174,12 +174,13 @@ sections:
       - com.microsoft.Edge
       - com.opera.Opera
       - com.vivaldi.Vivaldi
+      - app.zen_browser.zen
 
   - title: "Media"
     subtitle: "The Freedom of Music"
     rows: 2
-    light-banner: file:///run/host/etc/bazaar/02-bluefin-day.jxl
-    dark-banner: file:///run/host/etc/bazaar/02-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/music.jpg
+    dark-banner: file:///run/host/etc/bazaar/music.jpg
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
@@ -206,8 +207,8 @@ sections:
   - title: "Office & Productivity"
     subtitle: "Work smart, not hard"
     rows: 4
-    light-banner: file:///run/host/etc/bazaar/03-bluefin-day.jxl
-    dark-banner: file:///run/host/etc/bazaar/03-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/office.jpg
+    dark-banner: file:///run/host/etc/bazaar/office.jpg
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -239,8 +240,8 @@ sections:
   - title: "Games"
     subtitle: "Do not forget to touch grass as well!"
     rows: 3
-    light-banner: file:///run/host/etc/bazaar/04-bluefin-day.jxl
-    dark-banner: file:///run/host/etc/bazaar/04-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/games.jpg
+    dark-banner: file:///run/host/etc/bazaar/games.jpg
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -260,7 +261,8 @@ sections:
       - com.dec05eba.gpu_screen_recorder
       - com.github.Matoking.protontricks
       - com.obsproject.Studio
-      - org.prismlauncher.PrismLauncher      - com.valvesoftware.SteamLink
+      - org.prismlauncher.PrismLauncher
+      - com.valvesoftware.SteamLink
       - org.gnome.Mahjongg
       - io.github.fragglet.sdl_sopwith
       - io.github.sepehr_rs.Sudoku

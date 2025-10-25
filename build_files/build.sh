@@ -3,6 +3,8 @@
 set -ouex pipefail
 
 dnf5 install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+dnf5 install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
 dnf5 install -y terra-release-extras
 dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable ublue-os/staging
@@ -11,21 +13,17 @@ dnf5 -y copr enable bazzite-org/bazzite-multilib
 dnf5 -y copr enable bazzite-org/rom-properties
 dnf5 -y copr enable kylegospo/system76-scheduler
 
+# Using tagged Cosmic desktop
+dnf5 install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
+
 case "$1" in
     "main")
         IMAGE_NAME="main"
-
-        # Using tagged Cosmic desktop in main image
-        dnf5 install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
-
         systemctl enable cosmic-greeter
         ;;
     "hybrid")
         IMAGE_NAME="hybrid"
 
-        # Using tagged Cosmic  desktop in hybrid image
-        dnf5 install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
-
         # Setup GNOME
         dnf5 remove -y \
             gnome-classic-session \
@@ -60,66 +58,33 @@ case "$1" in
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
         ;;
-    "exp")
-        IMAGE_NAME="experimental"
-        # Using latest (nightly) Cosmic desktop in exp image
-        dnf5 copr enable -y ryanabx/cosmic-epoch
-        dnf5 install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
+    "hybrid-kde")
+        IMAGE_NAME="hybrid-kde"
 
-        # Setup GNOME
-        dnf5 remove -y \
-            gnome-classic-session \
-            gnome-tour \
-            gnome-extensions-app \
-            gnome-system-monitor \
-            gnome-software \
-            gnome-software-rpm-ostree \
-            gnome-tweaks \
-            gnome-shell-extension-apps-menu \
-            gnome-shell-extension-background-logo \
-            yelp \
-            gnome-initial-setup
-        dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
-        dnf5 versionlock add gnome-shell
+        # Setup KDE
         dnf5 -y install \
-          nautilus-gsconnect \
-          gnome-shell-extension-appindicator \
-          gnome-shell-extension-user-theme \
-          gnome-shell-extension-gsconnect \
-          gnome-shell-extension-compiz-windows-effect \
-          gnome-shell-extension-blur-my-shell \
-          gnome-shell-extension-hanabi \
-          gnome-shell-extension-hotedge \
-          gnome-shell-extension-caffeine \
-          gnome-shell-extension-desktop-cube \
-          gnome-shell-extension-just-perfection \
-          steamdeck-gnome-presets \
-          gnome-shell-extension-logo-menu \
-          gnome-shell-extension-pop-shell \
-          xprop \
-          rom-properties-gtk3 \
-          --exclude=gnome-extensions-app
-
-        # Install apps for experimental image
-        dnf5 install -y \
-            youtube-music \
-            zed \
-            codium \
-            codium-marketplace \
-            flatpak-builder \
-            gnome-boxes \
-            zsh \
-            restic \
-            rclone \
-            waydroid \
-            scrcpy \
-            quickemu
-
-        # Add Waydroid just command
-        echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
-
-        # Cleanup
-        dnf5 copr remove -y ryanabx/cosmic-epoch
+            qt \
+            krdp \
+            steamdeck-kde-presets-desktop \
+            wallpaper-engine-kde-plugin \
+            kdeconnectd \
+            kdeplasma-addons \
+            rom-properties-kf6 \
+            fcitx5-mozc \
+            fcitx5-chinese-addons \
+            fcitx5-hangul \
+            kcm-fcitx5 \
+            gnome-disk-utility \
+            kio-extras \
+            krunner-bazaar
+        dnf5 -y remove \
+            plasma-welcome \
+            plasma-welcome-fedora \
+            plasma-discover-kns \
+            kcharselect \
+            kde-partitionmanager \
+            plasma-discover \
+            konsole
         ;;
 esac
 
@@ -169,6 +134,9 @@ rm -rf /tmp/hwfirm/
 
 rm /usr/lib/firmware/rtl_bt/rtl8822cu_config.bin.xz
 
+# Install missing drivers from rpm-fusion
+dnf5 install -y broadcom-wl
+
 # Enable system76-schenduler
 dnf5 install -y system76-scheduler
 systemctl enable com.system76.Scheduler
@@ -195,10 +163,15 @@ dnf5 install -y \
     showtime \
     gnome-firmware \
     duperemove \
+    uupd \
     java-latest-openjdk-devel
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
-dnf5 install -y steamdeck-backgrounds gnome-backgrounds
+dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
+
+# Setup automatic-updates
+sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
+systemctl enable uupd.timer
 
 # Use ghostty instead of ptyxis
 dnf5 install -y ghostty
@@ -218,7 +191,6 @@ dnf5 -y copr disable ublue-os/flatpak-test
 systemctl enable brew-setup.service
 systemctl disable brew-upgrade.timer
 systemctl disable brew-update.timer
-systemctl disable waydroid-container.service
 
 # Write image info
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
@@ -238,10 +210,13 @@ cat >$IMAGE_INFO <<EOF
 }
 EOF
 
+# Workaround to make nix and snaps work
+# They are not installed by default
+mkdir /nix
+mkdir /snap
+ln -s /var/lib/snapd/snap /snap
+
 # Cleanup
-for repo in terra terra-extras; do
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/$repo.repo
-done
 dnf5 -y copr remove kylegospo/system76-scheduler
 dnf5 -y copr remove bazzite-org/rom-properties
 dnf5 -y copr remove ublue-os/packages
