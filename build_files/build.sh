@@ -217,7 +217,6 @@ mkdir /snap
 ln -s /var/lib/snapd/snap /snap
 
 # Cleanup
-dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
 dnf5 -y copr remove kylegospo/system76-scheduler
 dnf5 -y copr remove bazzite-org/rom-properties
 dnf5 -y copr remove ublue-os/packages
