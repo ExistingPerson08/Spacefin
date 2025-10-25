@@ -6,8 +6,6 @@ dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable ublue-os/staging
 dnf5 -y copr enable bazzite-org/bazzite
 dnf5 -y copr enable bazzite-org/bazzite-multilib
-dnf5 -y copr enable bazzite-org/rom-properties
-dnf5 -y copr enable kylegospo/system76-scheduler
 
 IMAGE_NAME="dx"
 
@@ -58,8 +56,6 @@ EOF
 
 # Cleanup
 dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
-dnf5 -y copr remove kylegospo/system76-scheduler
-dnf5 -y copr remove bazzite-org/rom-properties
 dnf5 -y copr remove ublue-os/packages
 dnf5 -y copr remove ublue-os/staging
 dnf5 -y copr remove bazzite-org/bazzite
