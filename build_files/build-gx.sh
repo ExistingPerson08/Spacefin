@@ -19,7 +19,7 @@ dnf5 versionlock delete \
     mesa-vulkan-drivers \
 
 # Install gx packages
-dnf5 install -y --disableexcludes \
+dnf5 install -y \
     waydroid \
     wine \
     winetricks \
