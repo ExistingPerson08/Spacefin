@@ -4,13 +4,17 @@ on:
   pull_request:
     branches:
       - main
+      - ExistingPerson08-patch-1
+    paths-ignore:
+      - "**.md"
   schedule:
     - cron: "05 10 * * *" # 10:05am UTC everyday
   push:
     branches:
       - main
+      - ExistingPerson08-patch-1
     paths-ignore:
-      - "**/README.md"
+      - "**.md"
   workflow_dispatch:
 
 env:
