@@ -12,7 +12,7 @@ dnf5 -y copr enable kylegospo/system76-scheduler
 IMAGE_NAME="gx"
 
 # Install gx packages
-dnf5 install -y \
+dnf5 install -y --disableexcludes \
     waydroid \
     wine \
     winetricks \
