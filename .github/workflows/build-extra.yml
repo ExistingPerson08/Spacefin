@@ -2,7 +2,7 @@
 name: Build extra container images
 on:
   workflow_run:
-    workflows: ["build-base"]
+    workflows: ["build-base.yml"]
     types: [completed]
   workflow_dispatch:
 
