@@ -200,10 +200,15 @@ dnf5 install -y \
     showtime \
     gnome-firmware \
     duperemove \
+    uupd \
     java-latest-openjdk-devel
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 dnf5 install -y steamdeck-backgrounds gnome-backgrounds
+
+# Setup automatic-updates
+sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
+systemctl enable uupd.timer
 
 # Use ghostty instead of ptyxis
 dnf5 install -y ghostty
