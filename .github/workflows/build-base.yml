@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - main
-      - ExistingPerson08-patch-1
     paths-ignore:
       - "**.md"
   schedule:
@@ -12,7 +11,6 @@ on:
   push:
     branches:
       - main
-      - ExistingPerson08-patch-1
     paths-ignore:
       - "**.md"
   workflow_dispatch:
