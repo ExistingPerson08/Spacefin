@@ -1,18 +1,9 @@
 ---
 name: Build extra container images
 on:
-  pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - "**.md"
-  schedule:
-    - cron: "05 11 * * *" # 11:05am UTC everyday
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - "**.md"
+  workflow_run:
+    workflows: ["build-base"]
+    types: [completed]
   workflow_dispatch:
 
 env:
