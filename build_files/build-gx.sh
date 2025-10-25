@@ -6,6 +6,7 @@ dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable ublue-os/staging
 dnf5 -y copr enable bazzite-org/bazzite
 dnf5 -y copr enable bazzite-org/bazzite-multilib
+dnf5 -y copr enable bazzite-org/webapp-manager
 
 IMAGE_NAME="gx"
 
@@ -23,9 +24,8 @@ dnf5 install -y \
     waydroid \
     wine \
     winetricks \
-    mangohud
-
-dnf5 install -y https://downloads.plex.tv/plex-media-server-new/1.42.2.10156-f737b826c/redhat/plexmediaserver-1.42.2.10156-f737b826c.x86_64.rpm
+    mangohud \
+    webapp-manager
 
 dnf5 -y --setopt=install_weak_deps=False install \
     steam \
@@ -57,6 +57,7 @@ EOF
 
 # Cleanup
 dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
+dnf5 -y copr remove bazzite-org/webapp-manager
 dnf5 -y copr remove ublue-os/packages
 dnf5 -y copr remove ublue-os/staging
 dnf5 -y copr remove bazzite-org/bazzite
