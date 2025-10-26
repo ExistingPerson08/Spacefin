@@ -27,6 +27,8 @@ dnf5 install -y \
     docker-compose \
     webapp-manager \
     wine \
+    gamescope \
+    vkBasalt \
     winetricks
 
 dnf5 -y --setopt=install_weak_deps=False install \

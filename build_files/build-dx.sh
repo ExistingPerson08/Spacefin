@@ -10,7 +10,7 @@ dnf5 -y copr enable bazzite-org/bazzite-multilib
 IMAGE_NAME="dx"
 
 # Using latest (nightly) Cosmic desktop in dx image
-dnf5 remove -y @cosmic-desktop @cosmic-desktop-apps
+dnf5 remove -y @cosmic-desktop @cosmic-desktop-apps --exclude=gnome-disk-utility,flatpak
 dnf5 copr enable -y ryanabx/cosmic-epoch
 dnf5 install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 dnf5 copr remove -y ryanabx/cosmic-epoch
