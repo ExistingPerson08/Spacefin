@@ -28,12 +28,16 @@ dnf5 install -y \
     rclone \
     waydroid \
     scrcpy \
+    docker \
+    docker-compose \
     quickemu
 
 # Add Waydroid just command
 echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
 
 systemctl disable waydroid-container.service
+systemctl enable docker.service
+systemctl enable containerd.service
 
 # Write image info
 rm /usr/share/ublue-os/image-info.json
