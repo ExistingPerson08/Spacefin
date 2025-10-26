@@ -10,13 +10,24 @@ dnf5 -y copr enable bazzite-org/webapp-manager
 
 IMAGE_NAME="gx"
 
+dnf5 versionlock delete \
+    mesa-dri-drivers \
+    mesa-filesystem \
+    mesa-libEGL \
+    mesa-libGL \
+    mesa-libgbm \
+    mesa-va-drivers \
+    mesa-vulkan-drivers
+
 # Install gx packages
 dnf5 install -y \
     waydroid \
     mangohud \
     docker \
     docker-compose \
-    webapp-manager
+    webapp-manager \
+    wine \
+    winetricks
 
 dnf5 -y --setopt=install_weak_deps=False install \
     steam \
