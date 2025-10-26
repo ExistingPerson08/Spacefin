@@ -2,6 +2,7 @@
 name: Build Hybrid Container Image
 on:
   workflow_dispatch:
+  workflow_call:
 
 env:
   IMAGE_DESC: "Custom Fedora Atomic image with COSMIC™ desktop"
