@@ -213,7 +213,6 @@ EOF
 # They are not installed by default
 mkdir /nix
 mkdir /snap
-ln -s /var/lib/snapd/snap /snap
 
 # Cleanup
 dnf5 -y copr remove kylegospo/system76-scheduler

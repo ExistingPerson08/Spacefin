@@ -5,7 +5,6 @@ set -ouex pipefail
 dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable ublue-os/staging
 dnf5 -y copr enable bazzite-org/bazzite
-dnf5 -y copr enable bazzite-org/bazzite-multilib
 dnf5 -y copr enable bazzite-org/webapp-manager
 
 IMAGE_NAME="gx"
@@ -65,7 +64,6 @@ dnf5 -y copr remove bazzite-org/webapp-manager
 dnf5 -y copr remove ublue-os/packages
 dnf5 -y copr remove ublue-os/staging
 dnf5 -y copr remove bazzite-org/bazzite
-dnf5 -y copr remove bazzite-org/bazzite-multilib
 dnf5 clean all -y
 
 # Finalize

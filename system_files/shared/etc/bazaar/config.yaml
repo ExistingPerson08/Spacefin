@@ -179,8 +179,8 @@ sections:
   - title: "Media"
     subtitle: "The Freedom of Music"
     rows: 2
-    light-banner: file:///run/host/etc/bazaar/music.jpg
-    dark-banner: file:///run/host/etc/bazaar/music.jpg
+    light-banner: file:///run/host/etc/bazaar/music.png
+    dark-banner: file:///run/host/etc/bazaar/music.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
