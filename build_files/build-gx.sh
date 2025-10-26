@@ -10,22 +10,15 @@ dnf5 -y copr enable bazzite-org/webapp-manager
 
 IMAGE_NAME="gx"
 
-dnf5 versionlock delete \
-    mesa-dri-drivers \
-    mesa-filesystem \
-    mesa-libEGL \
-    mesa-libGL \
-    mesa-libgbm \
-    mesa-va-drivers \
-    mesa-vulkan-drivers \
-
 # Install gx packages
 dnf5 install -y \
     waydroid \
-    wine \
-    winetricks \
     mangohud \
+    docker \
+    docker-compose \
     webapp-manager
+
+dnf5 install -y https://github.com/TibixDev/winboat/releases/download/v0.8.7/winboat-0.8.7-x86_64.rpm
 
 dnf5 -y --setopt=install_weak_deps=False install \
     steam \

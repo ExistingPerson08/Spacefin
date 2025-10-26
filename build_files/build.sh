@@ -65,7 +65,6 @@ case "$1" in
         dnf5 -y install \
             qt \
             krdp \
-            steamdeck-kde-presets-desktop \
             wallpaper-engine-kde-plugin \
             kdeconnectd \
             kdeplasma-addons \
@@ -74,7 +73,6 @@ case "$1" in
             fcitx5-chinese-addons \
             fcitx5-hangul \
             kcm-fcitx5 \
-            gnome-disk-utility \
             kio-extras \
             krunner-bazaar
         dnf5 -y remove \
@@ -164,10 +162,11 @@ dnf5 install -y \
     gnome-firmware \
     duperemove \
     uupd \
+    gnome-disk-utility \
     java-latest-openjdk-devel
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
-dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
+dnf5 install -y steamdeck-backgrounds gnome-backgrounds
 
 # Setup automatic-updates
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
