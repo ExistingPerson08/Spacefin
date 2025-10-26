@@ -27,22 +27,13 @@ dnf5 install -y \
     docker-compose \
     webapp-manager \
     wine \
+    gamescope \
     vkBasalt \
     winetricks
 
 dnf5 -y --setopt=install_weak_deps=False install \
     steam \
     lutris
-
-# Setup wine dobbleclick .exe
-sudo tee /usr/share/applications/wine-exe.desktop > /dev/null <<'EOF'
-[Desktop Entry]
-Type=Application
-Name=Wine Launcher
-MimeType=application/x-ms-dos-executable;
-Exec=wine start /unix %f
-NoDisplay=true
-EOF
 
 # Add Waydroid just command
 echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
