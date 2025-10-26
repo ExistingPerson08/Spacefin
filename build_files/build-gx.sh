@@ -18,8 +18,6 @@ dnf5 install -y \
     docker-compose \
     webapp-manager
 
-dnf5 install -y https://github.com/TibixDev/winboat/releases/download/v0.8.7/winboat-0.8.7-x86_64.rpm
-
 dnf5 -y --setopt=install_weak_deps=False install \
     steam \
     lutris
