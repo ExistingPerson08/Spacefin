@@ -6,7 +6,6 @@ dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable ublue-os/staging
 dnf5 -y copr enable bazzite-org/bazzite
 dnf5 -y copr enable bazzite-org/webapp-manager
-dnf5 -y copr enable pvermeer/gamescope-session-guide
 
 IMAGE_NAME="gx"
 
@@ -31,7 +30,7 @@ dnf5 install -y \
     docker-compose \
     webapp-manager \
     wine \
-    gamescope-session-guide \
+    gamescope \
     vkBasalt \
     winetricks
 
@@ -61,7 +60,6 @@ EOF
 
 # Cleanup
 dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
-dnf5 -y copr remove pvermeer/gamescope-session-guide
 dnf5 -y copr remove bazzite-org/webapp-manager
 dnf5 -y copr remove ublue-os/packages
 dnf5 -y copr remove ublue-os/staging
