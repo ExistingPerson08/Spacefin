@@ -27,7 +27,6 @@ dnf5 install -y \
     docker-compose \
     webapp-manager \
     wine \
-    sunshine \
     vkBasalt \
     winetricks
 
