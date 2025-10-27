@@ -32,6 +32,11 @@ dnf5 install -y \
     docker-compose \
     quickemu
 
+# Install niri
+dnf5 copr enable -y yalter/niri
+dnf5 install -y ulauncher niri waybar
+dnf5 copr remove -y yalter/niri
+
 # Add Waydroid just command
 echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
 
