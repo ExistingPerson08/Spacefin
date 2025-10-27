@@ -34,7 +34,7 @@ dnf5 install -y \
 
 # Install niri
 dnf5 copr enable -y yalter/niri
-dnf5 install -y ulauncher niri waybar
+dnf5 install -y niri
 dnf5 copr remove -y yalter/niri
 
 # Add Waydroid just command
