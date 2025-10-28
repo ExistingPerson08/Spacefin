@@ -90,7 +90,6 @@ esac
 declare -A toswap=(
     ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
     ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="xorg-x11-server-Xwayland"
-    ["terra-extras"]="switcheroo-control"
     ["terra-mesa"]="mesa-filesystem"
     ["copr:copr.fedorainfracloud.org:ublue-os:staging"]="fwupd"
 )
