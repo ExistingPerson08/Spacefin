@@ -5,11 +5,10 @@ import json
 import shutil
 import subprocess
 import shlex
+import argparse
 
-# Locations to search for config files
-CONFIG_DIRS = [
-    "/usr/share/language-get",
-]
+SYSTEM_CONFIG_DIR = "/usr/share/language-get"
+USER_CONFIG_DIR = os.path.expanduser("~/.local/share/language-get")
 
 EDITOR_CONFIG_PATHS = {
     "vscode_config_git": os.path.expanduser("~/.vscode"),
@@ -21,9 +20,9 @@ EDITOR_CONFIG_PATHS = {
 DEVCONTAINER_BASE_DIR = os.path.expanduser("~/.devcontainers")
 
 
-def find_config_file(language_name):
+def find_config_file(language_name, config_dirs):
     """Searches for the JSON file in the defined directories."""
-    for config_dir in CONFIG_DIRS:
+    for config_dir in config_dirs:
         config_path = os.path.join(config_dir, f"{language_name}.json")
         if os.path.exists(config_path):
             return config_path
@@ -39,15 +38,34 @@ def run_command(command):
 
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python language-get.py <language_name>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Installs language development environments based on config files."
+    )
+    parser.add_argument(
+        "language_name", help="Name of the language to set up (e.g., python, rust)."
+    )
+    parser.add_argument(
+        "-u",
+        "--user",
+        action="store_true",
+        help="Use user-specific configuration directory (~/.local/share/language-get) instead of system-wide.",
+    )
 
-    language_name = sys.argv[1]
-    config_file_path = find_config_file(language_name)
+    args = parser.parse_args()
+    language_name = args.language_name
+
+    if args.user:
+        config_dirs = [USER_CONFIG_DIR]
+        print(f"Using user configuration path: {USER_CONFIG_DIR}")
+    else:
+        config_dirs = [SYSTEM_CONFIG_DIR]
+
+    config_file_path = find_config_file(language_name, config_dirs)
 
     if not config_file_path:
-        print("Language config file not found")
+        print(
+            f"Language config file not found for '{language_name}' in: {', '.join(config_dirs)}"
+        )
         sys.exit(1)
 
     try:
@@ -68,7 +86,9 @@ def main():
         run_command(command)
 
     # Commands for installation
-    if "lang_install_cmds" in config and isinstance(config.get("lang_install_cmds"), list):
+    if "lang_install_cmds" in config and isinstance(
+        config.get("lang_install_cmds"), list
+    ):
         print("")
         print("Installing language with dependencies...")
         print("-----------------------------")
@@ -148,6 +168,7 @@ def main():
 
     print("")
     print("Environment for " + language_name + " is setup successfully.")
+
 
 if __name__ == "__main__":
     main()
