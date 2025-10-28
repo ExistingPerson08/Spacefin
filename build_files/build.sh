@@ -37,7 +37,6 @@ case "$1" in
             gnome-shell-extension-background-logo \
             yelp \
             gnome-initial-setup
-        dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
         dnf5 versionlock add gnome-shell
         dnf5 -y install \
           nautilus-gsconnect \
@@ -90,7 +89,6 @@ esac
 declare -A toswap=(
     ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
     ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="xorg-x11-server-Xwayland"
-    ["terra-extras"]="switcheroo-control"
     ["terra-mesa"]="mesa-filesystem"
     ["copr:copr.fedorainfracloud.org:ublue-os:staging"]="fwupd"
 )
@@ -133,7 +131,8 @@ rm -rf /tmp/hwfirm/
 rm /usr/lib/firmware/rtl_bt/rtl8822cu_config.bin.xz
 
 # Install missing drivers from rpm-fusion
-dnf5 install -y broadcom-wl
+# Disabled until I find way how to get it on F43
+# dnf5 install -y broadcom-wl
 
 # Enable system76-schenduler
 dnf5 install -y system76-scheduler
