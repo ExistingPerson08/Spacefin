@@ -37,7 +37,6 @@ case "$1" in
             gnome-shell-extension-background-logo \
             yelp \
             gnome-initial-setup
-        dnf5 -y swap --repo terra-extras gnome-shell gnome-shell
         dnf5 versionlock add gnome-shell
         dnf5 -y install \
           nautilus-gsconnect \
