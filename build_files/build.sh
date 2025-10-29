@@ -15,6 +15,7 @@ dnf5 -y copr enable kylegospo/system76-scheduler
 
 IMAGE_NAME="main"
 systemctl enable cosmic-greeter
+
 # Using tagged Cosmic desktop
 dnf5 install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
 
