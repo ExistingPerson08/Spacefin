@@ -130,9 +130,6 @@ rm -rf /tmp/hwfirm/
 
 rm /usr/lib/firmware/rtl_bt/rtl8822cu_config.bin.xz
 
-# Install missing drivers from rpm-fusion
-dnf5 install -y broadcom-wl
-
 # Enable system76-schenduler
 dnf5 install -y system76-scheduler
 systemctl enable com.system76.Scheduler
