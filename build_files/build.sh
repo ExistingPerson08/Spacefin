@@ -13,11 +13,51 @@ dnf5 -y copr enable bazzite-org/bazzite-multilib
 dnf5 -y copr enable bazzite-org/rom-properties
 dnf5 -y copr enable kylegospo/system76-scheduler
 
-IMAGE_NAME="main"
-systemctl enable cosmic-greeter
-
 # Using tagged Cosmic desktop
 dnf5 install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
+
+case "$1" in
+    "main")
+        IMAGE_NAME="main"
+        systemctl enable cosmic-greeter
+        ;;
+    "hybrid")
+        IMAGE_NAME="hybrid"
+
+        # Setup GNOME
+        dnf5 remove -y \
+            gnome-classic-session \
+            gnome-tour \
+            gnome-extensions-app \
+            gnome-system-monitor \
+            gnome-software \
+            gnome-software-rpm-ostree \
+            gnome-tweaks \
+            gnome-shell-extension-apps-menu \
+            gnome-shell-extension-background-logo \
+            yelp \
+            gnome-initial-setup
+        dnf5 -y install \
+          nautilus-gsconnect \
+          gnome-shell-extension-appindicator \
+          gnome-shell-extension-user-theme \
+          ulauncher \
+          gnome-shell-extension-gsconnect \
+          gnome-shell-extension-compiz-windows-effect \
+          gnome-shell-extension-blur-my-shell \
+          gnome-shell-extension-hanabi \
+          gnome-shell-extension-hotedge \
+          gnome-shell-extension-caffeine \
+          gnome-shell-extension-desktop-cube \
+          gnome-shell-extension-just-perfection \
+          steamdeck-gnome-presets \
+          gnome-shell-extension-logo-menu \
+          gnome-shell-extension-pop-shell \
+          xprop \
+          rom-properties-gtk3 \
+          --exclude=gnome-extensions-app
+        ;;
+esac
 
 # Additional packages for cosmic
 dnf5 install -y flameshot ulauncher

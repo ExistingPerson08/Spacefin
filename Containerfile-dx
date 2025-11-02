@@ -3,7 +3,7 @@ FROM scratch AS ctx
 COPY build_files /
 
 # Base Image
-FROM ghcr.io/existingperson08/spacefin-main:latest as spacefin-dx
+FROM ghcr.io/existingperson08/spacefin-hybrid:latest as spacefin-dx
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
