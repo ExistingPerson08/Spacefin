@@ -59,9 +59,6 @@ case "$1" in
         ;;
 esac
 
-# Additional packages for cosmic
-dnf5 install -y flameshot ulauncher
-
 # Swap patched packages
 declare -A toswap=(
     ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
