@@ -37,11 +37,11 @@ case "$1" in
             gnome-shell-extension-background-logo \
             yelp \
             gnome-initial-setup
-        dnf5 versionlock add gnome-shell
         dnf5 -y install \
           nautilus-gsconnect \
           gnome-shell-extension-appindicator \
           gnome-shell-extension-user-theme \
+          ulauncher \
           gnome-shell-extension-gsconnect \
           gnome-shell-extension-compiz-windows-effect \
           gnome-shell-extension-blur-my-shell \
@@ -56,32 +56,6 @@ case "$1" in
           xprop \
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
-        ;;
-    "hybrid-kde")
-        IMAGE_NAME="hybrid-kde"
-
-        # Setup KDE
-        dnf5 -y install \
-            qt \
-            krdp \
-            wallpaper-engine-kde-plugin \
-            kdeconnectd \
-            kdeplasma-addons \
-            rom-properties-kf6 \
-            fcitx5-mozc \
-            fcitx5-chinese-addons \
-            fcitx5-hangul \
-            kcm-fcitx5 \
-            kio-extras \
-            krunner-bazaar
-        dnf5 -y remove \
-            plasma-welcome \
-            plasma-welcome-fedora \
-            plasma-discover-kns \
-            kcharselect \
-            kde-partitionmanager \
-            plasma-discover \
-            konsole
         ;;
 esac
 
