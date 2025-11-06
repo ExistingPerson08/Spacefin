@@ -138,6 +138,33 @@ def list_available_scripts(path):
         print(f"   (Error listing commands: {e})")
 
 
+def list_available_bundles(path):
+    """Lists available install bundles"""
+    print(f"\nAvailable bundles:")
+    if not os.path.isdir(path):
+        print(f"   (Could not find 'install' directory in repository)")
+        return
+    try:
+        bundles = []
+        for item in os.listdir(path):
+            item_path = os.path.join(path, item)
+            # Check if it is a file, ends with .json, and not hidden
+            if (
+                os.path.isfile(item_path)
+                and item.endswith(".json")
+                and not item.startswith(".")
+            ):
+                bundles.append(item[:-5])  # Remove .json
+
+        if not bundles:
+            print(f"   (No bundles found)")
+        else:
+            for bundle in sorted(bundles):
+                print(f"  - {bundle}")
+    except OSError as e:
+        print(f"   (Error listing bundles: {e})")
+
+
 def copy(source, dest, ignore_patterns=None):
     """Wrapper for shutil.copytree with dirs_exist_ok and error handling."""
     print(f"📂 Copying files from '{os.path.basename(source)}' to '{dest}'...")
@@ -294,7 +321,47 @@ def handle_run(script_name, clone_path):
         sys.exit(1)
 
 
-# main()
+def handle_install(bundle_name, clone_path):
+    """Handles the installation of a software bundle."""
+    print(f"🔄 Installing bundle: {bundle_name}")
+    install_dir = os.path.join(clone_path, "install")
+    json_path = os.path.join(install_dir, f"{bundle_name}.json")
+
+    if not os.path.isfile(json_path):
+        print(f"❌ ERROR: Bundle '{bundle_name}.json' not found in repository.")
+        list_available_bundles(install_dir)
+        sys.exit(1)
+
+    print(f"Found '{bundle_name}.json', processing...")
+    try:
+        with open(json_path, "r", encoding="utf-8") as f:
+            bundle_data = json.load(f)
+
+        # Install Flatpak packages
+        flatpak_packages = bundle_data.get("flatpak")
+        if flatpak_packages and isinstance(flatpak_packages, list):
+            print("Installing Flatpak packages...")
+            # Add -y for non-interactive install
+            run_command(["flatpak", "install", "-y", "--system"] + flatpak_packages)
+        else:
+            print("No Flatpak packages to install.")
+
+        # Install Brew packages
+        brew_packages = bundle_data.get("brew")
+        if brew_packages and isinstance(brew_packages, list):
+            print("Installing Homebrew packages...")
+            run_command(["brew", "install"] + brew_packages)
+        else:
+            print("No Homebrew packages to install.")
+
+    except json.JSONDecodeError:
+        print(f"❌ ERROR: '{bundle_name}.json' is corrupt.")
+        sys.exit(1)
+    except Exception as e:
+        print(f"❌ ERROR: Failed processing '{bundle_name}.json': {e}")
+        sys.exit(1)
+
+    print(f"🎉 Done! Bundle '{bundle_name}' installation complete.")
 
 
 def main():
@@ -344,6 +411,14 @@ def main():
     )
     run_parser.add_argument("name", help="Name of the command to run.")
 
+    # 'install' subcommand
+    install_parser = subparsers.add_parser(
+        "install",
+        help="Install a software bundle.",
+        description="Install a bundle of applications from a .json file.",
+    )
+    install_parser.add_argument("name", help="Name of the bundle to install.")
+
     # Handle case where no arguments are given
     if len(sys.argv) == 1:
         parser.print_help(sys.stderr)
@@ -370,6 +445,8 @@ def main():
                 handle_language(args.name, clone_path)
             elif args.command == "run":
                 handle_run(args.name, clone_path)
+            elif args.command == "install":
+                handle_install(args.name, clone_path)
 
         except Exception as e:
             print(f"❌ An unexpected critical error occurred: {e}")
