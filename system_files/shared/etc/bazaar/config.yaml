@@ -271,8 +271,8 @@ sections:
   - title: "Utilities"
     subtitle: "Gear up and kit out"
     rows: 4
-    light-banner: file:///run/host/etc/bazaar/05-bluefin-day.jxl
-    dark-banner: file:///run/host/etc/bazaar/05-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/utility.jpg
+    dark-banner: file:///run/host/etc/bazaar/utility.jpg
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -307,8 +307,8 @@ sections:
   - title: "Developers"
     subtitle: "Unleash the power"
     rows: 4
-    light-banner: file:///run/host/etc/bazaar/06-bluefin-day.jxl
-    dark-banner: file:///run/host/etc/bazaar/06-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/dev.jpg
+    dark-banner: file:///run/host/etc/bazaar/dev.jpg
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -343,8 +343,8 @@ sections:
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
-    light-banner: file:///run/host/etc/bazaar/10-bluefin-day.jxl
-    dark-banner: file:///run/host/etc/bazaar/10-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/education.jpg
+    dark-banner: file:///run/host/etc/bazaar/education.jpg
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -368,8 +368,8 @@ sections:
   - title: "AI and Machine Learning"
     subtitle: "Explore the best of open source AI"
     rows: 1
-    light-banner: file:///run/host/etc/bazaar/08-bluefin-day.jxl
-    dark-banner: file:///run/host/etc/bazaar/08-bluefin-night.jxl
+    light-banner: file:///run/host/etc/bazaar/ai.jpg
+    dark-banner: file:///run/host/etc/bazaar/ai.jpg
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
