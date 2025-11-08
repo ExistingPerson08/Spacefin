@@ -13,16 +13,19 @@ dnf5 -y copr enable bazzite-org/bazzite-multilib
 dnf5 -y copr enable bazzite-org/rom-properties
 dnf5 -y copr enable kylegospo/system76-scheduler
 
-# Using tagged Cosmic desktop
-dnf5 install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
-
 case "$1" in
     "main")
         IMAGE_NAME="main"
+        # Using latest (nightly) Cosmic desktop until stable release
+        dnf5 remove -y @cosmic-desktop @cosmic-desktop-apps --exclude=gnome-disk-utility,flatpak
+        dnf5 copr enable -y ryanabx/cosmic-epoch
+        dnf5 install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
+        dnf5 copr remove -y ryanabx/cosmic-epoch
+
         systemctl enable cosmic-greeter
         ;;
-    "hybrid")
-        IMAGE_NAME="hybrid"
+    "gnome")
+        IMAGE_NAME="gnome"
 
         # Setup GNOME
         dnf5 remove -y \
@@ -118,6 +121,8 @@ done
 
 # Add to justfile
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
+echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
+
 
 # Install additional packages
 dnf5 install -y \
@@ -132,7 +137,21 @@ dnf5 install -y \
     duperemove \
     uupd \
     gnome-disk-utility \
-    java-latest-openjdk-devel
+    java-latest-openjdk-devel \
+    youtube-music \
+    zed \
+    codium \
+    codium-marketplace \
+    flatpak-builder \
+    gnome-boxes \
+    zsh \
+    restic \
+    rclone \
+    waydroid \
+    scrcpy \
+    docker \
+    docker-compose \
+    quickemu
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 dnf5 install -y steamdeck-backgrounds gnome-backgrounds
@@ -184,6 +203,7 @@ mkdir /nix
 mkdir /snap
 
 # Cleanup
+dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
 dnf5 -y copr remove kylegospo/system76-scheduler
 dnf5 -y copr remove bazzite-org/rom-properties
 dnf5 -y copr remove ublue-os/packages

@@ -15,17 +15,7 @@ jobs:
     uses: ./.github/workflows/build-main.yml
     secrets: inherit
 
-  build-image-hybrid:
+  build-image-gnome:
     needs: build-image-main
-    uses: ./.github/workflows/build-hybrid.yml
-    secrets: inherit
-
-  build-image-dx:
-    needs: build-image-hybrid
-    uses: ./.github/workflows/build-dx.yml
-    secrets: inherit
-
-  build-image-gx:
-    needs: build-image-dx
-    uses: ./.github/workflows/build-gx.yml
+    uses: ./.github/workflows/build-gnome.yml
     secrets: inherit

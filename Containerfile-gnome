@@ -3,16 +3,15 @@ FROM scratch AS ctx
 COPY build_files /
 
 # Base Image
-FROM ghcr.io/existingperson08/spacefin-hybrid:latest as spacefin-gx
+FROM ghcr.io/ublue-os/silverblue-main:latest as spacefin-gnome
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
     --mount=type=cache,dst=/var/log \
     --mount=type=tmpfs,dst=/tmp \
-    /ctx/build-gx.sh
+    /ctx/build.sh gnome
 
 COPY system_files/shared /
-COPY system_files/gx /
 
 # Enable custom services
 RUN systemctl --global enable bazaar.service
