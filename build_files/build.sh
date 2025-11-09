@@ -13,6 +13,10 @@ dnf5 -y copr enable bazzite-org/bazzite-multilib
 dnf5 -y copr enable bazzite-org/rom-properties
 dnf5 -y copr enable kylegospo/system76-scheduler
 
+# Clean base
+dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookmarks fedora-chromium-config fedora-chromium-config-gnome
+
+# Install edition specific packages
 case "$1" in
     "main")
         IMAGE_NAME="main"
@@ -23,6 +27,22 @@ case "$1" in
         dnf5 copr remove -y ryanabx/cosmic-epoch
 
         systemctl enable cosmic-greeter
+
+        # Install additional packages
+        dnf5 install -y \
+            youtube-music \
+            zed \
+            codium \
+            codium-marketplace \
+            gnome-boxes \
+            waydroid \
+            scrcpy \
+            torbrowser-launcher \
+            chromium \
+            prismlauncher \
+            quickemu
+
+        dnf5 install -y https://github.com/TriliumNext/Trilium/releases/download/v0.99.3/TriliumNotes-v0.99.3-linux-x64.rpm
         ;;
     "gnome")
         IMAGE_NAME="gnome"
@@ -59,6 +79,16 @@ case "$1" in
           xprop \
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
+
+        # Install additional packages
+        dnf5 install -y \
+            youtube-music \
+            xournal \
+            firefox \
+            waydroid \
+            scrcpy \
+            gnome-boxes \
+            torbrowser-launcher
         ;;
 esac
 
@@ -133,25 +163,21 @@ dnf5 install -y \
     fish \
     bluefin-cli-logos \
     showtime \
+    shotwell \
+    decibels \
     gnome-firmware \
     duperemove \
     uupd \
     gnome-disk-utility \
     java-latest-openjdk-devel \
-    youtube-music \
-    zed \
-    codium \
-    codium-marketplace \
-    flatpak-builder \
-    gnome-boxes \
-    zsh \
-    restic \
-    rclone \
-    waydroid \
-    scrcpy \
     docker \
+    gimp \
     docker-compose \
-    quickemu
+    zsh \
+    flatpak-builder \
+    papers \
+    restic \
+    rclone
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 dnf5 install -y steamdeck-backgrounds gnome-backgrounds
@@ -210,7 +236,6 @@ dnf5 -y copr remove ublue-os/packages
 dnf5 -y copr remove ublue-os/staging
 dnf5 -y copr remove bazzite-org/bazzite
 dnf5 -y copr remove bazzite-org/bazzite-multilib
-dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookmarks fedora-chromium-config fedora-chromium-config-gnome
 dnf5 clean all -y
 
 # Finalize
