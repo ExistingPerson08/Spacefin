@@ -137,6 +137,9 @@ case "$1" in
     "cinnamon")
         IMAGE_NAME="cinnamon"
         dnf5 group install -y cinnamon-desktop
+        dnf5 install -y lightdm
+
+        systemctl enable lightdm
 
         # Install additional packages
         dnf5 -y --setopt=install_weak_deps=False install \
