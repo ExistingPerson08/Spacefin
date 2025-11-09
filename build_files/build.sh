@@ -10,11 +10,57 @@ dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable ublue-os/staging
 dnf5 -y copr enable bazzite-org/bazzite
 dnf5 -y copr enable bazzite-org/bazzite-multilib
+dnf5 -y copr enable bazzite-org/webapp-manager
 dnf5 -y copr enable bazzite-org/rom-properties
 dnf5 -y copr enable kylegospo/system76-scheduler
 
 # Clean base
 dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookmarks fedora-chromium-config fedora-chromium-config-gnome
+
+# Swap patched packages
+declare -A toswap=(
+    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
+    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="xorg-x11-server-Xwayland"
+    ["terra-mesa"]="mesa-filesystem"
+    ["copr:copr.fedorainfracloud.org:ublue-os:staging"]="fwupd"
+)
+
+for repo in "${!toswap[@]}"; do
+    for package in ${toswap[$repo]}; do
+        dnf5 -y swap --repo="$repo" "$package" "$package"
+    done
+done
+
+dnf5 versionlock add \
+    wireplumber \
+    wireplumber-libs \
+    xorg-x11-server-Xwayland \
+    switcheroo-control \
+    mesa-dri-drivers \
+    mesa-filesystem \
+    mesa-libEGL \
+    mesa-libGL \
+    mesa-libgbm \
+    mesa-va-drivers \
+    mesa-vulkan-drivers \
+    fwupd \
+    fwupd-plugin-flashrom \
+    fwupd-plugin-modem-manager \
+    fwupd-plugin-uefi-capsule-data \
+
+# Setup firmware
+firmware="linux-firmware-whence qcom-wwan-firmware linux-firmware amd-gpu-firmware amd-ucode-firmware atheros-firmware brcmfmac-firmware cirrus-audio-firmware intel-audio-firmware intel-gpu-firmware intel-vsc-firmware iwlegacy-firmware iwlwifi-dvm-firmware iwlwifi-mvm-firmware libertas-firmware mt7xxx-firmware nvidia-gpu-firmware nxpwireless-firmware realtek-firmware tiwilink-firmware"
+dnf5 -y remove --no-autoremove $firmware
+dnf5 -y install --repo="copr:copr.fedorainfracloud.org:bazzite-org:bazzite" $firmware
+
+git clone https://github.com/hhd-dev/hwfirm /tmp/hwfirm --depth 1
+cp -r /tmp/hwfirm/cirrus/* /usr/lib/firmware/cirrus/
+cp -r /tmp/hwfirm/rtl_bt/* /usr/lib/firmware/rtl_bt/
+cp -r /tmp/hwfirm/awinic/* /usr/lib/firmware/
+cp -r /tmp/hwfirm/tas/*    /usr/lib/firmware/
+rm -rf /tmp/hwfirm/
+
+rm /usr/lib/firmware/rtl_bt/rtl8822cu_config.bin.xz
 
 # Install edition specific packages
 case "$1" in
@@ -35,7 +81,6 @@ case "$1" in
             codium \
             codium-marketplace \
             gnome-boxes \
-            waydroid \
             scrcpy \
             torbrowser-launcher \
             chromium \
@@ -85,57 +130,34 @@ case "$1" in
             youtube-music \
             xournal \
             firefox \
-            waydroid \
             scrcpy \
             gnome-boxes \
             torbrowser-launcher
         ;;
+    "cinnamon")
+        IMAGE_NAME="cinnamon"
+        dnf5 groupinstall -y "Cinnamon Desktop"
+
+        # Install additional packages
+        dnf5 -y --setopt=install_weak_deps=False install \
+            steam \
+            lutris
+
+        dnf5 install -y \
+            mangohud \
+            webapp-manager \
+            wine \
+            vlc \
+            thunderbird \
+            gamescope \
+            vkBasalt \
+            winetricks
+
+        dnf5 install -y https://packages.microsoft.com/yumrepos/edge/Packages/m/microsoft-edge-stable-142.0.3595.65-1.x86_64.rpm
+        dnf5 update -y microsoft-edge-stable
+
+        ;;
 esac
-
-# Swap patched packages
-declare -A toswap=(
-    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
-    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="xorg-x11-server-Xwayland"
-    ["terra-mesa"]="mesa-filesystem"
-    ["copr:copr.fedorainfracloud.org:ublue-os:staging"]="fwupd"
-)
-
-for repo in "${!toswap[@]}"; do
-    for package in ${toswap[$repo]}; do
-        dnf5 -y swap --repo="$repo" "$package" "$package"
-    done
-done
-
-dnf5 versionlock add \
-    wireplumber \
-    wireplumber-libs \
-    xorg-x11-server-Xwayland \
-    switcheroo-control \
-    mesa-dri-drivers \
-    mesa-filesystem \
-    mesa-libEGL \
-    mesa-libGL \
-    mesa-libgbm \
-    mesa-va-drivers \
-    mesa-vulkan-drivers \
-    fwupd \
-    fwupd-plugin-flashrom \
-    fwupd-plugin-modem-manager \
-    fwupd-plugin-uefi-capsule-data \
-
-# Setup firmware
-firmware="linux-firmware-whence qcom-wwan-firmware linux-firmware amd-gpu-firmware amd-ucode-firmware atheros-firmware brcmfmac-firmware cirrus-audio-firmware intel-audio-firmware intel-gpu-firmware intel-vsc-firmware iwlegacy-firmware iwlwifi-dvm-firmware iwlwifi-mvm-firmware libertas-firmware mt7xxx-firmware nvidia-gpu-firmware nxpwireless-firmware realtek-firmware tiwilink-firmware"
-dnf5 -y remove --no-autoremove $firmware
-dnf5 -y install --repo="copr:copr.fedorainfracloud.org:bazzite-org:bazzite" $firmware
-
-git clone https://github.com/hhd-dev/hwfirm /tmp/hwfirm --depth 1
-cp -r /tmp/hwfirm/cirrus/* /usr/lib/firmware/cirrus/
-cp -r /tmp/hwfirm/rtl_bt/* /usr/lib/firmware/rtl_bt/
-cp -r /tmp/hwfirm/awinic/* /usr/lib/firmware/
-cp -r /tmp/hwfirm/tas/*    /usr/lib/firmware/
-rm -rf /tmp/hwfirm/
-
-rm /usr/lib/firmware/rtl_bt/rtl8822cu_config.bin.xz
 
 # Enable system76-schenduler
 dnf5 install -y system76-scheduler
@@ -177,6 +199,7 @@ dnf5 install -y \
     flatpak-builder \
     papers \
     restic \
+    waydroid \
     rclone
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
@@ -234,6 +257,7 @@ dnf5 -y copr remove kylegospo/system76-scheduler
 dnf5 -y copr remove bazzite-org/rom-properties
 dnf5 -y copr remove ublue-os/packages
 dnf5 -y copr remove ublue-os/staging
+dnf5 -y copr remove bazzite-org/webapp-manager
 dnf5 -y copr remove bazzite-org/bazzite
 dnf5 -y copr remove bazzite-org/bazzite-multilib
 dnf5 clean all -y

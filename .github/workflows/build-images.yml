@@ -19,3 +19,8 @@ jobs:
     needs: build-image-main
     uses: ./.github/workflows/build-gnome.yml
     secrets: inherit
+
+  build-image-cinnamon:
+    needs: build-image-gnome
+    uses: ./.github/workflows/build-cinnamon.yml
+    secrets: inherit
