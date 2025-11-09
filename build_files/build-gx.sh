@@ -30,6 +30,8 @@ dnf5 install -y \
     docker-compose \
     webapp-manager \
     wine \
+    vlc \
+    thunderbird \
     gamescope \
     vkBasalt \
     winetricks
