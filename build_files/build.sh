@@ -160,11 +160,12 @@ case "$1" in
             mangohud \
             webapp-manager \
             wine \
-            vlc \
             thunderbird \
             gamescope \
             vkBasalt \
             winetricks
+
+        dnf5 install -y --allowerasing vlc
 
         dnf5 install -y https://packages.microsoft.com/yumrepos/edge/Packages/m/microsoft-edge-stable-142.0.3595.65-1.x86_64.rpm
         dnf5 update -y microsoft-edge-stable
