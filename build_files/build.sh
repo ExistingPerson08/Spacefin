@@ -164,10 +164,6 @@ case "$1" in
             gamescope \
             vkBasalt \
             winetricks
-
-        rpm --import https://packages.microsoft.com/keys/microsoft.asc
-        dnf config-manager addrepo --from-repofile=https://packages.microsoft.com/yumrepos/edge
-        dnf5 install -y microsoft-edge-stable
         ;;
 esac
 
