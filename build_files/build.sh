@@ -165,13 +165,9 @@ case "$1" in
             vkBasalt \
             winetricks
 
-        PACKAGE="https://packages.microsoft.com/yumrepos/edge/Packages/m/microsoft-edge-stable-142.0.3595.65-1.x86_64.rpm"
-        DEPENDENCIES=$(dnf repoquery --requires --resolve --recursive "$PACKAGE" | grep -v "$PACKAGE" | awk '{print $1}')
-
-        dnf5 install -y $DEPENDENCIES
-        rpm -i --nocaps "$PACKAGE"
-        dnf5 update -y microsoft-edge-stable
-
+        rpm --import https://packages.microsoft.com/keys/microsoft.asc
+        dnf config-manager addrepo --from-repofile=https://packages.microsoft.com/yumrepos/edge
+        dnf5 install -y microsoft-edge-stable
         ;;
 esac
 
