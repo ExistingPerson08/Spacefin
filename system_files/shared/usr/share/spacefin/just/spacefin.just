@@ -40,5 +40,8 @@ install-snap:
     sudo rpm-ostree install snapd
     echo "Snapd installed. Reboot to use snap!"
 
+install-plex:
+    /usr/share/spacefin/scripts/plex.sh
+
 fix-bazaar-config:
     flatpak override --user io.github.kolunmi.Bazaar --filesystem=host-etc
