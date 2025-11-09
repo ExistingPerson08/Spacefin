@@ -141,6 +141,16 @@ case "$1" in
 
         systemctl enable lightdm
 
+        # Workaround: fix dependencies conflicts
+        dnf5 versionlock delete \
+            mesa-dri-drivers \
+            mesa-filesystem \
+            mesa-libEGL \
+            mesa-libGL \
+            mesa-libgbm \
+            mesa-va-drivers \
+            mesa-vulkan-drivers
+
         # Install additional packages
         dnf5 -y --setopt=install_weak_deps=False install \
             steam \
