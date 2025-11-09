@@ -44,7 +44,7 @@ sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefi
     - patches to enable fractional scalling, VRR and more
     - Preinstalled useful extensions
     - [Hanabi extension](https://github.com/jeffshee/gnome-ext-hanabi) for live wallpapers
- - Curated se of touchscreen-friendly open-source apps
+ - Curated set of touchscreen-friendly open-source apps
 
 If you want to install GNOME eddition, rebase from Fedora Silverblue or Bluefin with:
 
