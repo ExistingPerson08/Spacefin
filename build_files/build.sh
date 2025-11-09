@@ -10,54 +10,12 @@ dnf5 -y copr enable ublue-os/packages
 dnf5 -y copr enable ublue-os/staging
 dnf5 -y copr enable bazzite-org/bazzite
 dnf5 -y copr enable bazzite-org/bazzite-multilib
+dnf5 -y copr enable bazzite-org/webapp-manager
 dnf5 -y copr enable bazzite-org/rom-properties
 dnf5 -y copr enable kylegospo/system76-scheduler
 
-# Using tagged Cosmic desktop
-dnf5 install -y @cosmic-desktop @cosmic-desktop-apps --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
-
-case "$1" in
-    "main")
-        IMAGE_NAME="main"
-        systemctl enable cosmic-greeter
-        ;;
-    "hybrid")
-        IMAGE_NAME="hybrid"
-
-        # Setup GNOME
-        dnf5 remove -y \
-            gnome-classic-session \
-            gnome-tour \
-            gnome-extensions-app \
-            gnome-system-monitor \
-            gnome-software \
-            gnome-software-rpm-ostree \
-            gnome-tweaks \
-            gnome-shell-extension-apps-menu \
-            gnome-shell-extension-background-logo \
-            yelp \
-            gnome-initial-setup
-        dnf5 -y install \
-          nautilus-gsconnect \
-          gnome-shell-extension-appindicator \
-          gnome-shell-extension-user-theme \
-          ulauncher \
-          gnome-shell-extension-gsconnect \
-          gnome-shell-extension-compiz-windows-effect \
-          gnome-shell-extension-blur-my-shell \
-          gnome-shell-extension-hanabi \
-          gnome-shell-extension-hotedge \
-          gnome-shell-extension-caffeine \
-          gnome-shell-extension-desktop-cube \
-          gnome-shell-extension-just-perfection \
-          steamdeck-gnome-presets \
-          gnome-shell-extension-logo-menu \
-          gnome-shell-extension-pop-shell \
-          xprop \
-          rom-properties-gtk3 \
-          --exclude=gnome-extensions-app
-        ;;
-esac
+# Clean base
+dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookmarks fedora-chromium-config fedora-chromium-config-gnome
 
 # Swap patched packages
 declare -A toswap=(
@@ -104,6 +62,111 @@ rm -rf /tmp/hwfirm/
 
 rm /usr/lib/firmware/rtl_bt/rtl8822cu_config.bin.xz
 
+# Install edition specific packages
+case "$1" in
+    "main")
+        IMAGE_NAME="main"
+        # Using latest (nightly) Cosmic desktop until stable release
+        dnf5 remove -y @cosmic-desktop @cosmic-desktop-apps --exclude=gnome-disk-utility,flatpak
+        dnf5 copr enable -y ryanabx/cosmic-epoch
+        dnf5 install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
+        dnf5 copr remove -y ryanabx/cosmic-epoch
+
+        systemctl enable cosmic-greeter
+
+        # Install additional packages
+        dnf5 install -y \
+            youtube-music \
+            zed \
+            codium \
+            codium-marketplace \
+            gnome-boxes \
+            scrcpy \
+            torbrowser-launcher \
+            chromium \
+            prismlauncher \
+            quickemu
+
+        dnf5 install -y https://github.com/TriliumNext/Trilium/releases/download/v0.99.3/TriliumNotes-v0.99.3-linux-x64.rpm
+        ;;
+    "gnome")
+        IMAGE_NAME="gnome"
+
+        # Setup GNOME
+        dnf5 remove -y \
+            gnome-classic-session \
+            gnome-tour \
+            gnome-extensions-app \
+            gnome-system-monitor \
+            gnome-software \
+            gnome-software-rpm-ostree \
+            gnome-tweaks \
+            gnome-shell-extension-apps-menu \
+            gnome-shell-extension-background-logo \
+            yelp \
+            gnome-initial-setup
+        dnf5 -y install \
+          nautilus-gsconnect \
+          gnome-shell-extension-appindicator \
+          gnome-shell-extension-user-theme \
+          ulauncher \
+          gnome-shell-extension-gsconnect \
+          gnome-shell-extension-compiz-windows-effect \
+          gnome-shell-extension-blur-my-shell \
+          gnome-shell-extension-hanabi \
+          gnome-shell-extension-hotedge \
+          gnome-shell-extension-caffeine \
+          gnome-shell-extension-desktop-cube \
+          gnome-shell-extension-just-perfection \
+          steamdeck-gnome-presets \
+          gnome-shell-extension-logo-menu \
+          gnome-shell-extension-pop-shell \
+          xprop \
+          rom-properties-gtk3 \
+          --exclude=gnome-extensions-app
+
+        # Install additional packages
+        dnf5 install -y \
+            youtube-music \
+            xournal \
+            firefox \
+            scrcpy \
+            gnome-boxes \
+            torbrowser-launcher
+        ;;
+    "cinnamon")
+        IMAGE_NAME="cinnamon"
+        dnf5 group install -y cinnamon-desktop
+        dnf5 install -y lightdm
+
+        systemctl enable lightdm
+
+        # Workaround: fix dependencies conflicts
+        dnf5 versionlock delete \
+            mesa-dri-drivers \
+            mesa-filesystem \
+            mesa-libEGL \
+            mesa-libGL \
+            mesa-libgbm \
+            mesa-va-drivers \
+            mesa-vulkan-drivers
+
+        # Install additional packages
+        dnf5 -y --setopt=install_weak_deps=False install \
+            steam \
+            lutris
+
+        dnf5 install -y \
+            mangohud \
+            webapp-manager \
+            wine \
+            thunderbird \
+            gamescope \
+            vkBasalt \
+            winetricks
+        ;;
+esac
+
 # Enable system76-schenduler
 dnf5 install -y system76-scheduler
 systemctl enable com.system76.Scheduler
@@ -118,6 +181,8 @@ done
 
 # Add to justfile
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
+echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
+
 
 # Install additional packages
 dnf5 install -y \
@@ -128,11 +193,22 @@ dnf5 install -y \
     fish \
     bluefin-cli-logos \
     showtime \
+    shotwell \
+    decibels \
     gnome-firmware \
     duperemove \
     uupd \
     gnome-disk-utility \
-    java-latest-openjdk-devel
+    java-latest-openjdk-devel \
+    docker \
+    gimp \
+    docker-compose \
+    zsh \
+    flatpak-builder \
+    papers \
+    restic \
+    waydroid \
+    rclone
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 dnf5 install -y steamdeck-backgrounds gnome-backgrounds
@@ -184,13 +260,14 @@ mkdir /nix
 mkdir /snap
 
 # Cleanup
+dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
 dnf5 -y copr remove kylegospo/system76-scheduler
 dnf5 -y copr remove bazzite-org/rom-properties
 dnf5 -y copr remove ublue-os/packages
 dnf5 -y copr remove ublue-os/staging
+dnf5 -y copr remove bazzite-org/webapp-manager
 dnf5 -y copr remove bazzite-org/bazzite
 dnf5 -y copr remove bazzite-org/bazzite-multilib
-dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookmarks fedora-chromium-config fedora-chromium-config-gnome
 dnf5 clean all -y
 
 # Finalize

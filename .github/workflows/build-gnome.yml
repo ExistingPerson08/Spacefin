@@ -1,5 +1,5 @@
 ---
-name: Build Hybrid Container Image
+name: Build Gnome Container Image
 on:
   workflow_dispatch:
   workflow_call:
@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   build_push:
-    name: Build and push Hybrid image
+    name: Build and push Gnome image
     runs-on: ubuntu-24.04
 
     permissions:
@@ -58,8 +58,8 @@ jobs:
             org.opencontainers.image.created=${{ steps.date.outputs.date }}
             org.opencontainers.image.description=${{ env.IMAGE_DESC }}
             org.opencontainers.image.documentation=https://raw.githubusercontent.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/refs/heads/main/README.md
-            org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/blob/main/Containerfile-hybrid
-            org.opencontainers.image.title=${{ env.IMAGE_NAME }}-hybrid
+            org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/blob/main/Containerfile-gnome
+            org.opencontainers.image.title=${{ env.IMAGE_NAME }}-gnome
             org.opencontainers.image.url=https://github.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
             org.opencontainers.image.vendor=${{ github.repository_owner }}
             org.opencontainers.image.version=${{ env.DEFAULT_TAG }}.{{date 'YYYYMMDD'}}
@@ -72,13 +72,13 @@ jobs:
           sep-tags: " "
           sep-annotations: " "
 
-      - name: Build Hybrid Image
-        id: build_image_hybrid
+      - name: Build Gnome Image
+        id: build_image_gnome
         uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
         with:
           containerfiles: |
-            ./Containerfile-hybrid
-          image: ${{ env.IMAGE_NAME }}-hybrid
+            ./Containerfile-gnome
+          image: ${{ env.IMAGE_NAME }}-gnome
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           oci: false
@@ -91,16 +91,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push Hybrid Image To GHCR
+      - name: Push Gnome Image To GHCR
         uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-        id: push_hybrid
+        id: push_gnome
         env:
           REGISTRY_USER: ${{ github.actor }}
           REGISTRY_PASSWORD: ${{ github.token }}
         with:
           registry: ${{ env.IMAGE_REGISTRY }}
-          image: ${{ env.IMAGE_NAME }}-hybrid
+          image: ${{ env.IMAGE_NAME }}-gnome
           tags: ${{ steps.metadata.outputs.tags }}
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
@@ -109,14 +109,14 @@ jobs:
         uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
 
-      - name: Sign hybrid container image
+      - name: Sign gnome container image
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
-          IMAGE_FULL="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}-hybrid"
+          IMAGE_FULL="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}-gnome"
           for tag in ${{ steps.metadata.outputs.tags }}; do
             cosign sign -y --key env://COSIGN_PRIVATE_KEY $IMAGE_FULL:$tag
           done
         env:
-          TAGS: ${{ steps.push_hybrid.outputs.digest }}
+          TAGS: ${{ steps.push_gnome.outputs.digest }}
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
