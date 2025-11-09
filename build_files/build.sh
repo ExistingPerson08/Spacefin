@@ -165,7 +165,7 @@ case "$1" in
             vkBasalt \
             winetricks
 
-        dnf5 install -y --no-caps https://packages.microsoft.com/yumrepos/edge/Packages/m/microsoft-edge-stable-142.0.3595.65-1.x86_64.rpm
+        rpm install -y --no-caps https://packages.microsoft.com/yumrepos/edge/Packages/m/microsoft-edge-stable-142.0.3595.65-1.x86_64.rpm
         dnf5 update -y microsoft-edge-stable
 
         ;;
