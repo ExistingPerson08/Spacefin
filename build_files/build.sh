@@ -163,6 +163,7 @@ case "$1" in
             thunderbird \
             gamescope \
             vkBasalt \
+            qbittorrent \
             winetricks
         ;;
 esac
@@ -191,23 +192,23 @@ dnf5 install -y \
     ublue-motd \
     firewall-config \
     fish \
+    zsh \
     bluefin-cli-logos \
     showtime \
     shotwell \
     decibels \
     gnome-firmware \
+    gimp \
+    papers \
     duperemove \
     uupd \
     gnome-disk-utility \
     java-latest-openjdk-devel \
     docker \
-    gimp \
     docker-compose \
-    zsh \
     flatpak-builder \
-    papers \
-    restic \
     waydroid \
+    restic \
     rclone
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev

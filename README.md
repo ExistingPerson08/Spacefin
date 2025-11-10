@@ -1,10 +1,9 @@
 <div align="center">
- <h1>⚠️ THIS IMAGE IS CURRENTLY IN ALPHA ⚠️</h1>
  <img src="assets/desktop.png" width="80%">
 </div>
 <br>
 
-Spacefin is custom Fedora Atomic image with COSMIC desktop installed. 
+Spacefin is my personal custom Fedora Atomic image with (not only) COSMIC desktop installed. 
 
 ## Features
 
@@ -44,7 +43,7 @@ sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefi
     - patches to enable fractional scalling, VRR and more
     - Preinstalled useful extensions
     - [Hanabi extension](https://github.com/jeffshee/gnome-ext-hanabi) for live wallpapers
- - Curated se of touchscreen-friendly open-source apps
+ - Curated set of touchscreen-friendly open-source apps
 
 If you want to install GNOME eddition, rebase from Fedora Silverblue or Bluefin with:
 
@@ -64,10 +63,6 @@ If you want to install GNOME eddition, rebase from Fedora Silverblue with:
 ```bash
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-cinnamon:latest
 ```
-
-## Contributing
-
-Ideas and pull requests are welcome 🎉. I would also appreciate a suggestion for a better name 😉.
 
 ## Screenshots
 
