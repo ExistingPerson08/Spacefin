@@ -64,10 +64,6 @@ If you want to install GNOME eddition, rebase from Fedora Silverblue with:
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-cinnamon:latest
 ```
 
-## Contributing
-
-Ideas and pull requests are welcome 🎉. I would also appreciate a suggestion for a better name 😉.
-
 ## Screenshots
 
 <div align="center">
