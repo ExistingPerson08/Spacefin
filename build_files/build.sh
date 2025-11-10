@@ -48,19 +48,6 @@ dnf5 versionlock add \
     fwupd-plugin-modem-manager \
     fwupd-plugin-uefi-capsule-data \
 
-# Setup firmware
-dnf5 install -y \
-    NetworkManager-wifi \
-    atheros-firmware \
-    brcmfmac-firmware \
-    iwlegacy-firmware \
-    iwlwifi-dvm-firmware \
-    iwlwifi-mvm-firmware \
-    mt7xxx-firmware \
-    nxpwireless-firmware \
-    realtek-firmware \
-    tiwilink-firmware 
-
 # Install edition specific packages
 case "$1" in
     "main")
