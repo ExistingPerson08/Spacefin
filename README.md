@@ -1,10 +1,9 @@
 <div align="center">
- <h1>⚠️ THIS IMAGE IS CURRENTLY IN ALPHA ⚠️</h1>
  <img src="assets/desktop.png" width="80%">
 </div>
 <br>
 
-Spacefin is custom Fedora Atomic image with COSMIC desktop installed. 
+Spacefin is my personal custom Fedora Atomic image with (not only) COSMIC desktop installed. 
 
 ## Features
 
