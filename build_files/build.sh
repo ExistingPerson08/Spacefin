@@ -114,7 +114,7 @@ case "$1" in
         # Install additional packages
         dnf5 install -y \
             youtube-music \
-            xournal \
+            xournalpp \
             firefox \
             scrcpy \
             gnome-boxes \
