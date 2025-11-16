@@ -62,7 +62,7 @@ sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefi
 If you want to install GNOME eddition, rebase from Fedora Silverblue with:
 
 ```bash
-sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-cinnamon:latest
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-kde:latest
 ```
 
 ## Screenshots
