@@ -230,6 +230,13 @@ dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
 systemctl enable uupd.timer
 
+# Add Flatpak preinstall
+dnf5 -y copr enable ublue-os/flatpak-test
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
+dnf5 -y copr disable ublue-os/flatpak-test
+
 # Use ghostty instead of ptyxis
 dnf5 install -y ghostty
 dnf5 remove -y ptyxis
