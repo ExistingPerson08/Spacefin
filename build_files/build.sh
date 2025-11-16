@@ -113,6 +113,7 @@ case "$1" in
 
         # Install additional packages
         dnf5 install -y \
+            gnome-text-editor \
             youtube-music \
             xournalpp \
             firefox \
