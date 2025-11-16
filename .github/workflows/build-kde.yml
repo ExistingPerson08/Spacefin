@@ -1,5 +1,5 @@
 ---
-name: Build Cinnamon Container Image
+name: Build Kde Container Image
 on:
   workflow_dispatch:
   workflow_call:
@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   build_push:
-    name: Build and push Cinnamon image
+    name: Build and push kde image
     runs-on: ubuntu-24.04
 
     permissions:
@@ -58,8 +58,8 @@ jobs:
             org.opencontainers.image.created=${{ steps.date.outputs.date }}
             org.opencontainers.image.description=${{ env.IMAGE_DESC }}
             org.opencontainers.image.documentation=https://raw.githubusercontent.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/refs/heads/main/README.md
-            org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/blob/main/Containerfile-cinnamon
-            org.opencontainers.image.title=${{ env.IMAGE_NAME }}-cinnamon
+            org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/blob/main/Containerfile-kde
+            org.opencontainers.image.title=${{ env.IMAGE_NAME }}-kde
             org.opencontainers.image.url=https://github.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
             org.opencontainers.image.vendor=${{ github.repository_owner }}
             org.opencontainers.image.version=${{ env.DEFAULT_TAG }}.{{date 'YYYYMMDD'}}
@@ -72,13 +72,13 @@ jobs:
           sep-tags: " "
           sep-annotations: " "
 
-      - name: Build Cinnamon Image
+      - name: Build kde Image
         id: build_image_cinnamon
         uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
         with:
           containerfiles: |
-            ./Containerfile-cinnamon
-          image: ${{ env.IMAGE_NAME }}-cinnamon
+            ./Containerfile-kde
+          image: ${{ env.IMAGE_NAME }}-kde
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
           oci: false
@@ -91,7 +91,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push Cinnamon Image To GHCR
+      - name: Push kde Image To GHCR
         uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         id: push_cinnamon
@@ -100,7 +100,7 @@ jobs:
           REGISTRY_PASSWORD: ${{ github.token }}
         with:
           registry: ${{ env.IMAGE_REGISTRY }}
-          image: ${{ env.IMAGE_NAME }}-cinnamon
+          image: ${{ env.IMAGE_NAME }}-kde
           tags: ${{ steps.metadata.outputs.tags }}
           username: ${{ env.REGISTRY_USER }}
           password: ${{ env.REGISTRY_PASSWORD }}
@@ -109,10 +109,10 @@ jobs:
         uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
 
-      - name: Sign cinnamon container image
+      - name: Sign kde container image
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
-          IMAGE_FULL="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}-cinnamon"
+          IMAGE_FULL="${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}-kde"
           for tag in ${{ steps.metadata.outputs.tags }}; do
             cosign sign -y --key env://COSIGN_PRIVATE_KEY $IMAGE_FULL:$tag
           done

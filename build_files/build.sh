@@ -113,6 +113,7 @@ case "$1" in
 
         # Install additional packages
         dnf5 install -y \
+            gnome-text-editor \
             youtube-music \
             xournalpp \
             firefox \
@@ -120,12 +121,34 @@ case "$1" in
             gnome-boxes \
             torbrowser-launcher
         ;;
-    "cinnamon")
-        IMAGE_NAME="cinnamon"
-        dnf5 group install -y cinnamon-desktop
-        dnf5 install -y lightdm
+    "kde")
+        IMAGE_NAME="kde"
 
-        systemctl enable lightdm
+        # Setup kde
+        dnf5 -y install \
+            qt \
+            krdp \
+            steamdeck-kde-presets-desktop \
+            kdeconnectd \
+            kdeplasma-addons \
+            rom-properties-kf6 \
+            fcitx5-mozc \
+            fcitx5-chinese-addons \
+            fcitx5-hangul \
+            kcm-fcitx5 \
+            kio-extras \
+            krunner-bazaar
+
+        dnf5 -y remove \
+            plasma-welcome \
+            plasma-welcome-fedora \
+            plasma-discover-kns \
+            kcharselect \
+            kde-partitionmanager \
+            konsole
+
+        # Hide discover
+        rm -f /usr/share/applications/plasma-discover.desktop
 
         # Workaround: fix dependencies conflicts
         dnf5 versionlock delete \
@@ -170,7 +193,6 @@ done
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
 echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
 
-
 # Install additional packages
 dnf5 install -y \
     fastfetch \
@@ -198,7 +220,7 @@ dnf5 install -y \
     rclone
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
-dnf5 install -y steamdeck-backgrounds gnome-backgrounds
+dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
 
 # Setup automatic-updates
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
@@ -210,13 +232,6 @@ dnf5 remove -y ptyxis
 
 # Remove Bazaar due old version
 dnf5 remove -y bazaar
-
-# Add Flatpak preinstall
-dnf5 -y copr enable ublue-os/flatpak-test
-dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
-dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
-dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
-dnf5 -y copr disable ublue-os/flatpak-test
 
 # Setup systemd services
 systemctl enable brew-setup.service

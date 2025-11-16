@@ -51,9 +51,10 @@ If you want to install GNOME eddition, rebase from Fedora Silverblue or Bluefin 
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-gnome:latest
 ```
 
-### Cinnamon
+### KDE
 
-- Almost vanilla cinnamon desktop
+- Almost vanilla KDE 
+- SteamOS themes
 - Steam and lutris with Gamescope session
 - VLC, Thunderbird and Edge for media
 - Wine dobble-click to run .exe
