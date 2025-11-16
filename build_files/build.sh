@@ -149,7 +149,11 @@ case "$1" in
 
         # Hide discover
         rm -f /usr/share/applications/plasma-discover.desktop
-
+        rm -f /usr/share/applications/org.kde.discover.desktop
+        rm -f /usr/share/applications/org.kde.discover.flatpak.desktop
+        rm -f /usr/share/applications/org.kde.discover.notifier.desktop
+        rm -f /usr/share/applications/org.kde.discover.urlhandler.desktop
+        
         # Workaround: fix dependencies conflicts
         dnf5 versionlock delete \
             mesa-dri-drivers \
