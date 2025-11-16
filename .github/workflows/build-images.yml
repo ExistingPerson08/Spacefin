@@ -20,7 +20,7 @@ jobs:
     uses: ./.github/workflows/build-gnome.yml
     secrets: inherit
 
-  build-image-cinnamon:
+  build-image-kde:
     needs: build-image-gnome
-    uses: ./.github/workflows/build-cinnamon.yml
+    uses: ./.github/workflows/build-kde.yml
     secrets: inherit
