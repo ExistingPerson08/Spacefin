@@ -149,7 +149,11 @@ case "$1" in
 
         # Hide discover
         rm -f /usr/share/applications/plasma-discover.desktop
-
+        rm -f /usr/share/applications/org.kde.discover.desktop
+        rm -f /usr/share/applications/org.kde.discover.flatpak.desktop
+        rm -f /usr/share/applications/org.kde.discover.notifier.desktop
+        rm -f /usr/share/applications/org.kde.discover.urlhandler.desktop
+        
         # Workaround: fix dependencies conflicts
         dnf5 versionlock delete \
             mesa-dri-drivers \
@@ -225,6 +229,13 @@ dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
 # Setup automatic-updates
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
 systemctl enable uupd.timer
+
+# Add Flatpak preinstall
+dnf5 -y copr enable ublue-os/flatpak-test
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
+dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
+dnf5 -y copr disable ublue-os/flatpak-test
 
 # Use ghostty instead of ptyxis
 dnf5 install -y ghostty
