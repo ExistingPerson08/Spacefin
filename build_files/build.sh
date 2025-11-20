@@ -221,7 +221,9 @@ dnf5 install -y \
     flatpak-builder \
     waydroid \
     restic \
-    rclone
+    rclone \
+    python3-pip \
+    python3-requests
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
