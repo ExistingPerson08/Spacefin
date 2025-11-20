@@ -21,7 +21,6 @@ dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookm
 declare -A toswap=(
     ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
     ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="xorg-x11-server-Xwayland"
-    ["terra-mesa"]="mesa-filesystem"
     ["copr:copr.fedorainfracloud.org:ublue-os:staging"]="fwupd"
 )
 
@@ -36,13 +35,6 @@ dnf5 versionlock add \
     wireplumber-libs \
     xorg-x11-server-Xwayland \
     switcheroo-control \
-    mesa-dri-drivers \
-    mesa-filesystem \
-    mesa-libEGL \
-    mesa-libGL \
-    mesa-libgbm \
-    mesa-va-drivers \
-    mesa-vulkan-drivers \
     fwupd \
     fwupd-plugin-flashrom \
     fwupd-plugin-modem-manager \
@@ -153,16 +145,6 @@ case "$1" in
         rm -f /usr/share/applications/org.kde.discover.flatpak.desktop
         rm -f /usr/share/applications/org.kde.discover.notifier.desktop
         rm -f /usr/share/applications/org.kde.discover.urlhandler.desktop
-        
-        # Workaround: fix dependencies conflicts
-        dnf5 versionlock delete \
-            mesa-dri-drivers \
-            mesa-filesystem \
-            mesa-libEGL \
-            mesa-libGL \
-            mesa-libgbm \
-            mesa-va-drivers \
-            mesa-vulkan-drivers
 
         # Install additional packages
         dnf5 -y --setopt=install_weak_deps=False install \
@@ -177,7 +159,8 @@ case "$1" in
             gamescope \
             vkBasalt \
             qbittorrent \
-            winetricks
+            winetricks \
+            wallpaper-engine-kde-plugin
         ;;
 esac
 
