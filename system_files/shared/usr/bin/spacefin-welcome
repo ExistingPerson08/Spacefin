@@ -1,0 +1,605 @@
+#!/usr/bin/env python
+import argparse
+import getpass
+import glob
+import json
+import os
+import re
+import shutil
+import signal
+import subprocess
+import sys
+import tempfile
+
+import gi
+
+gi.require_version("Gtk", "3.0")
+from gi.repository import GdkPixbuf, GLib, Gtk
+
+try:
+    subprocess.run(
+        ["dbus-launch"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=True,
+    )
+except subprocess.CalledProcessError:
+    pass
+
+RED = "\033[91m"
+GREEN = "\033[92m"
+YELLOW = "\033[93m"
+BLUE = "\033[94m"
+MAGENTA = "\033[95m"
+CYAN = "\033[96m"
+RESET = "\033[0m"
+
+DEFAULT_REPO_URL = "https://github.com/ExistingPerson08/Spacefin-cli.git"
+REPO_FOLDER_NAME = "spacefin-assets"
+AUTOSTART_PATH = os.path.expanduser("~/.config/autostart/better-welcome.desktop")
+DESKTOP_FILE = "/usr/share/applications/spacefin-welcome.desktop"
+
+
+class Colors:
+    def __init__(self):
+        self.use_color = "NO_COLOR" not in os.environ
+        if self.use_color:
+            self.NC = "\033[0m"
+            self.BGreen = "\033[1;32m"
+            self.BCyan = "\033[1;36m"
+            self.BYellow = "\033[1;33m"
+            self.BPurple = "\033[1;35m"
+            self.BRed = "\033[1;31m"
+            self.BWhite = "\033[1;37m"
+            self.c1 = "\u001b[38;5;104m"
+            self.c2 = "\u001b[0m"
+            self.c3 = "\u001b[38;5;55m"
+            self.c4 = "\u001b[38;5;98m"
+        else:
+            self.NC = self.BGreen = self.BCyan = self.BYellow = ""
+            self.BPurple = self.BRed = self.BWhite = ""
+            self.c1 = self.c2 = self.c3 = self.c4 = ""
+
+
+colors = Colors()
+
+
+# Handler for ctrl+c
+def signal_handler(sig, frame):
+    print("\nScript was interrupted.")
+    sys.exit(0)
+
+
+signal.signal(signal.SIGINT, signal_handler)
+
+
+def clone_repo(repo_url, temp_dir):
+    """Clone repository (převzato z spacefin-cli)"""
+    clone_path = os.path.join(temp_dir, REPO_FOLDER_NAME)
+
+    try:
+        subprocess.run(
+            ["git", "clone", "--depth", "1", repo_url, clone_path],
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+        )
+        return clone_path
+    except FileNotFoundError:
+        print(f"❌ ERROR: 'git' command not found. Please make sure git is installed.")
+        # TODO: Zobrazit GTK dialog
+        raise
+    except subprocess.CalledProcessError as e:
+        print(f"❌ ERROR: Failed to clone repository.")
+        if e.stderr:
+            print(f"   Details: {e.stderr.strip()}")
+        raise
+    except Exception as e:
+        print(f"❌ ERROR: An unexpected error occurred during cloning: {e}")
+        raise
+
+
+def load_install_items(clone_path):
+    """Načte položky pro 'install' (Tweaks) z JSON souborů."""
+    items = []
+    install_dir = os.path.join(clone_path, "install")
+    if not os.path.isdir(install_dir):
+        print(f"Warning: 'install' directory not found in repo.")
+        return items
+
+    for json_file in glob.glob(os.path.join(install_dir, "*.json")):
+        bundle_name = os.path.splitext(os.path.basename(json_file))[0]
+        try:
+            with open(json_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            # Načte 'name' z JSON, pokud neexistuje, použije jméno souboru
+            display_name = data.get("name", bundle_name)
+            # Načte 'icon' z JSON, pokud neexistuje, použije výchozí
+            icon = data.get("icon", "application-x-executable")
+            items.append(
+                {
+                    "label": display_name,
+                    "icon": icon,
+                    "command": ["spacefin-cli", "install", bundle_name],
+                }
+            )
+        except Exception as e:
+            print(f"Error parsing {json_file}: {e}")
+    return items
+
+
+def load_run_items(clone_path):
+    """Načte položky pro 'run' (Repairs) z .sh skriptů."""
+    items = []
+    run_dir = os.path.join(clone_path, "run")
+    if not os.path.isdir(run_dir):
+        print(f"Warning: 'run' directory not found in repo.")
+        return items
+
+    for sh_file in glob.glob(os.path.join(run_dir, "*.sh")):
+        script_name = os.path.splitext(os.path.basename(sh_file))[0]
+        display_name = script_name
+        icon = "system-run"
+
+        # Vynecháni update.sh
+        if script_name == "update":
+            continue
+
+        try:
+            with open(sh_file, "r", encoding="utf-8") as f:
+                lines = f.readlines()
+
+            # Hledá '# name:' na druhém řádku (index 1)
+            if len(lines) > 1 and lines[1].strip().startswith("# name:"):
+                display_name = lines[1].split(":", 1)[1].strip()
+
+            # Hledá '# icon:' na třetím řádku (index 2)
+            if len(lines) > 2 and lines[2].strip().startswith("# icon:"):
+                icon = lines[2].split(":", 1)[1].strip()
+
+            items.append(
+                {
+                    "label": display_name,
+                    "icon": icon,
+                    "command": ["spacefin-cli", "run", script_name],
+                }
+            )
+        except Exception as e:
+            print(f"Error parsing {sh_file}: {e}")
+    return items
+
+
+def run_command_in_gui(command):
+    """
+    Open a terminal window and run the provided command in it.
+    The terminal window will remain open until Enter is pressed.
+    """
+    import shutil
+    import subprocess
+
+    # Získat terminálový emulátor z konfigurace nebo výchozí fallback
+    terminal_emulator = "ghostty"
+    if terminal_emulator is None:
+        # fallback: zkus najít běžně používané terminály
+        for term in [
+            "alacritty",
+            "konsole",
+            "xterm",
+            "gnome-terminal",
+            "mate-terminal",
+            "ghostty",
+        ]:
+            if shutil.which(term):
+                terminal_emulator = term
+                break
+        else:
+            raise RuntimeError("Nebyl nalezen žádný dostupný terminálový emulátor.")
+
+    # Přidání sudo pro příkazy, které vyžadují práva roota
+    if command[0] in [
+        "pacman",
+        "apt-get",
+        "dnf",
+        "zypper",
+        "reflector",
+        "rpm-ostree",
+        "bootc",
+    ]:
+        command = ["sudo"] + command
+
+    # Vytvoř kompletní příkaz pro otevření terminálu a spuštění příkazu
+    bash_cmd = " ".join(command) + "; echo 'Press Enter to exit'; read"
+
+    if terminal_emulator == "ghostty":
+        full_command = [terminal_emulator, "-e", "bash", "-c", bash_cmd]
+    elif terminal_emulator == "konsole":
+        full_command = [terminal_emulator, "-e", "bash", "-c", bash_cmd]
+    elif terminal_emulator == "mate-terminal":
+        full_command = [
+            terminal_emulator,
+            "--hold",
+            "-e",
+            "bash",
+            "-c",
+            f"'{bash_cmd}'",
+        ]
+    else:
+        full_command = [terminal_emulator, "--", "bash", "-c", bash_cmd]
+
+    # Spusť terminál s příkazem
+    subprocess.Popen(full_command)
+
+
+class LinuxConfigurator(Gtk.Window):
+    def __init__(self):
+        Gtk.Window.__init__(self, title="Spacefin-Welcome!")
+        self.set_default_size(800, 570)
+        self.set_border_width(10)
+
+        # Vytvoření dočasného adresáře
+        self.temp_dir = tempfile.TemporaryDirectory()
+        print(f"Cloning repo into {self.temp_dir.name}...")
+
+        try:
+            # Klonování repozitáře
+            clone_path = clone_repo(DEFAULT_REPO_URL, self.temp_dir.name)
+            # Načtení dynamických položek
+            self.install_items = load_install_items(clone_path)
+            self.run_items = load_run_items(clone_path)
+            print(
+                f"Found {len(self.install_items)} install items and {len(self.run_items)} run items."
+            )
+        except Exception as e:
+            print(f"FATAL: Could not clone or parse repo: {e}")
+            # TODO: Zobrazit GTK chybový dialog uživateli
+            self.install_items = []
+            self.run_items = []
+
+        self.main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.add(self.main_box)
+
+        self.header = Gtk.Label()
+
+        # Funkce pro získání jména distribuce
+        def get_distro_name():
+            distro_name = "Linux"  # Výchozí hodnota
+            try:
+                with open("/etc/os-release") as f:
+                    for line in f:
+                        if line.startswith("PRETTY_NAME="):
+                            distro_name = line.split("=", 1)[1].strip().strip('"')
+                            break
+            except Exception as e:
+                print(f"Chyba při načítání distribuce: {e}")
+            return distro_name
+
+        # Získání uživatelského jména
+        user_name = getpass.getuser()
+
+        # Použití v Gtk headeru
+        distro_name = get_distro_name()
+        self.header.set_markup(
+            f"<span size='xx-large' weight='bold'>Welcome, {user_name}!</span>\n<span size='large'>To your {distro_name}.</span>"
+        )
+        self.header.set_justify(Gtk.Justification.CENTER)
+        self.main_box.pack_start(self.header, False, False, 10)
+
+        self.create_main_page()
+
+    def create_main_page(self):
+        # Pokud existuje checkbox, odstraníme ho
+        if hasattr(self, "startup_checkbox"):
+            self.main_box.remove(self.startup_checkbox)
+            del self.startup_checkbox  # Zajistí, že už neexistuje
+
+        if hasattr(self, "content_box"):
+            self.main_box.remove(self.content_box)  # Odstranění staré stránky
+
+        self.content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.main_box.pack_start(self.content_box, True, True, 10)
+
+        def get_distro_logo_name():
+            logo_name = "default"  # Výchozí hodnota
+            if os.path.exists("/etc/os-release"):
+                with open("/etc/os-release", "r") as f:
+                    for line in f:
+                        if line.startswith("LOGO="):
+                            logo_name = line.strip().split("=")[1].strip('"')
+                            break
+            return logo_name.lower()
+
+        distro_logo = get_distro_logo_name()
+        print(f"Název loga distribuce: {distro_logo}")
+
+        def find_distro_logo():
+            logo_name = get_distro_logo_name()
+            possible_paths = [
+                f"/usr/share/icons/hicolor/256x256/apps/{logo_name}.png",
+                f"/usr/share/icons/hicolor/scalable/apps/{logo_name}.svg",
+                f"/usr/share/pixmaps/{logo_name}.png",
+                f"/usr/share/pixmaps/{logo_name}.svg",
+            ]
+
+            for path in possible_paths:
+                if os.path.exists(path):
+                    return path  # Pokud logo existuje, vrátíme cestu
+
+            return "/usr/share/icons/better-welcome.png"  # Záložní logo
+
+        distro_logo_path = find_distro_logo()
+        print(f"Cesta k logu: {distro_logo_path}")
+
+        def get_distro_image():
+            """Vytvoří GTK Image s logem distribuce"""
+            logo_path = find_distro_logo()
+            print(f"Použité logo: {logo_path}")  # Debug výpis
+
+            try:
+                if logo_path.endswith(".svg"):
+                    # SVG se načítá trochu jinak
+                    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(logo_path, 64, 64)
+                    image = Gtk.Image.new_from_pixbuf(pixbuf)
+                else:
+                    # PNG/JPG se načítají přímo
+                    image = Gtk.Image.new_from_file(logo_path)
+            except Exception as e:
+                print(f"Chyba načtení loga: {e}")
+                image = Gtk.Image.new_from_file(
+                    "/usr/share/icons/better-welcome.png"
+                )  # Výchozí logo
+
+            return image
+
+        image = get_distro_image()
+        self.content_box.pack_start(image, False, False, 10)  # Přidání obrázku
+
+        grid = Gtk.Grid()
+        grid.set_column_spacing(10)
+        grid.set_row_spacing(10)
+
+        # Obalení gridu do centrálního boxu
+        grid_alignment = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        grid_alignment.set_valign(Gtk.Align.CENTER)  # Vertikální centrování
+        grid_alignment.set_halign(Gtk.Align.CENTER)  # Horizontální centrování
+        grid_alignment.pack_start(grid, False, False, 0)
+
+        self.content_box.pack_start(grid_alignment, True, True, 10)
+
+        buttons = [
+            ("Show System Info", self.on_system_info_clicked),
+            ("System Update", self.on_update_clicked),
+            ("Disk Usage", self.on_disk_usage_clicked),
+            ("Tweaks", self.on_tweaks_clicked),
+            ("Repairs", self.on_repairs_clicked),
+            ("Exit", self.on_exit_clicked),
+        ]
+
+        for i, (label, callback) in enumerate(buttons):
+            button = Gtk.Button(label=label)
+            button.connect("clicked", callback)
+            button.set_size_request(180, 50)
+            grid.attach(button, i % 3, i // 3, 1, 1)
+
+        # Vytvoření boxu pro checkbox a tlačítko nastavení
+        settings_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+
+        # Checkbox "Start at login"
+        self.startup_checkbox = Gtk.CheckButton(label="Start at login")
+        self.startup_checkbox.set_active(os.path.exists(AUTOSTART_PATH))
+        self.startup_checkbox.connect("toggled", self.on_startup_toggled)
+        settings_box.pack_start(self.startup_checkbox, False, False, 5)
+
+        self.content_box.pack_start(settings_box, False, False, 5)
+
+        links_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        self.content_box.pack_start(links_box, False, False, 10)
+
+        github_button = Gtk.LinkButton(
+            uri="https://github.com/ExistingPerson08/Spacefin", label="Github"
+        )
+        links_box.pack_start(github_button, True, True, 0)
+
+        fedora_button = Gtk.LinkButton(
+            uri="https://fedoraproject.org/start", label="Fedora Start"
+        )
+        links_box.pack_start(fedora_button, True, True, 0)
+
+        help_button = Gtk.LinkButton(
+            uri="https://universal-blue.org/documentation.html", label="Documentation"
+        )
+        links_box.pack_start(help_button, True, True, 0)
+
+        self.show_all()
+
+    def on_startup_toggled(self, widget):
+        if widget.get_active():
+            os.makedirs(os.path.dirname(AUTOSTART_PATH), exist_ok=True)
+            shutil.copy(DESKTOP_FILE, AUTOSTART_PATH)
+        else:
+            if os.path.exists(AUTOSTART_PATH):
+                os.remove(AUTOSTART_PATH)
+
+    def create_tweaks_page(self):
+        self.main_box.remove(self.content_box)
+
+        self.content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.main_box.pack_start(self.content_box, True, True, 10)
+
+        grid = Gtk.Grid()
+        grid.set_column_spacing(10)
+        grid.set_row_spacing(10)
+
+        # Obalení gridu do centrálního boxu
+        grid_alignment = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        grid_alignment.set_valign(Gtk.Align.CENTER)  # Vertikální centrování
+        grid_alignment.set_halign(Gtk.Align.CENTER)  # Horizontální centrování
+        grid_alignment.pack_start(grid, False, False, 0)
+
+        self.content_box.pack_start(grid_alignment, True, True, 10)
+
+        # Přidání textového popisku nad seznam
+        instruction_label = Gtk.Label(label="Choose what to install")
+        instruction_label.set_markup(
+            "<span size='medium' weight='bold'>Choose what to install (uses 'spacefin-cli install')</span>"
+        )
+        instruction_label.set_justify(Gtk.Justification.CENTER)
+        self.content_box.pack_start(instruction_label, False, False, 10)
+
+        # Vytvoření ListBoxu
+        listbox = Gtk.ListBox()
+        listbox.set_selection_mode(Gtk.SelectionMode.SINGLE)
+        listbox.set_sort_func(lambda row1, row2: 0)
+
+        items = self.install_items
+
+        # Vytvoření řádků (položek) v seznamu
+        for item in items:
+            row = Gtk.ListBoxRow()
+            hbox = Gtk.Box(
+                orientation=Gtk.Orientation.HORIZONTAL,
+                spacing=15,
+                margin_top=10,
+                margin_bottom=10,
+            )
+            row.add(hbox)
+
+            # Vytvoření ikony
+            icon = Gtk.Image.new_from_icon_name(
+                item["icon"], Gtk.IconSize.LARGE_TOOLBAR
+            )
+            icon.set_halign(Gtk.Align.CENTER)
+            icon.set_valign(Gtk.Align.CENTER)
+
+            # Vytvoření textového labelu
+            label = Gtk.Label(label=item["label"])
+            label.set_xalign(0)
+
+            # Přidání ikony a textu do boxu
+            hbox.pack_start(icon, False, False, 0)
+            hbox.pack_start(label, True, True, 0)
+
+            # Uložení řádku do seznamu
+            listbox.add(row)
+
+        self.items = items
+
+        # Vytvoření skrolovacího okna pro ListBox
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.ALWAYS)
+        scrolled_window.add(listbox)
+        scrolled_window.set_size_request(400, 250)
+
+        # Přidání skrolovacího okna do content_box
+        self.content_box.pack_start(scrolled_window, True, True, 10)
+
+        # Button box
+        button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        self.content_box.pack_start(button_box, False, False, 10)
+
+        back_button = Gtk.Button(label="Back")
+        back_button.connect("clicked", lambda _: self.create_main_page())
+        back_button.set_size_request(350, 20)  # Nastavení velikosti
+        button_box.pack_start(back_button, False, False, 10)
+
+        # Tlačítko Vybrat
+        select_button = Gtk.Button(label="Select")
+        select_button.connect("clicked", self.on_select_button_clicked, listbox, items)
+        select_button.set_size_request(350, 20)
+        button_box.pack_start(select_button, False, False, 10)
+
+        # Nastavení, aby tlačítka byla vedle sebe
+        self.show_all()
+
+    def create_repairs_page(self):
+        """Kompletně přepracovaná stránka, nyní dynamicky načítá 'run' skripty."""
+        self.main_box.remove(self.content_box)
+
+        self.content_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.main_box.pack_start(self.content_box, True, True, 10)
+
+        grid = Gtk.Grid()
+        grid.set_column_spacing(10)
+        grid.set_row_spacing(10)
+
+        # Obalení gridu do centrálního boxu
+        grid_alignment = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        grid_alignment.set_valign(Gtk.Align.CENTER)  # Vertikální centrování
+        grid_alignment.set_halign(Gtk.Align.CENTER)  # Horizontální centrování
+        grid_alignment.pack_start(grid, False, False, 0)
+
+        self.content_box.pack_start(grid_alignment, True, True, 10)
+
+        # Přidání textového popisku nad seznam
+        instruction_label = Gtk.Label(label="Choose what to run")
+        instruction_label.set_markup(
+            "<span size='medium' weight='bold'>Choose what to run (uses 'spacefin-cli run')</span>"
+        )
+        instruction_label.set_justify(Gtk.Justification.CENTER)
+        self.content_box.pack_start(instruction_label, False, False, 10)
+
+        items = self.run_items
+
+        # Vytvoření řádků (položek) v seznamu
+        for i, item in enumerate(items):
+            button = Gtk.Button(label=item["label"])
+            button.set_size_request(180, 50)
+            command = item["command"]  # Capture command
+            button.connect("clicked", lambda w, cmd=command: run_command_in_gui(cmd))
+            grid.attach(button, i % 3, i // 3, 1, 1)
+
+        # Tlačítko Zpět
+        back_button = Gtk.Button(label="Back")
+        back_button.connect("clicked", lambda _: self.create_main_page())
+        back_button.set_halign(Gtk.Align.CENTER)
+        # Šířka: (3 * 180px) + (2 * 10px mezera) = 560px
+        back_button.set_size_request(560, 20)
+        self.content_box.pack_start(back_button, False, False, 10)
+
+        self.show_all()
+
+    def on_select_button_clicked(self, widget, listbox, items):
+        """Obecná funkce pro spuštění vybrané položky (z Tweaks nebo Repairs)."""
+        selected_row = listbox.get_selected_row()
+        if selected_row:
+            index = selected_row.get_index()
+            selected_item = items[index]
+            run_command_in_gui(selected_item["command"])
+
+    def list_clicked(self, widget):
+        print("List clicked")
+
+    def on_tweaks_clicked(self, widget):
+        self.create_tweaks_page()
+
+    def on_repairs_clicked(self, widget):
+        self.create_repairs_page()
+
+    # --- Main Page Callbacks (zůstávají) ---
+    def on_system_info_clicked(self, widget):
+        run_command_in_gui(["fastfetch"])
+
+    def on_update_clicked(self, widget):
+        run_command_in_gui(["spacefin-cli", "run", "update"])
+
+    def on_disk_usage_clicked(self, widget):
+        subprocess.run(["flatpak", "run", "org.gnome.baobab"], check=True)
+
+    def on_exit_clicked(self, widget):
+        Gtk.main_quit()
+
+    # --- Ostatní 'on_..._clicked' metody jsou nyní zastaralé a odstraněné ---
+    # --- (on_mirrors_clicked, on_refind_clicked, atd.) ---
+    # --- (create_package_repairs_page, on_package_repairs_clicked, atd.) ---
+
+
+def main():
+    window = LinuxConfigurator()
+    window.connect("destroy", Gtk.main_quit)
+    window.connect("destroy", lambda w: window.temp_dir.cleanup())
+    window.show_all()
+    Gtk.main()
+
+
+if __name__ == "__main__":
+    main()

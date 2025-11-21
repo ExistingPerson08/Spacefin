@@ -1,5 +1,5 @@
 [Unit]
-Description=Jednorázový skript pro čištění dočasných souborů
+Description=Fix for bazaar curated config
 
 [Service]
 Type=oneshot
