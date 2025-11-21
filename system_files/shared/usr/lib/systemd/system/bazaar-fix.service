@@ -1,9 +1,0 @@
-[Unit]
-Description=Fix for bazaar curated config
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/flatpak override io.github.kolunmi.Bazaar --filesystem=host-etc
-
-[Install]
-WantedBy=multi-user.target
