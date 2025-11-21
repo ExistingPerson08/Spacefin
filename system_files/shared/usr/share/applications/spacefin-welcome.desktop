@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Spacefin welcome
+Comment=Welcome to your Spacefin desktop!
+Exec=spacefin-welcome
+Icon=/usr/share/spacefin/icons/update.svg
+Terminal=false
+Type=Application
+Categories=System;Utility;
