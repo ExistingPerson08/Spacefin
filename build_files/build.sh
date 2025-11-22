@@ -283,7 +283,6 @@ curl --retry 3 -Lo /etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub
 
 # Remove Fedora Flatpaks
 rm -rf /usr/lib/systemd/system/flatpak-add-fedora-repos.service
-systemctl enable flatpak-add-flathub-repos.service
 
 # Cleanup
 dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
