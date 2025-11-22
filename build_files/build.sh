@@ -40,6 +40,25 @@ dnf5 versionlock add \
     fwupd-plugin-modem-manager \
     fwupd-plugin-uefi-capsule-data \
 
+# Additional drivers
+dnf5 install -y \
+    NetworkManager-wifi \
+    atheros-firmware \
+    brcmfmac-firmware \
+    iwlegacy-firmware \
+    iwlwifi-dvm-firmware \
+    iwlwifi-mvm-firmware \
+    mt7xxx-firmware \
+    nxpwireless-firmware \
+    realtek-firmware \
+    tiwilink-firmware \
+    alsa-firmware \
+    alsa-sof-firmware \
+    alsa-tools-firmware \
+    intel-audio-firmware \
+    steam-devices \
+    ublue-os-udev-rules
+
 # Install edition specific packages
 case "$1" in
     "main")
@@ -257,6 +276,14 @@ EOF
 # They are not installed by default
 mkdir /nix
 mkdir /snap
+
+# Add Flathub
+mkdir -p /etc/flatpak/remotes.d/
+curl --retry 3 -Lo /etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo
+
+# Remove Fedora Flatpaks
+rm -rf /usr/lib/systemd/system/flatpak-add-fedora-repos.service
+systemctl enable flatpak-add-flathub-repos.service
 
 # Cleanup
 dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
