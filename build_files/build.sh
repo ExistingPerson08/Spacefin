@@ -196,6 +196,7 @@ dnf5 install -y \
     gimp \
     papers \
     duperemove \
+    ddcutil \
     uupd \
     gnome-disk-utility \
     java-latest-openjdk-devel \
