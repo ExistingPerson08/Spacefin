@@ -1,4 +1,4 @@
-name: Build Main Container Image
+name: Build Container Image
 
 on:
   workflow_dispatch:
