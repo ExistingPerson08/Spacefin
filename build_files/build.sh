@@ -154,12 +154,15 @@ case "$2" in
         # Install dx packages
         dnf5 install -y \
             zed \
+            waydroid \
             codium \
             codium-marketplace \
             gnome-boxes \
             scrcpy \
             quickemu \
             zsh
+
+        echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
         ;;
     "gx")
         IMAGE_NAME="$DE_NAME-gx"
@@ -172,10 +175,13 @@ case "$2" in
             mangohud \
             webapp-manager \
             wine \
+            waydroid \
             gamescope \
             vkBasalt \
             winetricks \
             wallpaper-engine-kde-plugin
+
+        echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
         ;;
     "swe")
         IMAGE_NAME="$DE_NAME-swe"
@@ -184,6 +190,7 @@ case "$2" in
             webapp-manager \
             youtube-music \
             wine \
+            waydroid \
             xournalpp \
             chromium \
             scrcpy \
@@ -191,6 +198,7 @@ case "$2" in
             torbrowser-launcher
 
         dnf5 install -y https://github.com/TriliumNext/Trilium/releases/download/v0.99.3/TriliumNotes-v0.99.3-linux-x64.rpm
+        echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
         ;;
 esac
 
@@ -208,7 +216,6 @@ done
 
 # Add to justfile
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
-echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
 
 # Install additional packages
 dnf5 install -y \
@@ -218,12 +225,6 @@ dnf5 install -y \
     firewall-config \
     fish \
     bluefin-cli-logos \
-    showtime \
-    shotwell \
-    decibels \
-    gnome-firmware \
-    gimp \
-    papers \
     duperemove \
     ddcutil \
     uupd \
@@ -232,7 +233,6 @@ dnf5 install -y \
     docker \
     docker-compose \
     flatpak-builder \
-    waydroid \
     restic \
     rclone \
     python3-pip \
