@@ -56,7 +56,6 @@ dnf5 install -y \
     alsa-sof-firmware \
     alsa-tools-firmware \
     intel-audio-firmware \
-    steam-devices \
     ublue-os-udev-rules
 
 # Install de specific packages
@@ -159,6 +158,9 @@ case "$2" in
             gnome-boxes \
             scrcpy \
             quickemu \
+            docker \
+            git \
+            docker-compose \
             zsh
 
         echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
@@ -176,8 +178,11 @@ case "$2" in
             wine \
             waydroid \
             gamescope \
+            xone \
+            steam-devices \
             vkBasalt \
             winetricks \
+            docker \
             wallpaper-engine-kde-plugin
 
         echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
