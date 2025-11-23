@@ -64,7 +64,6 @@ case "$1" in
     "cosmic")
         DE_NAME="main"
         # Using latest (nightly) Cosmic desktop until stable release
-        dnf5 remove -y @cosmic-desktop @cosmic-desktop-apps --exclude=gnome-disk-utility,flatpak
         dnf5 copr enable -y ryanabx/cosmic-epoch
         dnf5 install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
         dnf5 copr remove -y ryanabx/cosmic-epoch
@@ -329,9 +328,3 @@ find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \;
 find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 \! -name rpm-ostree -exec rm -fr {} \;
 mkdir -p /var/tmp
 chmod -R 1777 /var/tmp
-
-# Initramfs
-KERNEL_VERSION="$(find "/usr/lib/modules" -maxdepth 1 -type d ! -path "/usr/lib/modules" -exec basename '{}' ';' | sort | tail -n 1)"
-export DRACUT_NO_XATTR=1
-dracut --no-hostonly --kver "$KERNEL_VERSION" --reproducible --zstd -v --add ostree -f "/usr/lib/modules/$KERNEL_VERSION/initramfs.img"
-chmod 0600 "/usr/lib/modules/${KERNEL_VERSION}/initramfs.img"
