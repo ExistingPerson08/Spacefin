@@ -64,8 +64,8 @@ jobs:
       - name: Set Dynamic Variables
         id: dynamic_vars
         run: |
-          DESKTOP="${{ github.event.inputs.desktop }}"
-          EDITION="${{ github.event.inputs.edition }}"
+          DESKTOP="${{ inputs.desktop }}"
+          EDITION="${{ inputs.edition }}"
           BASE="base" # Defaultní hodnota
 
           # Logika pro BASE
