@@ -61,7 +61,7 @@ dnf5 install -y \
 
 # Install de specific packages
 case "$1" in
-    "main")
+    "cosmic")
         DE_NAME="main"
         # Using latest (nightly) Cosmic desktop until stable release
         dnf5 remove -y @cosmic-desktop @cosmic-desktop-apps --exclude=gnome-disk-utility,flatpak
