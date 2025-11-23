@@ -2,12 +2,6 @@ ARG DESKTOP
 ARG EDITION
 ARG BASE
 
-RUN echo "--- DIAGNOSTIKA ---" \
-    && echo "DESKTOP: $DESKTOP" \
-    && echo "EDITION: $EDITION" \
-    && echo "BASE: $BASE" \
-    && echo "-------------------"
-
 # Allow build scripts to be referenced without being copied into the final image
 FROM scratch AS ctx
 COPY build_files /
@@ -19,12 +13,6 @@ ARG EDITION
 
 ENV DESKTOP=$DESKTOP
 ENV EDITION=$EDITION
-
-RUN echo "--- DIAGNOSTIKA ---" \
-    && echo "DESKTOP: $DESKTOP" \
-    && echo "EDITION: $EDITION" \
-    && echo "BASE: $BASE" \
-    && echo "-------------------"
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=cache,dst=/var/cache \
