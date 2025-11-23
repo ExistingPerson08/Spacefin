@@ -23,6 +23,15 @@ on:
           - gx
           - swe
   workflow_call:
+    inputs:
+      desktop:
+        description: "Desktop Environment"
+        required: true
+        type: string
+      edition:
+        description: "Edition"
+        required: true
+        type: string
 
 env:
   IMAGE_DESC: "Custom Fedora Atomic image with COSMIC™ desktop"
