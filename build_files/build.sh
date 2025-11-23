@@ -59,10 +59,10 @@ dnf5 install -y \
     steam-devices \
     ublue-os-udev-rules
 
-# Install edition specific packages
+# Install de specific packages
 case "$1" in
     "main")
-        IMAGE_NAME="main"
+        DE_NAME="main"
         # Using latest (nightly) Cosmic desktop until stable release
         dnf5 remove -y @cosmic-desktop @cosmic-desktop-apps --exclude=gnome-disk-utility,flatpak
         dnf5 copr enable -y ryanabx/cosmic-epoch
@@ -70,24 +70,9 @@ case "$1" in
         dnf5 copr remove -y ryanabx/cosmic-epoch
 
         systemctl enable cosmic-greeter
-
-        # Install additional packages
-        dnf5 install -y \
-            youtube-music \
-            zed \
-            codium \
-            codium-marketplace \
-            gnome-boxes \
-            scrcpy \
-            torbrowser-launcher \
-            chromium \
-            prismlauncher \
-            quickemu
-
-        dnf5 install -y https://github.com/TriliumNext/Trilium/releases/download/v0.99.3/TriliumNotes-v0.99.3-linux-x64.rpm
         ;;
     "gnome")
-        IMAGE_NAME="gnome"
+        DE_NAME="gnome"
 
         # Setup GNOME
         dnf5 remove -y \
@@ -119,21 +104,12 @@ case "$1" in
           gnome-shell-extension-logo-menu \
           gnome-shell-extension-pop-shell \
           xprop \
+          gnome-text-editor \
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
-
-        # Install additional packages
-        dnf5 install -y \
-            gnome-text-editor \
-            youtube-music \
-            xournalpp \
-            firefox \
-            scrcpy \
-            gnome-boxes \
-            torbrowser-launcher
         ;;
     "kde")
-        IMAGE_NAME="kde"
+        DE_NAME="kde"
 
         # Setup kde
         dnf5 -y install \
@@ -164,8 +140,30 @@ case "$1" in
         rm -f /usr/share/applications/org.kde.discover.flatpak.desktop
         rm -f /usr/share/applications/org.kde.discover.notifier.desktop
         rm -f /usr/share/applications/org.kde.discover.urlhandler.desktop
+        ;;
+esac
 
-        # Install additional packages
+# Install edition specific packages
+case "$2" in
+    "main")
+        # Skipping
+        IMAGE_NAME="$DE_NAME"
+        ;;
+    "dx")
+        IMAGE_NAME="$DE_NAME-dx"
+        # Install dx packages
+        dnf5 install -y \
+            zed \
+            codium \
+            codium-marketplace \
+            gnome-boxes \
+            scrcpy \
+            quickemu \
+            zsh
+        ;;
+    "gx")
+        IMAGE_NAME="$DE_NAME-gx"
+        # Install gx packages
         dnf5 -y --setopt=install_weak_deps=False install \
             steam \
             lutris
@@ -174,12 +172,25 @@ case "$1" in
             mangohud \
             webapp-manager \
             wine \
-            thunderbird \
             gamescope \
             vkBasalt \
-            qbittorrent \
             winetricks \
             wallpaper-engine-kde-plugin
+        ;;
+    "swe")
+        IMAGE_NAME="$DE_NAME-swe"
+        # Install swe packages
+        dnf5 install -y \
+            webapp-manager \
+            youtube-music \
+            wine \
+            xournalpp \
+            chromium \
+            scrcpy \
+            gnome-boxes \
+            torbrowser-launcher
+
+        dnf5 install -y https://github.com/TriliumNext/Trilium/releases/download/v0.99.3/TriliumNotes-v0.99.3-linux-x64.rpm
         ;;
 esac
 
@@ -206,7 +217,6 @@ dnf5 install -y \
     ublue-motd \
     firewall-config \
     fish \
-    zsh \
     bluefin-cli-logos \
     showtime \
     shotwell \
@@ -246,9 +256,6 @@ dnf5 -y copr disable ublue-os/flatpak-test
 dnf5 install -y ghostty
 dnf5 remove -y ptyxis
 
-# Remove Bazaar due old version
-dnf5 remove -y bazaar
-
 # Setup systemd services
 systemctl enable brew-setup.service
 systemctl disable brew-upgrade.timer
@@ -259,6 +266,7 @@ IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_VENDOR="existingperson08"
 image_flavor="main"
 IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
+HOME_URL="https://github.com/ExistingPerson08/Spacefin"
 
 cat >$IMAGE_INFO <<EOF
 {
@@ -268,8 +276,28 @@ cat >$IMAGE_INFO <<EOF
   "image-ref": "$IMAGE_REF",
   "image-tag":"latest",
   "base-image-name": "fedora",
-  "fedora-version": "42"
+  "fedora-version": "43"
 }
+EOF
+
+echo "spacefin" | tee "/etc/hostname"
+
+sed -i -f - /usr/lib/os-release <<EOF
+s|^NAME=.*|NAME=\"Spacefin\"|
+s|^PRETTY_NAME=.*|PRETTY_NAME=\"Spacefin\"|
+s|^VERSION_CODENAME=.*|VERSION_CODENAME=\"Forty-Three\"|
+s|^VARIANT_ID=.*|VARIANT_ID=""|
+s|^HOME_URL=.*|HOME_URL=\"${HOME_URL}\"|
+s|^BUG_REPORT_URL=.*|BUG_REPORT_URL=\"${HOME_URL}/issues\"|
+s|^SUPPORT_URL=.*|SUPPORT_URL=\"${HOME_URL}/issues\"|
+s|^CPE_NAME=\".*\"|CPE_NAME=\"cpe:/o:existingperson08:spacefin\"|
+s|^DOCUMENTATION_URL=.*|DOCUMENTATION_URL=\"${HOME_URL}\"|
+s|^DEFAULT_HOSTNAME=.*|DEFAULT_HOSTNAME="spacefin"|
+
+/^REDHAT_BUGZILLA_PRODUCT=/d
+/^REDHAT_BUGZILLA_PRODUCT_VERSION=/d
+/^REDHAT_SUPPORT_PRODUCT=/d
+/^REDHAT_SUPPORT_PRODUCT_VERSION=/d
 EOF
 
 # Workaround to make nix and snaps work
@@ -301,3 +329,9 @@ find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \;
 find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 \! -name rpm-ostree -exec rm -fr {} \;
 mkdir -p /var/tmp
 chmod -R 1777 /var/tmp
+
+# Initramfs
+KERNEL_VERSION="$(find "/usr/lib/modules" -maxdepth 1 -type d ! -path "/usr/lib/modules" -exec basename '{}' ';' | sort | tail -n 1)"
+export DRACUT_NO_XATTR=1
+dracut --no-hostonly --kver "$KERNEL_VERSION" --reproducible --zstd -v --add ostree -f "/usr/lib/modules/$KERNEL_VERSION/initramfs.img"
+chmod 0600 "/usr/lib/modules/${KERNEL_VERSION}/initramfs.img"
