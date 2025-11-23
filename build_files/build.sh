@@ -158,9 +158,6 @@ case "$2" in
             gnome-boxes \
             scrcpy \
             quickemu \
-            docker \
-            git \
-            docker-compose \
             zsh
 
         echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
@@ -182,7 +179,6 @@ case "$2" in
             steam-devices \
             vkBasalt \
             winetricks \
-            docker \
             wallpaper-engine-kde-plugin
 
         echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
@@ -239,6 +235,7 @@ dnf5 install -y \
     flatpak-builder \
     restic \
     rclone \
+    git \
     python3-pip \
     python3-requests
 
