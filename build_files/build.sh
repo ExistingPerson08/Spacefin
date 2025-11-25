@@ -117,7 +117,6 @@ case "$1" in
         dnf5 install -y \
             thunar
         
-        systemctl add-wants niri.service dms
         systemctl enable dsearch
         systemctl enable dms-greeter
         ;;
