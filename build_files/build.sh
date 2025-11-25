@@ -111,12 +111,11 @@ case "$1" in
 
         # Install and setup niri
         dnf5 copr enable -y avengemedia/dms
-        dnf5 install -y niri dms mate-polkit wl-clipboard --setopt=install_weak_deps=True --exclude=alacritty
+        dnf5 install -y niri dms mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty
         dnf5 copr remove -y avengemedia/dms
 
         dnf5 install -y \
-            thunar \
-            dms-greeter
+            thunar
         
         systemctl add-wants niri.service dms
         systemctl enable dsearch
