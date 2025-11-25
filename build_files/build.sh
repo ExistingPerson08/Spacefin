@@ -114,7 +114,8 @@ case "$1" in
         dnf5 install -y niri dms mate-polkit wl-clipboard --setopt=install_weak_deps=True --exclude=alacritty
         dnf5 copr remove -y avengemedia/dms
         
-        systemctl --user add-wants niri.service dms
+        systemctl add-wants niri.service dms
+        systemctl enable dsearch
         
     "kde")
         DE_NAME="kde"
