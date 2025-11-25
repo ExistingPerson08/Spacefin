@@ -106,6 +106,16 @@ case "$1" in
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
         ;;
+    "niri")
+        DE_NAME="niri"
+
+        # Install and setup niri
+        dnf5 copr enable -y avengemedia/dms
+        dnf5 install -y niri dms mate-polkit wl-clipboard --setopt=install_weak_deps=True --exclude=alacritty
+        dnf5 copr remove -y avengemedia/dms
+        
+        systemctl --user add-wants niri.service dms
+        
     "kde")
         DE_NAME="kde"
 
