@@ -113,10 +113,15 @@ case "$1" in
         dnf5 copr enable -y avengemedia/dms
         dnf5 install -y niri dms mate-polkit wl-clipboard --setopt=install_weak_deps=True --exclude=alacritty
         dnf5 copr remove -y avengemedia/dms
+
+        dnf5 install -y \
+            thunar \
+            dms-greeter
         
         systemctl add-wants niri.service dms
         systemctl enable dsearch
-        
+        systemctl enable dms-greeter
+        ;;
     "kde")
         DE_NAME="kde"
 
