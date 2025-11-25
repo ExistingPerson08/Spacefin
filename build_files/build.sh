@@ -117,8 +117,7 @@ case "$1" in
         dnf5 install -y \
             thunar
         
-        systemctl enable dsearch
-        systemctl enable dms-greeter
+        systemctl enable greetd
         ;;
     "kde")
         DE_NAME="kde"
