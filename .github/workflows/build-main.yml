@@ -11,6 +11,7 @@ on:
         options:
           - kde
           - gnome
+          - niri
           - cosmic
       edition:
         description: "Edition"
