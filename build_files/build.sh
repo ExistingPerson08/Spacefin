@@ -120,7 +120,6 @@ case "$1" in
             fprintd
         
         systemctl enable greetd
-        useradd --create-home --shell /usr/bin/nologin greeter
         ;;
     "kde")
         DE_NAME="kde"
