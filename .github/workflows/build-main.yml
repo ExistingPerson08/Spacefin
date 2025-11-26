@@ -108,10 +108,8 @@ jobs:
         with:
           images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ env.DEFAULT_TAG }}
-            type=raw,value=${{ steps.dynamic_vars.outputs.FULL_NAME }} # NOVÝ TAG
-            type=raw,value=${{ steps.dynamic_vars.outputs.FULL_NAME }}.${{ steps.date.outputs.date_tag }}
-            type=raw,value=${{ steps.date.outputs.date_tag }}
+            type=raw,value=${{ env.DEFAULT_TAG }} # Vytvoří tag :latest
+            type=raw,value=${{ steps.date.outputs.date_tag }} # Vytvoří tag :20251126
             type=sha,enable=${{ github.event_name == 'pull_request' }}
             type=ref,event=pr
           labels: |
