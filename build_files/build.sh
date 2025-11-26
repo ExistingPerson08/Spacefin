@@ -115,9 +115,12 @@ case "$1" in
         dnf5 copr remove -y avengemedia/dms
 
         dnf5 install -y \
-            thunar
+            thunar \
+            gnome-keyring \
+            fprintd
         
         systemctl enable greetd
+        useradd --create-home --shell /usr/bin/nologin greeter
         ;;
     "kde")
         DE_NAME="kde"
