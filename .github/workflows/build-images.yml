@@ -14,13 +14,30 @@ jobs:
   build-image-main:
     uses: ./.github/workflows/build-main.yml
     secrets: inherit
+    with:
+      desktop: cosmic
+      edition: dx
 
   build-image-gnome:
     needs: build-image-main
-    uses: ./.github/workflows/build-gnome.yml
+    uses: ./.github/workflows/build-main.yml
     secrets: inherit
+    with:
+      desktop: gnome
+      edition: main
 
-  build-image-kde:
+  build-image-niri:
     needs: build-image-gnome
-    uses: ./.github/workflows/build-kde.yml
+    uses: ./.github/workflows/build-main.yml
     secrets: inherit
+    with:
+      desktop: niri
+      edition: dx
+      
+#  build-image-kde:
+#    needs: build-image-niri
+#    uses: ./.github/workflows/build-main.yml
+#    secrets: inherit
+#    with:
+#      desktop: kde
+#      edition: gx
