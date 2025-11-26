@@ -106,7 +106,7 @@ jobs:
         uses: docker/metadata-action@318604b99e75e41977312d83839a89be02ca4893 # v5
         id: metadata
         with:
-          images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.IMAGE_REGISTRY }}/${{ steps.dynamic_vars.outputs.FULL_NAME }}
           tags: |
             type=raw,value=${{ env.DEFAULT_TAG }} # Vytvoří tag :latest
             type=raw,value=${{ steps.date.outputs.date_tag }} # Vytvoří tag :20251126
