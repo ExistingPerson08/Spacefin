@@ -179,13 +179,11 @@ jobs:
       - name: Sign main container image
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
-          IMAGE_FULL="${{ env.IMAGE_REGISTRY }}/${{ steps.dynamic_vars.outputs.FULL_NAME }}"
-          echo "TAGS: ${{ steps.metadata.outputs.tags }}"
-          echo "IMAGE_FULL: $IMAGE_FULL"
-          for tag in ${{ steps.metadata.outputs.tags }}; do
-            cosign sign -y --key env://COSIGN_PRIVATE_KEY $IMAGE_FULL:$tag
+          for image_ref in ${{ steps.push.outputs.tags }}; do
+            echo "Signing: ${image_ref}"
+            cosign sign -y --key env://COSIGN_PRIVATE_KEY ${image_ref}
           done
         env:
-          TAGS: ${{ steps.push.outputs.digest }}
+          TAGS: ${{ steps.metadata.outputs.tags }}
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
