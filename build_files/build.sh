@@ -115,9 +115,13 @@ case "$1" in
         dnf5 copr remove -y avengemedia/dms
 
         dnf5 install -y \
-            thunar \
+            nautilus \
             gnome-keyring \
-            fprintd
+            fprintd \
+            tuned \
+            tuned-ppd
+
+        echo "import \"/usr/share/spacefin/just/niri.just\"" >>/usr/share/ublue-os/justfile
         
         systemctl enable greetd
         ;;
