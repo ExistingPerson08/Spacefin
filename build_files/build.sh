@@ -129,6 +129,7 @@ case "$1" in
             xdg-desktop-portal-gnome \
             xwayland-satellite \
             fprintd \
+            fprintd-pam \
             tuned \
             tuned-ppd
 
