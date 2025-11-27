@@ -103,6 +103,7 @@ case "$1" in
           gnome-shell-extension-pop-shell \
           xprop \
           papers \
+          decibels \
           gnome-text-editor \
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
@@ -119,6 +120,7 @@ case "$1" in
         dnf5 install -y \
             nautilus \
             papers \
+            decibels \
             gnome-keyring \
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
