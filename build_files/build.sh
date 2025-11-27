@@ -85,6 +85,7 @@ case "$1" in
             gnome-shell-extension-background-logo \
             yelp \
             gnome-initial-setup
+            
         dnf5 -y install \
           nautilus-gsconnect \
           gnome-shell-extension-appindicator \
@@ -103,6 +104,7 @@ case "$1" in
           gnome-shell-extension-pop-shell \
           xprop \
           papers \
+          loupe \
           decibels \
           gnome-text-editor \
           rom-properties-gtk3 \
@@ -121,6 +123,7 @@ case "$1" in
             nautilus \
             papers \
             decibels \
+            shotwell \
             gnome-keyring \
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
@@ -149,6 +152,7 @@ case "$1" in
             fcitx5-hangul \
             kcm-fcitx5 \
             kio-extras \
+            gwenview \
             krunner-bazaar
 
         dnf5 -y remove \
@@ -208,23 +212,6 @@ case "$2" in
             winetricks \
             wallpaper-engine-kde-plugin
 
-        echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
-        ;;
-    "swe")
-        IMAGE_NAME="$DE_NAME-swe"
-        # Install swe packages
-        dnf5 install -y \
-            webapp-manager \
-            youtube-music \
-            wine \
-            waydroid \
-            xournalpp \
-            chromium \
-            scrcpy \
-            gnome-boxes \
-            torbrowser-launcher
-
-        dnf5 install -y https://github.com/TriliumNext/Trilium/releases/download/v0.99.3/TriliumNotes-v0.99.3-linux-x64.rpm
         echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
         ;;
 esac
