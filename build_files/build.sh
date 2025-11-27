@@ -103,7 +103,6 @@ case "$1" in
           gnome-shell-extension-pop-shell \
           xprop \
           papers \
-          decibels \
           gnome-text-editor \
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
@@ -116,11 +115,14 @@ case "$1" in
         dnf5 install -y niri dms mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty
         dnf5 copr remove -y avengemedia/dms
 
+        # Install aditional packages and dependencies
         dnf5 install -y \
             nautilus \
             papers \
-            decibels \
             gnome-keyring \
+            xdg-desktop-portal-gtk \
+            xdg-desktop-portal-gnome \
+            xwayland-satellite \
             fprintd \
             tuned \
             tuned-ppd
