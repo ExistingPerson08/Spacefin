@@ -120,6 +120,16 @@ case "$1" in
 
         # Install aditional packages and dependencies
         dnf5 install -y \
+            waybar \ # <- experimental packages start
+            mako \
+            wofi \
+            swayidle \
+            pavucontrol \
+            brightnessctl \
+            swaybg \
+            blueman \
+            nm-connection-editor \
+            swaylock \ # <- experimental packages end
             nautilus \
             papers \
             decibels \
