@@ -130,6 +130,7 @@ case "$1" in
             blueman \
             nm-connection-editor \
             swaylock \ 
+            webapp-manager
             
         # Install aditional packages and dependencies
         dnf5 install -y \
