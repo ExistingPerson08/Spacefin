@@ -2,20 +2,23 @@
 // "/-" comments out the following node.
 // Check the wiki for a full description of the configuration:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction
+
 config-notification {
     disable-failed
 }
 
 // Outputs from existing configuration
+// Internal display
 output "Samsung Display Corp. 0x41A7 Unknown" {
   scale 1.0
   transform "normal"
-  focus-at-startup
   position x=0 y=540
 }
 
+// Home external display
 output "PNP(AOC) 2470W 1212121212124" {
   scale 1.0
+  focus-at-startup
   transform "normal"
   position x=2048 y=0
 }
@@ -23,9 +26,6 @@ output "PNP(AOC) 2470W 1212121212124" {
 gestures {
 }
 
-// Input device configuration.
-// Find the full list of options on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Input
 input {
     keyboard {
         xkb {
@@ -43,54 +43,21 @@ input {
     focus-follows-mouse
     warp-mouse-to-focus
 }
-// You can configure outputs by their name, which you can find
-// by running `niri msg outputs` while inside a niri instance.
-// The built-in laptop monitor is usually called "eDP-1".
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
-// Remember to uncomment the node by removing "/-"!
 
-// Settings that influence how windows are positioned and sized.
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
 layout {
     // Set gaps around windows in logical pixels.
     gaps 5
+
     background-color "transparent"
-    // When to center a column when changing focus, options are:
-    // - "never", default behavior, focusing an off-screen column will keep at the left
-    //   or right edge of the screen.
-    // - "always", the focused column will always be centered.
-    // - "on-overflow", focusing a column will center it if it doesn't fit
-    //   together with the previously focused column.
-    center-focused-column "never"
-    // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
+    center-focused-column "on-overflow"
+
     preset-column-widths {
-        // Proportion sets the width as a fraction of the output width, taking gaps into account.
-        // For example, you can perfectly fit four windows sized "proportion 0.25" on an output.
-        // The default preset widths are 1/3, 1/2 and 2/3 of the output.
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
-        // Fixed sets the width in logical pixels exactly.
-        // fixed 1920
     }
-    // You can also customize the heights that "switch-preset-window-height" (Mod+Shift+R) toggles between.
-    // preset-window-heights { }
-    // You can change the default width of the new windows.
     default-column-width { proportion 0.5; }
-    // If you leave the brackets empty, the windows themselves will decide their initial width.
-    // default-column-width {}
-    // By default focus ring and border are rendered as a solid background rectangle
-    // behind windows. That is, they will show up through semitransparent windows.
-    // This is because windows using client-side decorations can have an arbitrary shape.
-    //
-    // If you don't like that, you should uncomment `prefer-no-csd` below.
-    // Niri will draw focus ring and border *around* windows that agree to omit their
-    // client-side decorations.
-    //
-    // Alternatively, you can override it with a window rule called
-    // `draw-border-with-background`.
+
     border {
         off
         width 4
@@ -111,6 +78,14 @@ layout {
     }
     struts {
     }
+    tab-indicator {
+        width 9
+        gap 8
+        length total-proportion=1.0
+        place-within-column
+      active-color "4680dd"
+      urgent-color "red"
+    }
 }
 layer-rule {
     match namespace="^quickshell$"
@@ -121,11 +96,7 @@ overview {
         off
     }
 }
-// Add lines like this to spawn processes at startup.
-// Note that running niri as a session supports xdg-desktop-autostart,
-// which may be more convenient to use.
-// See the binds section below for more spawn examples.
-// This line starts waybar, a commonly used bar for Wayland compositors.
+
 spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
 spawn-at-startup "dms" "run"
 spawn-at-startup "/usr/libexec/polkit-mate-authentication-agent-1"
@@ -174,17 +145,15 @@ animations {
         spring damping-ratio=0.85 stiffness=800 epsilon=0.0001
     }
 }
-// Window rules let you adjust behavior for individual windows.
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
-// Work around WezTerm's initial configure bug
-// by setting an empty default-column-width.
+
 window-rule {
-    // This regular expression is intentionally made as specific as possible,
-    // since this is the default config, and we want no false positives.
-    // You can get away with just app-id="wezterm" if you want.
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
+}
+window-rule {
+    match app-id="Spotify"
+    match app-id="vesktop"
+    open-maximized true
 }
 window-rule {
     match app-id=r#"^org\.gnome\."#
@@ -201,10 +170,11 @@ window-rule {
 }
 window-rule {
     match app-id=r#"^gnome-calculator$"#
+    match app-id="org.gnome.Calculator"
     match app-id=r#"^galculator$"#
     match app-id=r#"^blueman-manager$"#
-    match app-id=r#"^org\.gnome\.Nautilus$"#
     match app-id=r#"^steam$"#
+    match app-id="spacefin-welcome"
     match app-id=r#"^xdg-desktop-portal$"#
     open-floating true
 }
@@ -222,20 +192,27 @@ window-rule {
 }
 window-rule {
     match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id="org.garudalinux.firedragon" title="Obraz v obraze"
     match app-id="zoom"
+    default-column-width { fixed 480; }
+    default-window-height { fixed 270; }
     open-floating true
 }
 window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
 }
+
 binds {
     // === System & Overview ===
     Mod+D { spawn "niri" "msg" "action" "toggle-overview"; }
     Mod+Tab repeat=false { toggle-overview; }
     Mod+Shift+Slash { show-hotkey-overlay; }
+    Mod+Shift+C hotkey-overlay-title="Open Niri Config" { spawn-sh "zed ~/.config/niri/config.kdl"; }
 
     // === Application Launchers ===
+    Mod+F hotkey-overlay-title="Open File Manager" { spawn "nautilus"; }
+    Mod+B hotkey-overlay-title="Open Browser" { spawn-sh "flatpak run org.garudalinux.firedragon"; }
     Mod+T hotkey-overlay-title="Open Terminal" { spawn "ghostty"; }
     Mod+Space hotkey-overlay-title="Application Launcher" {
         spawn "dms" "ipc" "call" "spotlight" "toggle";
@@ -246,7 +223,7 @@ binds {
     Mod+Shift+M hotkey-overlay-title="Task Manager" {
         spawn "dms" "ipc" "call" "processlist" "toggle";
     }
-    Mod+Comma hotkey-overlay-title="Settings" {
+    Mod+S hotkey-overlay-title="Settings" {
         spawn "dms" "ipc" "call" "settings" "toggle";
     }
     Mod+Y hotkey-overlay-title="Browse Wallpapers" {
@@ -263,6 +240,7 @@ binds {
     Ctrl+Alt+Delete hotkey-overlay-title="Task Manager" {
         spawn "dms" "ipc" "call" "processlist" "toggle";
     }
+
 
     // === Audio Controls ===
     XF86AudioRaiseVolume allow-when-locked=true {
@@ -290,7 +268,8 @@ binds {
     Mod+Q repeat=false { close-window; }
     Mod+M { maximize-column; }
     Mod+F11 { fullscreen-window; }
-    Mod+Shift+T { toggle-window-floating; }
+    Mod+Shift+F11 { toggle-windowed-fullscreen; }
+    Mod+G { toggle-window-floating; }
     Mod+Shift+V { switch-focus-between-floating-and-tiling; }
     Mod+W { toggle-column-tabbed-display; }
 
@@ -321,10 +300,10 @@ binds {
     Mod+Ctrl+End  { move-column-to-last; }
 
     // === Monitor Navigation ===
-    Mod+Ctrl+Left  { focus-monitor-left; }
+    Mod+Alt+Left  { focus-monitor-left; }
     //Mod+Ctrl+Down  { focus-monitor-down; }
     //Mod+Ctrl+Up    { focus-monitor-up; }
-    Mod+Ctrl+Right { focus-monitor-right; }
+    Mod+Alt+Right { focus-monitor-right; }
     Mod+Ctrl+H     { focus-monitor-left; }
     Mod+Ctrl+J     { focus-monitor-down; }
     Mod+Ctrl+K     { focus-monitor-up; }
@@ -408,8 +387,10 @@ binds {
     Mod+Ctrl+C { center-visible-columns; }
 
     // === Manual Sizing ===
-    Mod+Minus { set-column-width "-10%"; }
-    Mod+Equal { set-column-width "+10%"; }
+    // Mod+Minus { set-column-width "-10%"; }
+    // Mod+Equal { set-column-width "+10%"; }
+    Mod+Ctrl+Left { set-column-width "-3%"; }
+    Mod+Ctrl+Right { set-column-width "+3%"; }
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
 
@@ -421,7 +402,7 @@ binds {
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
     // === System Controls ===
-    // Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    // Mod+Shift+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
     Mod+Shift+P { power-off-monitors; }
 }
 debug {
