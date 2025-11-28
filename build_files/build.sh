@@ -117,20 +117,6 @@ case "$1" in
         dnf5 copr enable -y avengemedia/dms
         dnf5 install -y niri dms mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty
         dnf5 copr remove -y avengemedia/dms
-
-        # Experimental packages
-        dnf5 install -y \
-            waybar \
-            mako \
-            wofi \
-            swayidle \
-            pavucontrol \
-            brightnessctl \
-            swaybg \
-            blueman \
-            nm-connection-editor \
-            swaylock \ 
-            webapp-manager
             
         # Install aditional packages and dependencies
         dnf5 install -y \
