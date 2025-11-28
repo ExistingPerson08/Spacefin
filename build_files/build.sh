@@ -118,9 +118,9 @@ case "$1" in
         dnf5 install -y niri dms mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty
         dnf5 copr remove -y avengemedia/dms
 
-        # Install aditional packages and dependencies
+        # Experimental packages
         dnf5 install -y \
-            waybar \ # <- experimental packages start
+            waybar \
             mako \
             wofi \
             swayidle \
@@ -129,7 +129,10 @@ case "$1" in
             swaybg \
             blueman \
             nm-connection-editor \
-            swaylock \ # <- experimental packages end
+            swaylock \ 
+            
+        # Install aditional packages and dependencies
+        dnf5 install -y \
             nautilus \
             papers \
             decibels \
