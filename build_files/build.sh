@@ -120,6 +120,8 @@ case "$1" in
             
         # Install aditional packages and dependencies
         dnf5 install -y \
+            nm-connection-editor \
+            webapp-manager \
             nautilus \
             papers \
             decibels \
