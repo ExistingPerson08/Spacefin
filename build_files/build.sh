@@ -122,6 +122,7 @@ case "$1" in
         dnf5 install -y \
             nm-connection-editor \
             webapp-manager \
+            adw-gtk3-theme \
             nautilus \
             papers \
             decibels \
