@@ -85,7 +85,7 @@ case "$1" in
             gnome-shell-extension-background-logo \
             yelp \
             gnome-initial-setup
-            
+
         dnf5 -y install \
           nautilus-gsconnect \
           gnome-shell-extension-appindicator \
@@ -109,36 +109,6 @@ case "$1" in
           gnome-text-editor \
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
-        ;;
-    "niri")
-        DE_NAME="niri"
-
-        # Install and setup niri
-        dnf5 copr enable -y avengemedia/dms
-        dnf5 install -y niri dms mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty
-        dnf5 copr remove -y avengemedia/dms
-            
-        # Install aditional packages and dependencies
-        dnf5 install -y \
-            nm-connection-editor \
-            webapp-manager \
-            adw-gtk3-theme \
-            nautilus \
-            papers \
-            decibels \
-            shotwell \
-            gnome-keyring \
-            xdg-desktop-portal-gtk \
-            xdg-desktop-portal-gnome \
-            xwayland-satellite \
-            fprintd \
-            fprintd-pam \
-            tuned \
-            tuned-ppd
-
-        echo "import \"/usr/share/spacefin/just/niri.just\"" >>/usr/share/ublue-os/justfile
-        
-        systemctl enable greetd
         ;;
     "kde")
         DE_NAME="kde"
