@@ -85,7 +85,7 @@ case "$1" in
             gnome-shell-extension-background-logo \
             yelp \
             gnome-initial-setup
-            
+
         dnf5 -y install \
           nautilus-gsconnect \
           gnome-shell-extension-appindicator \
@@ -117,7 +117,7 @@ case "$1" in
         dnf5 copr enable -y avengemedia/dms
         dnf5 install -y niri dms mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty
         dnf5 copr remove -y avengemedia/dms
-            
+
         # Install aditional packages and dependencies
         dnf5 install -y \
             nm-connection-editor \
@@ -133,7 +133,7 @@ case "$1" in
             xwayland-satellite \
 
         echo "import \"/usr/share/spacefin/just/niri.just\"" >>/usr/share/ublue-os/justfile
-        
+
         systemctl enable greetd
         ;;
     "kde")
@@ -163,6 +163,20 @@ case "$1" in
             kde-partitionmanager \
             konsole
 
+        # Install additional packages
+        dnf5 -y --setopt=install_weak_deps=False install \
+            steam \
+            lutris
+
+        dnf5 install -y \
+            mangohud \
+            wine \
+            waydroid \
+            gamescope \
+            vkBasalt \
+            winetricks \
+            wallpaper-engine-kde-plugin
+
         # Hide Discover entries by renaming them (allows for easy re-enabling)
         discover_apps=(
           "org.kde.discover.desktop"
@@ -191,42 +205,6 @@ case "$2" in
         # Skipping
         IMAGE_NAME="$DE_NAME"
         ;;
-    "dx")
-        IMAGE_NAME="$DE_NAME-dx"
-        # Install dx packages
-        dnf5 install -y \
-            zed \
-            waydroid \
-            codium \
-            codium-marketplace \
-            gnome-boxes \
-            scrcpy \
-            quickemu \
-            zsh
-
-        echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
-        ;;
-    "gx")
-        IMAGE_NAME="$DE_NAME-gx"
-        # Install gx packages
-        dnf5 -y --setopt=install_weak_deps=False install \
-            steam \
-            lutris
-
-        dnf5 install -y \
-            mangohud \
-            webapp-manager \
-            wine \
-            waydroid \
-            gamescope \
-            xone \
-            steam-devices \
-            vkBasalt \
-            winetricks \
-            wallpaper-engine-kde-plugin
-
-        echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
-        ;;
 esac
 
 # Enable system76-schenduler
@@ -243,6 +221,7 @@ done
 
 # Add to justfile
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
+echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
 
 # Install additional packages
 dnf5 install -y \
@@ -261,6 +240,9 @@ dnf5 install -y \
     docker \
     docker-compose \
     flatpak-builder \
+    quickemu \
+    waydroid \
+    webapp-manager \
     restic \
     rclone \
     git \
