@@ -131,10 +131,6 @@ case "$1" in
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
             xwayland-satellite \
-            fprintd \
-            fprintd-pam \
-            tuned \
-            tuned-ppd
 
         echo "import \"/usr/share/spacefin/just/niri.just\"" >>/usr/share/ublue-os/justfile
         
@@ -255,7 +251,11 @@ dnf5 install -y \
     rclone \
     git \
     python3-pip \
-    python3-requests
+    python3-requests \
+    fprintd \
+    fprintd-pam \
+    tuned \
+    tuned-ppd
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
