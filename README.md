@@ -84,4 +84,6 @@ sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefi
 
 <div align="center">
 <img src="assets/Gnome.png" width="70%">
+<br><br>
+<img src="assets/niri.png" width="70%">
 </div>
