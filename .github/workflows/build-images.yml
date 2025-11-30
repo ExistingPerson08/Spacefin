@@ -51,7 +51,7 @@ jobs:
   #      edition: main
 
   build-image-kde:
-    needs: build-image-gnome
+    needs: build-image-main
     uses: ./.github/workflows/build-main.yml
     secrets: inherit
     with:
