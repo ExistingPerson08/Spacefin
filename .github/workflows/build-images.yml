@@ -32,7 +32,7 @@ jobs:
     secrets: inherit
     with:
       desktop: niri
-      edition: dx
+      edition: main
 
   build-image-main:
     needs: build-image-niri
@@ -40,19 +40,20 @@ jobs:
     secrets: inherit
     with:
       desktop: cosmic
-      edition: dx
+      edition: main
 
-  build-image-gnome:
-    needs: build-image-main
+  #  build-image-gnome:
+  #    needs: build-image-main
+  #    uses: ./.github/workflows/build-main.yml
+  #    secrets: inherit
+  #    with:
+  #      desktop: gnome
+  #      edition: main
+
+  build-image-kde:
+    needs: build-image-gnome
     uses: ./.github/workflows/build-main.yml
     secrets: inherit
     with:
-      desktop: gnome
+      desktop: kde
       edition: main
-#  build-image-kde:
-#    needs: build-image-gnome
-#    uses: ./.github/workflows/build-main.yml
-#    secrets: inherit
-#    with:
-#      desktop: kde
-#      edition: gx
