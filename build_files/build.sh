@@ -127,6 +127,7 @@ case "$1" in
             decibels \
             shotwell \
             waybar \
+            wl-mirror \
             swaybg \
             swaylock \
             swayidle \
