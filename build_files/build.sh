@@ -264,6 +264,13 @@ dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
 systemctl enable uupd.timer
 
+# Setup internal drives automount
+git clone --depth=1 https://github.com/Zeglius/media-automount-generator
+cd ./media-automount-generator
+./install.sh
+cd ../
+rm -rf ./media-automount-generator
+
 # Add Flatpak preinstall
 dnf5 -y copr enable ublue-os/flatpak-test
 dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
