@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Wine Launcher
-MimeType=application/x-ms-dos-executable;
-Exec=wine start /unix %f
-NoDisplay=true

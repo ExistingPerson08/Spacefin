@@ -85,7 +85,7 @@ case "$1" in
             gnome-shell-extension-background-logo \
             yelp \
             gnome-initial-setup
-            
+
         dnf5 -y install \
           nautilus-gsconnect \
           gnome-shell-extension-appindicator \
@@ -117,11 +117,10 @@ case "$1" in
         dnf5 copr enable -y avengemedia/dms
         dnf5 install -y niri dms mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty
         dnf5 copr remove -y avengemedia/dms
-            
+
         # Install aditional packages and dependencies
         dnf5 install -y \
             nm-connection-editor \
-            webapp-manager \
             adw-gtk3-theme \
             nautilus \
             papers \
@@ -131,13 +130,9 @@ case "$1" in
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
             xwayland-satellite \
-            fprintd \
-            fprintd-pam \
-            tuned \
-            tuned-ppd
 
         echo "import \"/usr/share/spacefin/just/niri.just\"" >>/usr/share/ublue-os/justfile
-        
+
         systemctl enable greetd
         ;;
     "kde")
@@ -157,6 +152,8 @@ case "$1" in
             kcm-fcitx5 \
             kio-extras \
             gwenview \
+            breeze-gtk-gtk3 \
+            breeze-gtk-gtk4 \
             krunner-bazaar
 
         dnf5 -y remove \
@@ -167,12 +164,42 @@ case "$1" in
             kde-partitionmanager \
             konsole
 
-        # Hide discover
-        rm -f /usr/share/applications/plasma-discover.desktop
-        rm -f /usr/share/applications/org.kde.discover.desktop
-        rm -f /usr/share/applications/org.kde.discover.flatpak.desktop
-        rm -f /usr/share/applications/org.kde.discover.notifier.desktop
-        rm -f /usr/share/applications/org.kde.discover.urlhandler.desktop
+        # Install additional packages
+        dnf5 -y --setopt=install_weak_deps=False install \
+            steam \
+            lutris
+
+        dnf5 install -y \
+            mangohud \
+            wine \
+            waydroid \
+            gamescope \
+            vkBasalt \
+            winetricks \
+            wallpaper-engine-kde-plugin
+
+        # Hide Discover entries by renaming them (allows for easy re-enabling)
+        discover_apps=(
+          "org.kde.discover.desktop"
+          "org.kde.discover.flatpak.desktop"
+          "org.kde.discover.notifier.desktop"
+          "org.kde.discover.urlhandler.desktop"
+        )
+
+        for app in "${discover_apps[@]}"; do
+          if [ -f "/usr/share/applications/${app}" ]; then
+            mv "/usr/share/applications/${app}" "/usr/share/applications/${app}.disabled"
+          fi
+        done
+
+        # Disable Discover update notifications
+        rm /etc/xdg/autostart/org.kde.discover.notifier.desktop
+
+        # Set Bazaar as default appstore
+        echo "application/vnd.flatpak.ref=io.github.kolunmi.Bazaar.desktop" >> /usr/share/applications/mimeapps.list
+
+        # Pin apps to taskbar
+        sed -i '/<entry name="launchers" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,applications:steam.desktop,applications:net.lutris.Lutris.desktop,applications:com.mitchellh.ghostty.desktop,applications:io.github.kolunmi.Bazaar.desktop,preferred:\/\/filemanager<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml
         ;;
 esac
 
@@ -181,42 +208,6 @@ case "$2" in
     "main")
         # Skipping
         IMAGE_NAME="$DE_NAME"
-        ;;
-    "dx")
-        IMAGE_NAME="$DE_NAME-dx"
-        # Install dx packages
-        dnf5 install -y \
-            zed \
-            waydroid \
-            codium \
-            codium-marketplace \
-            gnome-boxes \
-            scrcpy \
-            quickemu \
-            zsh
-
-        echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
-        ;;
-    "gx")
-        IMAGE_NAME="$DE_NAME-gx"
-        # Install gx packages
-        dnf5 -y --setopt=install_weak_deps=False install \
-            steam \
-            lutris
-
-        dnf5 install -y \
-            mangohud \
-            webapp-manager \
-            wine \
-            waydroid \
-            gamescope \
-            xone \
-            steam-devices \
-            vkBasalt \
-            winetricks \
-            wallpaper-engine-kde-plugin
-
-        echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
         ;;
 esac
 
@@ -234,6 +225,7 @@ done
 
 # Add to justfile
 echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
+echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
 
 # Install additional packages
 dnf5 install -y \
@@ -242,6 +234,7 @@ dnf5 install -y \
     ublue-motd \
     firewall-config \
     fish \
+    zsh \
     bluefin-cli-logos \
     duperemove \
     ddcutil \
@@ -251,11 +244,18 @@ dnf5 install -y \
     docker \
     docker-compose \
     flatpak-builder \
+    quickemu \
+    waydroid \
+    webapp-manager \
     restic \
     rclone \
     git \
     python3-pip \
-    python3-requests
+    python3-requests \
+    fprintd \
+    fprintd-pam \
+    tuned \
+    tuned-ppd
 
 dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds

@@ -7,18 +7,17 @@ Spacefin is my personal custom Fedora Atomic image with (not only) COSMIC deskto
 
 ## Features
 
- - Latest or tagged cosmic desktop
+ - Cosmic, Gnome or KDE desktops or Niri wm
+ - Automatic updates in background
  - Codecs and drivers out-of-the box
  - Custom just commands
- - Patched `switcheroo-control`, `mesa` and `xwayland`
- - Kernel with hardware patches
  - System76-schenduler enabled by default
  - Java preinstalled and set for running .jar files
  - Homebrew, Docker and Distrobox preinstalled
  - Restic and rclone out-of-the box
  - All shells (fish, bash, zsh) preinstalled
 
-## Editions
+## Desktops
 
 ### Main (Cosmic)
 
@@ -51,6 +50,22 @@ If you want to install GNOME eddition, rebase from Fedora Silverblue or Bluefin 
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-gnome:latest
 ```
 
+### Niri
+
+ - Preconfigured Niri setup
+    - [Dank material shell](https://danklinux.com/)
+    - All needed packages preinstalled
+    - Fingerprint unlock preconfigured
+ - Easy to customize
+ - Preconfigured Zed and VSCodium
+ - Gnome Boxes and quickemu for virtualization
+
+If you want to install Niri eddition, rebase from Fedora Silverblue or Bluefin with:
+
+```bash
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-niri:latest
+```
+
 ### KDE
 
 - Almost vanilla KDE 
@@ -59,7 +74,7 @@ sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefi
 - VLC, Thunderbird and Edge for media
 - Wine dobble-click to run .exe
 
-If you want to install GNOME eddition, rebase from Fedora Silverblue with:
+If you want to install KDE eddition, rebase from Fedora Kinoite with:
 
 ```bash
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-kde:latest

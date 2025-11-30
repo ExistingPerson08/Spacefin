@@ -20,9 +20,6 @@ on:
         type: choice
         options:
           - main
-          - dx
-          - gx
-          - swe
   workflow_call:
     inputs:
       desktop:
