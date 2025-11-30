@@ -126,6 +126,13 @@ case "$1" in
             papers \
             decibels \
             shotwell \
+            waybar \
+            swaybg \
+            swaylock \
+            swayidle \
+            mako \
+            rofi \
+            libnotify \
             gnome-keyring \
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
