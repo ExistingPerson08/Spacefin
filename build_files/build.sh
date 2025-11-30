@@ -121,7 +121,6 @@ case "$1" in
         # Install aditional packages and dependencies
         dnf5 install -y \
             nm-connection-editor \
-            webapp-manager \
             adw-gtk3-theme \
             nautilus \
             papers \
@@ -153,6 +152,7 @@ case "$1" in
             kcm-fcitx5 \
             kio-extras \
             gwenview \
+            breeze-gtk \
             krunner-bazaar
 
         dnf5 -y remove \
