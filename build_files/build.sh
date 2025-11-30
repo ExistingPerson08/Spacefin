@@ -163,12 +163,25 @@ case "$1" in
             kde-partitionmanager \
             konsole
 
-        # Hide discover
-        rm -f /usr/share/applications/plasma-discover.desktop
-        rm -f /usr/share/applications/org.kde.discover.desktop
-        rm -f /usr/share/applications/org.kde.discover.flatpak.desktop
-        rm -f /usr/share/applications/org.kde.discover.notifier.desktop
-        rm -f /usr/share/applications/org.kde.discover.urlhandler.desktop
+        # Hide Discover entries by renaming them (allows for easy re-enabling)
+        discover_apps=(
+          "org.kde.discover.desktop"
+          "org.kde.discover.flatpak.desktop"
+          "org.kde.discover.notifier.desktop"
+          "org.kde.discover.urlhandler.desktop"
+        )
+
+        for app in "${discover_apps[@]}"; do
+          if [ -f "/usr/share/applications/${app}" ]; then
+            mv "/usr/share/applications/${app}" "/usr/share/applications/${app}.disabled"
+          fi
+        done
+
+        # Disable Discover update notifications
+        rm /etc/xdg/autostart/org.kde.discover.notifier.desktop
+
+        # Set Bazaar as default appstore
+        echo "application/vnd.flatpak.ref=io.github.kolunmi.Bazaar.desktop" >> /usr/share/applications/mimeapps.list
         ;;
 esac
 
@@ -238,6 +251,7 @@ dnf5 install -y \
     ublue-motd \
     firewall-config \
     fish \
+    zsh \
     bluefin-cli-logos \
     duperemove \
     ddcutil \
