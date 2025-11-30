@@ -142,6 +142,7 @@ case "$1" in
         echo "import \"/usr/share/spacefin/just/niri.just\"" >>/usr/share/ublue-os/justfile
 
         systemctl enable --global dms
+        systemctl enable --global dsearch
         systemctl enable greetd
         ;;
     "kde")
