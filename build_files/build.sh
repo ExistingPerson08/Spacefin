@@ -152,7 +152,8 @@ case "$1" in
             kcm-fcitx5 \
             kio-extras \
             gwenview \
-            breeze-gtk \
+            breeze-gtk-gtk3 \
+            breeze-gtk-gtk4 \
             krunner-bazaar
 
         dnf5 -y remove \
