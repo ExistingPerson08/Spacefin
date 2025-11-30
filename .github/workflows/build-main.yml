@@ -22,7 +22,6 @@ on:
           - main
           - dx
           - gx
-          - swe
   workflow_call:
     inputs:
       desktop:
