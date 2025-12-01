@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Java Launcher
+MimeType=application/x-ms-dos-executable;
+Exec=java -jar %f
+NoDisplay=true
