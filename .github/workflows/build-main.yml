@@ -169,7 +169,7 @@ jobs:
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo skopeo login --username ${{ github.actor }} --password-stdin ghcr.io
 
-      - name: Push Rechunked Image To GHCR
+      - name: Push Image To GHCR
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         id: push
         run: |
@@ -181,6 +181,10 @@ jobs:
           TAGS_FOR_SIGNING=""
           
           for tag in ${{ steps.metadata.outputs.tags }}; do
+            echo "Image registry: ${{ env.IMAGE_REGISTRY }}"
+            echo "Full name: ${{ steps.dynamic_vars.outputs.FULL_NAME }}"
+            echo "Image ref: $IMAGE_REF"
+            
             dest_image="${{ env.IMAGE_REGISTRY }}/${{ steps.dynamic_vars.outputs.FULL_NAME }}:$tag"
             sudo skopeo copy "$IMAGE_REF" docker://$dest_image
             echo "Pushed $dest_image"
