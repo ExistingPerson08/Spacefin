@@ -1,7 +1,7 @@
 [customizations.installer.kickstart]
 contents = """
 %post
-bootc switch --mutate-in-place --transport registry ghcr.io/existingperson08/spacefin-cosmic:latest
+bootc switch --mutate-in-place --transport registry ghcr.io/existingperson08/spacefin-niri:latest
 %end
 """
 
