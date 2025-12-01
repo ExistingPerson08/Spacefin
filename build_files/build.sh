@@ -126,6 +126,14 @@ case "$1" in
             papers \
             decibels \
             shotwell \
+            waybar \
+            wl-mirror \
+            swaybg \
+            swaylock \
+            swayidle \
+            mako \
+            rofi \
+            libnotify \
             gnome-keyring \
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
@@ -133,6 +141,8 @@ case "$1" in
 
         echo "import \"/usr/share/spacefin/just/niri.just\"" >>/usr/share/ublue-os/justfile
 
+        systemctl enable --global dms
+        systemctl enable --global dsearch
         systemctl enable greetd
         ;;
     "kde")
@@ -263,6 +273,13 @@ dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
 # Setup automatic-updates
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
 systemctl enable uupd.timer
+
+# Setup internal drives automount
+git clone --depth=1 https://github.com/Zeglius/media-automount-generator
+cd ./media-automount-generator
+./install.sh
+cd ../
+rm -rf ./media-automount-generator
 
 # Add Flatpak preinstall
 dnf5 -y copr enable ublue-os/flatpak-test

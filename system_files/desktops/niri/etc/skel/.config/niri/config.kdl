@@ -7,22 +7,6 @@ config-notification {
     disable-failed
 }
 
-// Outputs from existing configuration
-// Internal display
-output "Samsung Display Corp. 0x41A7 Unknown" {
-  scale 1.0
-  transform "normal"
-  position x=0 y=540
-}
-
-// Home external display
-output "PNP(AOC) 2470W 1212121212124" {
-  scale 1.0
-  focus-at-startup
-  transform "normal"
-  position x=2048 y=0
-}
-
 gestures {
 }
 
@@ -98,8 +82,8 @@ overview {
 }
 
 spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
-spawn-at-startup "dms" "run"
 spawn-at-startup "/usr/libexec/polkit-mate-authentication-agent-1"
+
 environment {
   XDG_CURRENT_DESKTOP "niri"
   QT_QPA_PLATFORM "wayland"
@@ -208,7 +192,7 @@ binds {
     Mod+D { spawn "niri" "msg" "action" "toggle-overview"; }
     Mod+Tab repeat=false { toggle-overview; }
     Mod+Shift+Slash { show-hotkey-overlay; }
-    Mod+Shift+C hotkey-overlay-title="Open Niri Config" { spawn-sh "zed ~/.config/niri/config.kdl"; }
+    Mod+Shift+C hotkey-overlay-title="Open Niri Config" { spawn-sh "flatpak run dev.zed.Zed ~/.config/niri/config.kdl"; }
 
     // === Application Launchers ===
     Mod+F hotkey-overlay-title="Open File Manager" { spawn "nautilus"; }
