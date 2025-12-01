@@ -1,5 +1,3 @@
-dev.zed.Zed
-org.gnome.Boxes
 com.google.AndroidStudio
 com.google.ChromeDev
 com.helix_editor.Helix
