@@ -7,22 +7,6 @@ config-notification {
     disable-failed
 }
 
-// Outputs from existing configuration
-// Internal display
-output "Samsung Display Corp. 0x41A7 Unknown" {
-  scale 1.0
-  transform "normal"
-  position x=0 y=540
-}
-
-// Home external display
-output "PNP(AOC) 2470W 1212121212124" {
-  scale 1.0
-  focus-at-startup
-  transform "normal"
-  position x=2048 y=0
-}
-
 gestures {
 }
 

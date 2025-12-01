@@ -8,5 +8,5 @@ reset-niri-config:
     rm -r ~/.config/niri/
     rm ~/.config/ghostty/config
 
-    cp -r /usr/share/spacefin/niri-conf/niri/ ~/.config/
-    cp /usr/share/spacefin/niri-conf/config ~/.config/ghostty/
+    cp -r /etc/skel/.config/niri/ ~/.config/
+    cp /etc/skel/.config/ghostty/config ~/.config/ghostty/
