@@ -56,8 +56,8 @@ jobs:
     steps:
       - name: Prepare environment
         run: |
-          echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> ${GITHUB_ENV}
-          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
+          echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> "${GITHUB_ENV}"
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> "${GITHUB_ENV}"
 
       - name: Set Dynamic Variables
         id: dynamic_vars
@@ -90,6 +90,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
+      - name: Maximize build space
+        uses: ublue-os/remove-unwanted-software@695eb75bc387dbcd9685a8e72d23439d8686cba6
+        with:
+          remove-codeql: true
+
       - name: Mount BTRFS for podman storage
         uses: ublue-os/container-storage-action@main
 
@@ -98,6 +103,7 @@ jobs:
         run: |
           echo "date_iso=$(date -u +%Y-%m-%d\T%H:%M:%S\Z)" >> $GITHUB_OUTPUT
           echo "date_tag=$(date -u +%Y%m%d)" >> $GITHUB_OUTPUT
+          echo "date=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
 
       - name: Image Metadata
         uses: docker/metadata-action@318604b99e75e41977312d83839a89be02ca4893 # v5
@@ -131,41 +137,57 @@ jobs:
           sep-annotations: " "
 
       - name: Build Image
-        id: build_image
-        uses: redhat-actions/buildah-build@7a95fa7ee0f02d552a32753e7414641a04307056 # v2
+        id: build
+        run: |
+          FULL_IMAGE_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
+          DESKTOP="${{ steps.dynamic_vars.outputs.DESKTOP }}"
+          EDITION="${{ steps.dynamic_vars.outputs.EDITION }}"
+          BASE="${{ steps.dynamic_vars.outputs.BASE }}"
+          
+          sudo buildah build \
+            --storage-driver=overlay \
+            --format=docker \
+            --file ./Containerfile \
+            --tag "$FULL_IMAGE_NAME":${{ env.DEFAULT_TAG }} \
+            --build-arg DESKTOP="$DESKTOP" \
+            --build-arg EDITION="$EDITION" \
+            --build-arg BASE="$BASE" \
+            .
+            
+          echo "full_image_name=$FULL_IMAGE_NAME" >> "$GITHUB_OUTPUT"
+          
+      - name: Run Rechunker
+        id: rechunk
+        uses: hhd-dev/rechunk@5fbe1d3a639615d2548d83bc888360de6267b1a2 # v1.2.4
         with:
-          containerfiles: |
-            ./Containerfile
-          image: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
-          tags: ${{ steps.metadata.outputs.tags }}
+          ref: "${{ steps.dynamic_vars.outputs.FULL_NAME }}:${{ env.DEFAULT_TAG }}"
+          prev-ref: "${{ env.IMAGE_REGISTRY }}/${{ steps.dynamic_vars.outputs.FULL_NAME }}:${{ env.DEFAULT_TAG }}"
+          version: "${{ env.DEFAULT_TAG }}"
           labels: ${{ steps.metadata.outputs.labels }}
-          oci: false
-          build-args: |
-            DESKTOP=${{ steps.dynamic_vars.outputs.DESKTOP }}
-            EDITION=${{ steps.dynamic_vars.outputs.EDITION }}
-            BASE=${{ steps.dynamic_vars.outputs.BASE }}
-
+          
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo skopeo login --username ${{ github.actor }} --password-stdin ghcr.io
 
-      - name: Push Main Image To GHCR
-        uses: redhat-actions/push-to-registry@5ed88d269cf581ea9ef6dd6806d01562096bee9c # v2
+      - name: Push Rechunked Image To GHCR
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         id: push
-        env:
-          REGISTRY_USER: ${{ github.actor }}
-          REGISTRY_PASSWORD: ${{ github.token }}
-        with:
-          registry: ${{ env.IMAGE_REGISTRY }}
-          image: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
-          tags: ${{ steps.metadata.outputs.tags }}
-          username: ${{ env.REGISTRY_USER }}
-          password: ${{ env.REGISTRY_PASSWORD }}
+        run: |
+          IMAGE_REF="${{ steps.rechunk.outputs.ref }}"
+
+          DIGEST=$(sudo skopeo inspect --format '{{.Digest}}' "$IMAGE_REF")
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
+          
+          TAGS_FOR_SIGNING=""
+          
+          for tag in ${{ steps.metadata.outputs.tags }}; do
+            dest_image="${{ env.IMAGE_REGISTRY }}/${{ steps.dynamic_vars.outputs.FULL_NAME }}:$tag"
+            sudo skopeo copy "$IMAGE_REF" docker://$dest_image
+            echo "Pushed $dest_image"
+            TAGS_FOR_SIGNING="${TAGS_FOR_SIGNING} $dest_image"
+          done
+          
+          echo "tags_for_signing=$TAGS_FOR_SIGNING" >> "$GITHUB_OUTPUT"
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
@@ -182,3 +204,5 @@ jobs:
           TAGS: ${{ steps.metadata.outputs.tags }}
           COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          COSIGN_REGISTRY_USERNAME: ${{ github.actor }}
+          COSIGN_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
