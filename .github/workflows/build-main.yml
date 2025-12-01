@@ -137,20 +137,21 @@ jobs:
           sep-annotations: " "
 
       - name: Build Image
-        id: build # Používáme požadované ID build
+        id: build
         run: |
           FULL_IMAGE_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
+          DESKTOP="${{ steps.dynamic_vars.outputs.DESKTOP }}"
+          EDITION="${{ steps.dynamic_vars.outputs.EDITION }}"
+          BASE="${{ steps.dynamic_vars.outputs.BASE }}"
           
-          # BUILD ARGS
-          sed -i -e "s|@DESKTOP@|${{ steps.dynamic_vars.outputs.DESKTOP }}|g" \
-                 -e "s|@EDITION@|${{ steps.dynamic_vars.outputs.EDITION }}|g" \
-                 -e "s|@BASE@|${{ steps.dynamic_vars.outputs.BASE }}|g" Containerfile
-
           sudo buildah build \
             --storage-driver=overlay \
             --format=docker \
             --file ./Containerfile \
             --tag "$FULL_IMAGE_NAME":${{ env.DEFAULT_TAG }} \
+            --build-arg DESKTOP="$DESKTOP" \
+            --build-arg EDITION="$EDITION" \
+            --build-arg BASE="$BASE" \
             .
             
           echo "full_image_name=$FULL_IMAGE_NAME" >> "$GITHUB_OUTPUT"
