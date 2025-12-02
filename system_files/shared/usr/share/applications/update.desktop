@@ -2,7 +2,7 @@
 Version=1.0
 Name=System update
 Comment=Update system, Flatpaks and Brew packages
-Exec=ghostty -e bash -c "update; echo; echo 'Press ENTER to close...'; read -r"
+Exec=ghostty -e bash -c "spacefin-cli run update; echo; echo 'Press ENTER to close...'; read -r"
 Icon=/usr/share/spacefin/icons/update.svg
 Terminal=false
 Type=Application
