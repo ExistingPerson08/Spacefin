@@ -31,7 +31,7 @@ Spacefin is my personal custom Fedora Atomic image with (not only) COSMIC deskto
 If you want to install main eddition, rebase from Fedora Cosmic Atomic with:
 
 ```bash
-sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin:latest
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-cosmic:latest
 ```
 
 ### GNOME

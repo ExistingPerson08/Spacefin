@@ -172,6 +172,15 @@ case "$1" in
             plasma-discover-kns \
             kcharselect \
             kde-partitionmanager \
+            akonadi-server \
+            akonadi-server-mysql \
+            mariadb \
+            mariadb-backup \
+            mariadb-common \
+            mariadb-cracklib-password-check \
+            mariadb-errmsg \
+            mariadb-gssapi-server \
+            mariadb-server \
             konsole
 
         # Install additional packages
