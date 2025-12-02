@@ -173,11 +173,7 @@ jobs:
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         id: push
         run: |
-          IMAGE_REF_OLD="${{ steps.rechunk.outputs.ref }}"
-          IMAGE_REF="${{ steps.dynamic_vars.outputs.FULL_NAME }}:${{ env.DEFAULT_TAG }}"
-
-          echo "Image ref: $IMAGE_REF"
-          echo "Image ref old: $IMAGE_REF_OLD"
+          IMAGE_REF="${{ steps.rechunk.outputs.ref || format('containers-storage:localhost/{0}:{1}', steps.dynamic_vars.outputs.FULL_NAME, env.DEFAULT_TAG) }}"
 
           DIGEST=$(sudo skopeo inspect --format '{{.Digest}}' "$IMAGE_REF")
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
