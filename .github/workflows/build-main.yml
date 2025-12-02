@@ -185,7 +185,7 @@ jobs:
             echo "Full name: ${{ steps.dynamic_vars.outputs.FULL_NAME }}"
             echo "Image ref: $IMAGE_REF"
             
-            dest_image="${{ env.IMAGE_REGISTRY }}/${{ steps.dynamic_vars.outputs.FULL_NAME }}:$tag"
+            dest_image="ghcr.io/existingperson08/${{ steps.dynamic_vars.outputs.FULL_NAME }}:latest"
             echo "dest_image: $dest_image"
             
             sudo skopeo copy "$IMAGE_REF" docker://$dest_image
