@@ -186,6 +186,8 @@ jobs:
             echo "Image ref: $IMAGE_REF"
             
             dest_image="${{ env.IMAGE_REGISTRY }}/${{ steps.dynamic_vars.outputs.FULL_NAME }}:$tag"
+            echo "dest_image: $dest_image"
+            
             sudo skopeo copy "$IMAGE_REF" docker://$dest_image
             echo "Pushed $dest_image"
             TAGS_FOR_SIGNING="${TAGS_FOR_SIGNING} $dest_image"
