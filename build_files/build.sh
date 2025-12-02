@@ -251,6 +251,7 @@ dnf5 install -y \
     uupd \
     gnome-disk-utility \
     java-latest-openjdk-devel \
+    bazaar \
     docker \
     docker-compose \
     flatpak-builder \
