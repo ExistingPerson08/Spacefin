@@ -125,8 +125,8 @@ sections:
   - title: "Spacefin Recommends"
     subtitle: "Our Favorite Applications"
     rows: 3
-    light-banner: file:///run/host/etc/bazaar/recommended.jpg
-    dark-banner: file:///run/host/etc/bazaar/recommended.jpg
+    light-banner: file:///usr/share/ublue-os/bazaar/recommended.jpg
+    dark-banner: file:///usr/share/ublue-os/bazaar/recommended.jpg
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -155,8 +155,8 @@ sections:
   - title: "Browsers"
     subtitle: "Use the web with your favorite browser"
     rows: 2
-    light-banner: file:///run/host/etc/bazaar/internet.jpg
-    dark-banner: file:///run/host/etc/bazaar/internet.jpg
+    light-banner: file:///usr/share/ublue-os/bazaar/internet.jpg
+    dark-banner: file:///usr/share/ublue-os/bazaar/internet.jpg
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: start
@@ -179,8 +179,8 @@ sections:
   - title: "Media"
     subtitle: "The Freedom of Music"
     rows: 2
-    light-banner: file:///run/host/etc/bazaar/music.png
-    dark-banner: file:///run/host/etc/bazaar/music.png
+    light-banner: file:///usr/share/ublue-os/bazaar/music.png
+    dark-banner: file:///usr/share/ublue-os/bazaar/music.png
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
@@ -207,8 +207,8 @@ sections:
   - title: "Office & Productivity"
     subtitle: "Work smart, not hard"
     rows: 4
-    light-banner: file:///run/host/etc/bazaar/office.jpg
-    dark-banner: file:///run/host/etc/bazaar/office.jpg
+    light-banner: file:///usr/share/ublue-os/bazaar/office.jpg
+    dark-banner: file:///usr/share/ublue-os/bazaar/office.jpg
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -240,8 +240,8 @@ sections:
   - title: "Games"
     subtitle: "Do not forget to touch grass as well!"
     rows: 3
-    light-banner: file:///run/host/etc/bazaar/games.jpg
-    dark-banner: file:///run/host/etc/bazaar/games.jpg
+    light-banner: file:///usr/share/ublue-os/bazaar/games.jpg
+    dark-banner: file:///usr/share/ublue-os/bazaar/games.jpg
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -271,8 +271,8 @@ sections:
   - title: "Utilities"
     subtitle: "Gear up and kit out"
     rows: 4
-    light-banner: file:///run/host/etc/bazaar/utility.jpg
-    dark-banner: file:///run/host/etc/bazaar/utility.jpg
+    light-banner: file:///usr/share/ublue-os/bazaar/utility.jpg
+    dark-banner: file:///usr/share/ublue-os/bazaar/utility.jpg
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -307,8 +307,8 @@ sections:
   - title: "Developers"
     subtitle: "Unleash the power"
     rows: 4
-    light-banner: file:///run/host/etc/bazaar/dev.jpg
-    dark-banner: file:///run/host/etc/bazaar/dev.jpg
+    light-banner: file:///usr/share/ublue-os/bazaar/dev.jpg
+    dark-banner: file:///usr/share/ublue-os/bazaar/dev.jpg
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: start
@@ -343,8 +343,8 @@ sections:
   - title: "Sustainability & Education"
     subtitle: "Invest in the Future"
     rows: 2
-    light-banner: file:///run/host/etc/bazaar/education.jpg
-    dark-banner: file:///run/host/etc/bazaar/education.jpg
+    light-banner: file:///usr/share/ublue-os/bazaar/education.jpg
+    dark-banner: file:///usr/share/ublue-os/bazaar/education.jpg
     banner-fit: cover
     banner-text-halign: start
     banner-text-valign: end
@@ -368,8 +368,8 @@ sections:
   - title: "AI and Machine Learning"
     subtitle: "Explore the best of open source AI"
     rows: 1
-    light-banner: file:///run/host/etc/bazaar/ai.jpg
-    dark-banner: file:///run/host/etc/bazaar/ai.jpg
+    light-banner: file:///usr/share/ublue-os/bazaar/ai.jpg
+    dark-banner: file:///usr/share/ublue-os/bazaar/ai.jpg
     banner-fit: cover
     banner-text-halign: end
     banner-text-valign: end
