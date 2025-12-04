@@ -2,7 +2,6 @@ blocklists:
   - block:
       - io.github.kolunmi.Bazaar
       - com.google.AndroidStudio
-      - com.google.ChromeDev
       - com.helix_editor.Helix
       - com.jetbrains.CLion
       - com.jetbrains.DataGrip
@@ -16,7 +15,6 @@ blocklists:
       - com.jetbrains.RubyMine
       - com.jetbrains.RustRover
       - com.jetbrains.WebStorm
-      - com.microsoft.EdgeDev
       - com.visualstudio.code
       - com.visualstudio.code-oss
       - com.vscodium.codium
@@ -24,6 +22,6 @@ blocklists:
       - dev.neovide.neovide
       - io.github.zyedidia.micro
       - io.neovim.nvim
-      - org.gnu.emacs
+      - org.gnu.emacss
       - org.vim.Vim
       - org.kde.dolphin
