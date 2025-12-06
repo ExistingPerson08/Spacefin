@@ -164,6 +164,7 @@ case "$1" in
             gwenview \
             breeze-gtk-gtk3 \
             breeze-gtk-gtk4 \
+            ksystemlog \
             krunner-bazaar
 
         dnf5 -y remove \
@@ -195,7 +196,7 @@ case "$1" in
             gamescope \
             vkBasalt \
             winetricks \
-            wallpaper-engine-kde-plugin
+            plasma-wallpapers-dynamic
 
         # Hide Discover entries by renaming them (allows for easy re-enabling)
         discover_apps=(
