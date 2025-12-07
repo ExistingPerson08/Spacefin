@@ -1,0 +1,9 @@
+[Added Associations]
+application/x-ms-dos-executable=wine-exe.desktop;org.gnome.FileRoller.desktop;com.usebottles.bottles.desktop;com.github.Matoking.protontricks-launch.desktop;wine.desktop;
+x-scheme-handler/http=com.microsoft.Edge.desktop;com.vivaldi.Vivaldi.desktop;
+x-scheme-handler/https=com.microsoft.Edge.desktop;com.vivaldi.Vivaldi.desktop;
+
+[Default Applications]
+application/x-ms-dos-executable=wine-exe.desktop;
+x-scheme-handler/http=com.microsoft.Edge.desktop;
+x-scheme-handler/https=com.microsoft.Edge.desktop;

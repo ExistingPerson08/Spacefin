@@ -283,7 +283,7 @@ dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
 
 # Setup automatic-updates
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
-systemctl enable uupd.timer
+systemctl enable uupd
 
 # Setup internal drives automount
 git clone --depth=1 https://github.com/Zeglius/media-automount-generator
