@@ -13,6 +13,7 @@ on:
           - gnome
           - niri
           - cosmic
+          - miracle-wm
       edition:
         description: "Edition"
         required: true
@@ -143,7 +144,7 @@ jobs:
           DESKTOP="${{ steps.dynamic_vars.outputs.DESKTOP }}"
           EDITION="${{ steps.dynamic_vars.outputs.EDITION }}"
           BASE="${{ steps.dynamic_vars.outputs.BASE }}"
-          
+
           sudo buildah build \
             --storage-driver=overlay \
             --format=docker \
@@ -153,9 +154,9 @@ jobs:
             --build-arg EDITION="$EDITION" \
             --build-arg BASE="$BASE" \
             .
-            
+
           echo "full_image_name=$FULL_IMAGE_NAME" >> "$GITHUB_OUTPUT"
-          
+
       - name: Run Rechunker
         id: rechunk
         uses: hhd-dev/rechunk@5fbe1d3a639615d2548d83bc888360de6267b1a2 # v1.2.4
@@ -164,7 +165,7 @@ jobs:
           prev-ref: "${{ env.IMAGE_REGISTRY }}/${{ steps.dynamic_vars.outputs.FULL_NAME }}:${{ env.DEFAULT_TAG }}"
           version: "${{ env.DEFAULT_TAG }}"
           labels: ${{ steps.metadata.outputs.labels }}
-          
+
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo skopeo login --username ${{ github.actor }} --password-stdin ghcr.io
@@ -177,22 +178,22 @@ jobs:
 
           DIGEST=$(sudo skopeo inspect --format '{{.Digest}}' "$IMAGE_REF")
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
-          
+
           TAGS_FOR_SIGNING=""
-          
+
           for tag in ${{ steps.metadata.outputs.tags }}; do
             echo "Image registry: ${{ env.IMAGE_REGISTRY }}"
             echo "Full name: ${{ steps.dynamic_vars.outputs.FULL_NAME }}"
             echo "Image ref: $IMAGE_REF"
-            
+
             dest_image="ghcr.io/existingperson08/${{ steps.dynamic_vars.outputs.FULL_NAME }}:latest"
             echo "dest_image: $dest_image"
-            
+
             sudo skopeo copy "$IMAGE_REF" docker://$dest_image
             echo "Pushed $dest_image"
             TAGS_FOR_SIGNING="${TAGS_FOR_SIGNING} $dest_image"
           done
-          
+
           echo "tags_for_signing=$TAGS_FOR_SIGNING" >> "$GITHUB_OUTPUT"
 
       - name: Install Cosign

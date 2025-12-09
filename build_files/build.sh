@@ -145,6 +145,38 @@ case "$1" in
         systemctl enable --global dsearch
         systemctl enable greetd
         ;;
+    "miracle-wm")
+        DE_NAME="miracle-wm"
+
+        # Install and setup miracle-wm
+        dnf5 copr enable -y avengemedia/dms
+        dnf5 install -y miracle-wm mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty
+        dnf5 copr remove -y avengemedia/dms
+
+        # Install aditional packages and dependencies
+        dnf5 install -y \
+            nm-connection-editor \
+            blueman \
+            adw-gtk3-theme \
+            nautilus \
+            papers \
+            decibels \
+            shotwell \
+            waybar \
+            wl-mirror \
+            swaybg \
+            swaylock \
+            swayidle \
+            mako \
+            rofi \
+            libnotify \
+            gnome-keyring \
+            xdg-desktop-portal-gtk \
+            xdg-desktop-portal-gnome \
+            xwayland-satellite \
+
+        systemctl enable greetd
+        ;;
     "kde")
         DE_NAME="kde"
 
