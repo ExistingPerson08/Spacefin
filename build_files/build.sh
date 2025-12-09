@@ -196,6 +196,7 @@ case "$1" in
             gwenview \
             breeze-gtk-gtk3 \
             breeze-gtk-gtk4 \
+            ksystemlog \
             krunner-bazaar
 
         dnf5 -y remove \
@@ -227,7 +228,7 @@ case "$1" in
             gamescope \
             vkBasalt \
             winetricks \
-            wallpaper-engine-kde-plugin
+            plasma-wallpapers-dynamic
 
         # Hide Discover entries by renaming them (allows for easy re-enabling)
         discover_apps=(
@@ -314,7 +315,7 @@ dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
 
 # Setup automatic-updates
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
-systemctl enable uupd.timer
+systemctl enable uupd
 
 # Setup internal drives automount
 git clone --depth=1 https://github.com/Zeglius/media-automount-generator
