@@ -175,9 +175,8 @@ case "$1" in
             rofi \
             libnotify \
             gnome-keyring \
-            xdg-desktop-portal-gtk \
-            xdg-desktop-portal-gnome \
-            xwayland-satellite \
+            mate-polkit \
+            wl-clipboard
 
         systemctl enable greetd
         ;;
