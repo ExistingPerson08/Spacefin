@@ -84,6 +84,7 @@ case "$1" in
             gnome-shell-extension-apps-menu \
             gnome-shell-extension-background-logo \
             yelp \
+            clapper \
             gnome-initial-setup
 
         dnf5 -y install \
