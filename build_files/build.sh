@@ -114,8 +114,12 @@ case "$1" in
         DE_NAME="niri"
 
         # Install and setup niri
+        dnf5 copr enable -y yalter/niri
+        dnf5 install -y niri
+        dnf5 copr remove -y yalter/niri
+
         dnf5 copr enable -y avengemedia/dms
-        dnf5 install -y niri dms mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty
+        dnf5 install -y dms mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty,niri
         dnf5 copr remove -y avengemedia/dms
 
         # Install aditional packages and dependencies
