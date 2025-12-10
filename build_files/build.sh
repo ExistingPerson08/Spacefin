@@ -84,7 +84,6 @@ case "$1" in
             gnome-shell-extension-apps-menu \
             gnome-shell-extension-background-logo \
             yelp \
-            clapper \
             gnome-initial-setup
 
         dnf5 -y install \
@@ -109,7 +108,7 @@ case "$1" in
           decibels \
           gnome-text-editor \
           rom-properties-gtk3 \
-          --exclude=gnome-extensions-app
+          --exclude=gnome-extensions-app,clapper
         ;;
     "niri")
         DE_NAME="niri"
@@ -289,6 +288,7 @@ dnf5 install -y \
     ublue-brew \
     ublue-motd \
     firewall-config \
+    dbus-x11 \
     fish \
     zsh \
     bluefin-cli-logos \
