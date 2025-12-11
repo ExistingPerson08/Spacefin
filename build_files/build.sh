@@ -94,7 +94,6 @@ case "$1" in
           gnome-shell-extension-gsconnect \
           gnome-shell-extension-compiz-windows-effect \
           gnome-shell-extension-blur-my-shell \
-          gnome-shell-extension-hanabi \
           gnome-shell-extension-hotedge \
           gnome-shell-extension-caffeine \
           gnome-shell-extension-desktop-cube \
@@ -108,7 +107,7 @@ case "$1" in
           decibels \
           gnome-text-editor \
           rom-properties-gtk3 \
-          --exclude=gnome-extensions-app,clapper
+          --exclude=gnome-extensions-app
         ;;
     "niri")
         DE_NAME="niri"
