@@ -82,6 +82,13 @@ overview {
     }
 }
 
+recent-windows {
+    highlight {
+        padding 20
+        corner-radius 20
+    }
+}
+
 spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
 spawn-at-startup "/usr/libexec/polkit-mate-authentication-agent-1"
 
