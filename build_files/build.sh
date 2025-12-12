@@ -152,8 +152,10 @@ case "$1" in
         DE_NAME="miracle-wm"
 
         # Install and setup miracle-wm
+        dnf5 install miracle-wm
+
         dnf5 copr enable -y avengemedia/dms
-        dnf5 install -y miracle-wm mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True --exclude=alacritty
+        dnf5 install -y dms-greeter
         dnf5 copr remove -y avengemedia/dms
 
         # Install aditional packages and dependencies
