@@ -2,9 +2,26 @@
 // "/-" comments out the following node.
 // Check the wiki for a full description of the configuration:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction
+include "dms/binds.kdl"
 
 config-notification {
     disable-failed
+}
+
+// Outputs from existing configuration
+// Internal display
+output "Samsung Display Corp. 0x41A7 Unknown" {
+  scale 1.0
+  transform "normal"
+  position x=0 y=540
+}
+
+// Home external display
+output "PNP(AOC) 2470W 1212121212124" {
+  scale 1.0
+  focus-at-startup
+  transform "normal"
+  position x=2048 y=0
 }
 
 gestures {
@@ -204,7 +221,7 @@ binds {
     Mod+V hotkey-overlay-title="Clipboard Manager" {
         spawn "dms" "ipc" "call" "clipboard" "toggle";
     }
-    Mod+Shift+M hotkey-overlay-title="Task Manager" {
+    Mod+Ctrl+M hotkey-overlay-title="Task Manager" {
         spawn "dms" "ipc" "call" "processlist" "toggle";
     }
     Mod+S hotkey-overlay-title="Settings" {
@@ -251,6 +268,7 @@ binds {
     // === Window Management ===
     Mod+Q repeat=false { close-window; }
     Mod+M { maximize-column; }
+    Mod+Shift+M { maximize-window-to-edges; }
     Mod+F11 { fullscreen-window; }
     Mod+Shift+F11 { toggle-windowed-fullscreen; }
     Mod+G { toggle-window-floating; }
