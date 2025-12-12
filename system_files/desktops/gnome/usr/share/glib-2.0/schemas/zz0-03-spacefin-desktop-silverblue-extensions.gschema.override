@@ -1,0 +1,2 @@
+[org.gnome.shell]
+enabled-extensions=['logomenu@aryan_k', 'appindicatorsupport@rgcjonas.gmail.com', 'user-theme@gnome-shell-extensions.gcampax.github.com', 'gsconnect@andyholmes.github.io', 'blur-my-shell@aunetx', 'hotedge@jonathan.jdoda.ca', 'caffeine@patapon.info', 'just-perfection-desktop@just-perfection', 'pop-shell@system76.com']

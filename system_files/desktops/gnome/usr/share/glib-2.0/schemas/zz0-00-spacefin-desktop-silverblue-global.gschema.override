@@ -1,0 +1,34 @@
+[org.gnome.desktop.wm.keybindings]
+switch-applications=['<Super>Tab']
+switch-applications-backward=['<Shift><Super>Tab']
+switch-windows=['<Alt>Tab']
+switch-windows-backward=['<Shift><Alt>Tab']
+
+[org.gnome.desktop.peripherals.keyboard]
+numlock-state=true
+
+[org.gtk.Settings.FileChooser]
+sort-directories-first=true
+
+[org.gtk.gtk4.Settings.FileChooser]
+sort-directories-first=true
+
+[org.gnome.nautilus.preferences]
+show-create-link=true
+
+[org.gnome.mutter]
+experimental-features=['variable-refresh-rate', 'scale-monitor-framebuffer', 'xwayland-native-scaling']
+check-alive-timeout=uint32 20000
+
+[org.gnome.software]
+allow-updates=false
+download-updates=false
+download-updates-notify=false
+
+[org.gnome.Ptyxis]
+restore-session=false
+restore-window-size=false
+audible-bell=false
+
+[org.gnome.shell.extensions.appindicator]
+legacy-tray-enabled=true
