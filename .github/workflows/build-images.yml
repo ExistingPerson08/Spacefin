@@ -51,7 +51,7 @@ jobs:
       edition: main
       
   build-image-kde:
-    needs: build-image-kde
+    needs: build-image-niri
     uses: ./.github/workflows/build-main.yml
     secrets: inherit
     with:
