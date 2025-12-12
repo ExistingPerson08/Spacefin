@@ -27,31 +27,31 @@ permissions:
   id-token: write
 
 jobs:
-  build-image-niri:
-    uses: ./.github/workflows/build-main.yml
-    secrets: inherit
-    with:
-      desktop: niri
-      edition: main
-
   build-image-main:
-    needs: build-image-niri
     uses: ./.github/workflows/build-main.yml
     secrets: inherit
     with:
       desktop: cosmic
       edition: main
 
-  #  build-image-gnome:
-  #    needs: build-image-main
-  #    uses: ./.github/workflows/build-main.yml
-  #    secrets: inherit
-  #    with:
-  #      desktop: gnome
-  #      edition: main
+  build-image-gnome:
+      needs: build-image-main
+      uses: ./.github/workflows/build-main.yml
+      secrets: inherit
+      with:
+        desktop: gnome
+        edition: main
 
+  build-image-niri:
+    needs: build-image-gnome
+    uses: ./.github/workflows/build-main.yml
+    secrets: inherit
+    with:
+      desktop: niri
+      edition: main
+      
   build-image-kde:
-    needs: build-image-main
+    needs: build-image-kde
     uses: ./.github/workflows/build-main.yml
     secrets: inherit
     with:
