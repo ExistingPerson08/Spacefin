@@ -181,6 +181,14 @@ case "$1" in
 
         systemctl enable greetd
         ;;
+    "budgie")
+        DE_NAME="budgie"
+
+        # Install and setup Budgie
+        dnf5 install -y budgie-desktop budgie-session budgie-backgrounds budgie-control-center
+
+        dnf5 install -y materia-gtk-theme budgie-extras
+        ;;
     "kde")
         DE_NAME="kde"
 
