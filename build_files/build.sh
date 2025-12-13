@@ -187,7 +187,7 @@ case "$1" in
         # Install and setup Budgie
         dnf5 install -y budgie-desktop budgie-session budgie-backgrounds budgie-control-center
 
-        dnf5 install -y materia-gtk-theme budgie-extras
+        dnf5 install -y budgie-extras
         ;;
     "kde")
         DE_NAME="kde"
