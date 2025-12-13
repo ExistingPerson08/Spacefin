@@ -187,7 +187,9 @@ case "$1" in
         # Install and setup Budgie
         dnf5 install -y budgie-desktop budgie-session budgie-backgrounds budgie-control-center
 
-        dnf5 install -y budgie-extras pocillo-gtk-theme
+        dnf5 install -y budgie-extras pocillo-gtk-theme lightdm
+
+        systemctl enable lightdm
         ;;
     "kde")
         DE_NAME="kde"
