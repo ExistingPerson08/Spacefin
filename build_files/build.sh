@@ -13,6 +13,7 @@ dnf5 -y copr enable bazzite-org/bazzite-multilib
 dnf5 -y copr enable bazzite-org/webapp-manager
 dnf5 -y copr enable bazzite-org/rom-properties
 dnf5 -y copr enable kylegospo/system76-scheduler
+dnf5 -y copr enable atim/starship
 
 # Clean base
 dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookmarks fedora-chromium-config fedora-chromium-config-gnome
@@ -90,7 +91,6 @@ case "$1" in
           nautilus-gsconnect \
           gnome-shell-extension-appindicator \
           gnome-shell-extension-user-theme \
-          ulauncher \
           gnome-shell-extension-gsconnect \
           gnome-shell-extension-compiz-windows-effect \
           gnome-shell-extension-blur-my-shell \
@@ -98,9 +98,10 @@ case "$1" in
           gnome-shell-extension-caffeine \
           gnome-shell-extension-desktop-cube \
           gnome-shell-extension-just-perfection \
-          steamdeck-gnome-presets \
+          gnome-shell-extension-drive-menu \
           gnome-shell-extension-logo-menu \
           gnome-shell-extension-pop-shell \
+          ulauncher \
           xprop \
           papers \
           loupe \
@@ -312,6 +313,8 @@ dnf5 install -y \
     docker \
     docker-compose \
     flatpak-builder \
+    tealdeer \
+    starship \
     quickemu \
     waydroid \
     webapp-manager \
@@ -408,6 +411,7 @@ rm -rf /usr/lib/systemd/system/flatpak-add-fedora-repos.service
 
 # Cleanup
 dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
+dnf5 -y copr remove atim/starship
 dnf5 -y copr remove kylegospo/system76-scheduler
 dnf5 -y copr remove bazzite-org/rom-properties
 dnf5 -y copr remove ublue-os/packages
