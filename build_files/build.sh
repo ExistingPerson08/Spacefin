@@ -238,6 +238,7 @@ case "$1" in
 
         dnf5 install -y \
             mangohud \
+            discord \
             wine \
             waydroid \
             gamescope \
