@@ -240,7 +240,6 @@ case "$1" in
             mangohud \
             discord \
             wine \
-            waydroid \
             gamescope \
             vkBasalt \
             winetricks \
