@@ -109,8 +109,6 @@ case "$1" in
           gnome-text-editor \
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
-
-          systemctl enable dconf-update.service
         ;;
     "niri")
         DE_NAME="niri"

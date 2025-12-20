@@ -30,5 +30,12 @@ RUN rm -f /.gitkeep
 RUN systemctl --global enable bazaar.service
 RUN systemctl enable flatpak-preinstall.service
 
+# Enable dconf update service on GTK desktops
+RUN if $DESKTOP == "gnome"; then \
+        systemctl enable dconf-update.service; \
+    elif $DESKTOP == "budgie"; then \
+        systemctl enable dconf-update.service; \
+    fi
+
 RUN ostree container commit
 RUN bootc container lint
