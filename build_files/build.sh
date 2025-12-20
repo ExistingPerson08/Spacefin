@@ -16,7 +16,7 @@ dnf5 -y copr enable kylegospo/system76-scheduler
 dnf5 -y copr enable atim/starship
 
 # Clean base
-dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookmarks fedora-chromium-config fedora-chromium-config-gnome
+dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookmarks fedora-chromium-config fedora-chromium-config-gnome ublue-os-just
 
 # Swap patched packages
 declare -A toswap=(
@@ -142,8 +142,6 @@ case "$1" in
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
             xwayland-satellite \
-
-        echo "import \"/usr/share/spacefin/just/niri.just\"" >>/usr/share/ublue-os/justfile
 
         systemctl enable --global dms
         systemctl enable --global dsearch
@@ -282,18 +280,6 @@ esac
 dnf5 install -y system76-scheduler
 systemctl enable com.system76.Scheduler
 
-# Remove incompatible just recipes
-for recipe in "devmode" "toggle-devmode" "install-system-flatpaks" "update" ; do
-  if ! grep -l "^$recipe:" /usr/share/ublue-os/just/*.just | grep -q .; then
-    echo "Skipping"
-  fi
-  sed -i "s/^$recipe:/_$recipe:/" /usr/share/ublue-os/just/*.just
-done
-
-# Add to justfile
-echo "import \"/usr/share/spacefin/just/spacefin.just\"" >>/usr/share/ublue-os/justfile
-echo "import \"/usr/share/spacefin/just/waydroid.just\"" >>/usr/share/ublue-os/justfile
-
 # Install additional packages
 dnf5 install -y \
     fastfetch \
@@ -303,6 +289,7 @@ dnf5 install -y \
     dbus-x11 \
     fish \
     zsh \
+    just \
     bluefin-cli-logos \
     duperemove \
     ddcutil \
