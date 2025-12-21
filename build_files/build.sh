@@ -287,6 +287,7 @@ dnf5 install -y \
     ublue-motd \
     firewall-config \
     dbus-x11 \
+    libgda \
     fish \
     zsh \
     just \
