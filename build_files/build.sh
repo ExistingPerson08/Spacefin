@@ -315,7 +315,6 @@ dnf5 install -y \
     starship \
     quickemu \
     waydroid \
-    webapp-manager \
     restic \
     rclone \
     git \
@@ -326,19 +325,11 @@ dnf5 install -y \
     tuned \
     tuned-ppd
 
-dnf5 install -y --enable-repo=copr:copr.fedorainfracloud.org:ublue-os:packages ublue-os-media-automount-udev
 dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
 
 # Setup automatic-updates
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
 systemctl enable uupd
-
-# Setup internal drives automount
-git clone --depth=1 https://github.com/Zeglius/media-automount-generator
-cd ./media-automount-generator
-./install.sh
-cd ../
-rm -rf ./media-automount-generator
 
 # Add Flatpak preinstall
 dnf5 -y copr enable ublue-os/flatpak-test
