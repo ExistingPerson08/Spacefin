@@ -109,9 +109,7 @@ case "$1" in
           gnome-text-editor \
           rom-properties-gtk3 \
           --exclude=gnome-extensions-app
-
-          glib-compile-schemas /usr/share/glib-2.0/schemas
-        ;;
+          ;;
     "niri")
         DE_NAME="niri"
 
