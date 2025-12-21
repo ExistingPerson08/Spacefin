@@ -30,11 +30,10 @@ RUN rm -f /.gitkeep
 RUN systemctl --global enable bazaar.service
 RUN systemctl enable flatpak-preinstall.service
 
-# Enable dconf update service on GTK desktops
-RUN if "$DESKTOP" == "gnome"; then \
-        systemctl enable dconf-update.service; \
-    elif "$DESKTOP" == "budgie"; then \
-        systemctl enable dconf-update.service; \
+# Enable dconf update service on GTK desktops and update gschemas
+RUN if [ "$DESKTOP" = "gnome" ] || [ "$DESKTOP" = "budgie" ]; then \
+        systemctl enable dconf-update.service && \
+        glib-compile-schemas /usr/share/glib-2.0/schemas; \
     fi
 
 RUN ostree container commit
