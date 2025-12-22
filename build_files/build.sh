@@ -14,7 +14,6 @@ dnf5 -y copr enable bazzite-org/webapp-manager
 dnf5 -y copr enable bazzite-org/rom-properties
 dnf5 -y copr enable kylegospo/system76-scheduler
 dnf5 -y copr enable atim/starship
-dnf5 -y copr enable che/nerd-fonts
 
 # Clean base
 dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookmarks fedora-chromium-config fedora-chromium-config-gnome ublue-os-just
@@ -295,9 +294,6 @@ dnf5 install -y \
     ublue-motd \
     firewall-config \
     dbus-x11 \
-    libgda \
-    nerd-fonts \
-    borgbackup \
     fish \
     zsh \
     just \
@@ -324,6 +320,8 @@ dnf5 install -y \
     fprintd-pam \
     tuned \
     tuned-ppd
+
+# Removed packages: libgda borgbackup nerd-fonts (copr che/nerd-fonts)
 
 dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
 
@@ -402,7 +400,6 @@ rm -rf /usr/lib/systemd/system/flatpak-add-fedora-repos.service
 rm -f /etc/yum.repos.d/tailscale.repo
 
 dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
-dnf5 -y copr remove che/nerd-fonts
 dnf5 -y copr remove atim/starship
 dnf5 -y copr remove kylegospo/system76-scheduler
 dnf5 -y copr remove bazzite-org/rom-properties
