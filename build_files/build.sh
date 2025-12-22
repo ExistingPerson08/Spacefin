@@ -321,6 +321,11 @@ dnf5 install -y \
     tuned \
     tuned-ppd
 
+# Temporary: Steam and dykscord on all images
+dnf5 -y --setopt=install_weak_deps=False install \
+    steam \
+    discord
+
 # Removed packages: libgda borgbackup nerd-fonts (copr che/nerd-fonts)
 
 dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
