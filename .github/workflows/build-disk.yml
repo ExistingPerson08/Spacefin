@@ -73,7 +73,7 @@ jobs:
           (cd output && sha256sum *.iso | tee CHECKSUMS)
 
       - name: Upload ISO
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: custom-iso
           path: output/
