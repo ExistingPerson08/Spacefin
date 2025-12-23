@@ -23,12 +23,16 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 COPY system_files/shared /
 COPY system_files/desktops/${DESKTOP} /
 COPY system_files/editions/${EDITION} /
+COPY --from=ghcr.io/ublue-os/brew:latest /system_files /
 
 RUN rm -f /.gitkeep
 
 # Enable custom services
 RUN systemctl --global enable bazaar.service
 RUN systemctl enable flatpak-preinstall.service
+RUN systemctl enable brew-setup.service
+RUN systemctl disable brew-upgrade.timer
+RUN systemctl disable brew-update.timer
 
 # Enable dconf update service on GTK desktops and update gschemas
 RUN if [ "$DESKTOP" = "gnome" ] || [ "$DESKTOP" = "budgie" ]; then \

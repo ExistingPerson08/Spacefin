@@ -290,7 +290,6 @@ systemctl enable tailscaled.service
 # Install additional packages
 dnf5 install -y \
     fastfetch \
-    ublue-brew \
     ublue-motd \
     firewall-config \
     dbus-x11 \
@@ -344,11 +343,6 @@ dnf5 -y copr disable ublue-os/flatpak-test
 # Use ghostty instead of ptyxis
 dnf5 install -y ghostty
 dnf5 remove -y ptyxis
-
-# Setup systemd services
-systemctl enable brew-setup.service
-systemctl disable brew-upgrade.timer
-systemctl disable brew-update.timer
 
 # Write image info
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
