@@ -323,6 +323,7 @@ dnf5 install -y \
 # Temporary: Steam and dykscord on all images
 dnf5 -y --setopt=install_weak_deps=False install \
     steam \
+    youtube-music \
     discord
 
 # Removed packages: libgda borgbackup nerd-fonts (copr che/nerd-fonts)
