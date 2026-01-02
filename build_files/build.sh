@@ -307,6 +307,7 @@ dnf5 install -y \
     docker-compose \
     flatpak-builder \
     tealdeer \
+    thefuck \
     starship \
     quickemu \
     waydroid \
