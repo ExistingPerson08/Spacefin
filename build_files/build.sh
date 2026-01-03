@@ -156,7 +156,7 @@ pacman -S --noconfirm system76-scheduler
 systemctl enable com.system76.Scheduler
 
 # Install additional packages
-dnf5 install -y \
+pacman -S --noconfirm \
     fastfetch \
     ufw \
     dbus-x11 \
