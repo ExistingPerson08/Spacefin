@@ -6,7 +6,7 @@ ARG BASE
 FROM scratch AS ctx
 COPY build_files /
 
-FROM ghcr.io/ublue-os/${BASE}-main:43 as spacefin
+FROM ghcr.io/existingperson08/arch-base:latest as spacefin
 
 ARG DESKTOP
 ARG EDITION

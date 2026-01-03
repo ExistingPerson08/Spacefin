@@ -66,16 +66,6 @@ jobs:
         run: |
           DESKTOP="${{ inputs.desktop }}"
           EDITION="${{ inputs.edition }}"
-          BASE="base" # Defaultní hodnota
-
-          # Logika pro BASE
-          if [[ "$DESKTOP" == "kde" ]]; then
-              BASE="kinoite"
-          elif [[ "$DESKTOP" == "gnome" ]]; then
-              BASE="silverblue"
-          else
-              BASE="base"
-          fi
 
           if [[ "$EDITION" == "main" ]]; then
               FULL_NAME="${IMAGE_NAME}-${DESKTOP}"
