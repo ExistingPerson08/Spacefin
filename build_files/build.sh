@@ -18,7 +18,7 @@ case "$1" in
         # Setup GNOME
         pacman -S --noconfirm gnome-shell gnome-session gdm nautilus
 
-        dnf5 -y install \
+          pacman -S --noconfirm \
           nautilus-python \
           nautilus-open-any-terminal \
           nautilus-share \
@@ -251,6 +251,6 @@ rm -rf \
 # Finalize
 rm -rf /tmp/* || true
 find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \;
-find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 \! -name rpm-ostree -exec rm -fr {} \;
+find /var/cache/* -maxdepth 0 -type d \! -name lib \! -name rpm-ostree -exec rm -fr {} \;
 mkdir -p /var/tmp
 chmod -R 1777 /var/tmp
