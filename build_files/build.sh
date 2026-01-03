@@ -167,7 +167,7 @@ pacman -S --noconfirm \
     ddcutil \
     gnome-disk-utility \
     ghostty \
-    java-latest-openjdk-devel \
+    jdk-openjdk \
     bazaar-git \
     docker \
     docker-compose \
@@ -181,8 +181,8 @@ pacman -S --noconfirm \
     restic \
     rclone \
     git \
-    python3-pip \
-    python3-requests \
+    python-pip \
+    python-requests \
     fprintd \
     borg \
     tuned \
