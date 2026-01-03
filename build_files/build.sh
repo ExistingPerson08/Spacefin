@@ -159,7 +159,6 @@ systemctl enable com.system76.Scheduler
 pacman -S --noconfirm \
     fastfetch \
     ufw \
-    dbus-x11 \
     fish \
     zsh \
     just \
