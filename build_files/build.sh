@@ -41,7 +41,7 @@ case "$1" in
         DE_NAME="niri"
 
         # Install and setup niri
-        pacman -S --noconfirm niri dms mate-polkit wl-clipboard dms-greeter
+        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard
 
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
