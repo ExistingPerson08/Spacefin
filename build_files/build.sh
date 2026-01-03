@@ -41,7 +41,7 @@ case "$1" in
         DE_NAME="niri"
 
         # Install and setup niri
-        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard
+        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard dgop
 
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
@@ -67,7 +67,6 @@ case "$1" in
             xwayland-satellite \
 
         systemctl enable --global dms
-        systemctl enable --global dsearch
         systemctl enable greetd
         ;;
     "kde")
