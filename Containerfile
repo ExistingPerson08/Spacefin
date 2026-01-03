@@ -40,5 +40,5 @@ RUN if [ "$DESKTOP" = "gnome" ] || [ "$DESKTOP" = "budgie" ]; then \
         glib-compile-schemas /usr/share/glib-2.0/schemas; \
     fi
 
-RUN ostree container commit
+LABEL containers.bootc 1
 RUN bootc container lint
