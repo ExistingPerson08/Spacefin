@@ -46,7 +46,7 @@ case "$1" in
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
             nm-connection-editor \
-            adw-gtk3-theme \
+            adw-gtk-theme \
             nautilus \
             nautilus-share \
             nautilus-python \
