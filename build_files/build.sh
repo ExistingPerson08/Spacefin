@@ -205,6 +205,7 @@ image_flavor="main"
 IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
 HOME_URL="https://github.com/ExistingPerson08/Spacefin"
 
+mkdir /usr/share/ublue-os/
 touch $IMAGE_INFO
 cat >$IMAGE_INFO <<EOF
 {
