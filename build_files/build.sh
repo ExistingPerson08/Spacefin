@@ -307,7 +307,6 @@ dnf5 install -y \
     docker-compose \
     flatpak-builder \
     tealdeer \
-    thefuck \
     starship \
     quickemu \
     waydroid \
@@ -334,6 +333,8 @@ dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
 # Setup automatic-updates
 sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
 systemctl enable uupd
+
+systemctl disable waydroid-container.service
 
 # Add Flatpak preinstall
 dnf5 -y copr enable ublue-os/flatpak-test
