@@ -190,8 +190,7 @@ systemctl enable ufw
 # Temporary: Steam and dykscord on all images
 pacman -S --noconfirm \
     steam \
-    vesktop \
-    discord
+    vesktop
 
 pacman -S --noconfirm gnome-backgrounds
 
