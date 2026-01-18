@@ -50,6 +50,7 @@ case "$1" in
             nautilus \
             nautilus-share \
             nautilus-python \
+            nautilus-open-any-terminal \
             papers \
             decibels \
             shotwell \
