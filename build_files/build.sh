@@ -182,9 +182,7 @@ pacman -S --noconfirm \
     python-pip \
     python-requests \
     fprintd \
-    borg \
-    tuned \
-    tuned-ppd
+    borg
 
 systemctl enable tailscaled.service
 systemctl enable ufw
