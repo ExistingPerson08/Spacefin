@@ -240,6 +240,9 @@ EOF
 mkdir /nix
 mkdir /snap
 
+systemd-sysusers --root=/
+systemd-tmpfiles --root=/ --create --prefix=/var/lib/polkit-1
+
 # Cleanup
 rm -rf \
     /tmp/* \
@@ -247,7 +250,7 @@ rm -rf \
 
 # Finalize
 rm -rf /tmp/* || true
-find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \;
+# find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \; Add when sure that it doesn't break image
 find /var/cache/* -maxdepth 0 -type d \! -name lib \! -name rpm-ostree -exec rm -fr {} \;
 mkdir -p /var/tmp
 chmod -R 1777 /var/tmp
