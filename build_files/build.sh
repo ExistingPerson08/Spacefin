@@ -3,10 +3,6 @@
 set -ouex pipefail
 pacman -Syu --noconfirm
 
-# Lts and zen kernel
-pacman -R --noconfirm linux
-pacman -S --noconfirm linux-lts linux-zen
-
 # Install de specific packages
 case "$1" in
     "cosmic")
