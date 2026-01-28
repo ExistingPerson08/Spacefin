@@ -16,7 +16,7 @@ case "$1" in
         DE_NAME="gnome"
 
         # Setup GNOME
-        pacman -S --noconfirm gnome-shell gnome-session gdm nautilus gnome-bluetooth-3.0
+        pacman -S --noconfirm gnome-shell gnome-session gdm nautilus gnome-control-center gnome-bluetooth-3.0
 
           pacman -S --noconfirm \
           nautilus-python \
