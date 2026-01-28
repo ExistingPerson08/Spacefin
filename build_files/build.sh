@@ -3,6 +3,10 @@
 set -ouex pipefail
 pacman -Syu --noconfirm
 
+# Lts and zen kernel
+pacman -R --noconfirm linux
+pacman -S --noconfirm linux-lts linux-zen
+
 # Install de specific packages
 case "$1" in
     "cosmic")
@@ -34,6 +38,8 @@ case "$1" in
           loupe \
           decibels \
           gnome-text-editor
+
+        pacman -R --noconfirm
 
         systemctl enable gdm
         ;;
@@ -156,6 +162,7 @@ systemctl enable com.system76.Scheduler
 
 # Install additional packages
 pacman -S --noconfirm \
+    zram-generator \
     fastfetch \
     ufw \
     fish \
@@ -192,6 +199,9 @@ pacman -S --noconfirm \
     steam
 
 pacman -S --noconfirm gnome-backgrounds
+
+# Setup zram
+echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
 
 # Write image info
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
