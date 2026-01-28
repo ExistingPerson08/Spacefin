@@ -12,9 +12,6 @@ on:
           - kde
           - gnome
           - niri
-          - cosmic
-          - miracle-wm
-          - budgie
       edition:
         description: "Edition"
         required: true
