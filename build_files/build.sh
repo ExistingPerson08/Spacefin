@@ -39,8 +39,6 @@ case "$1" in
           decibels \
           gnome-text-editor
 
-        pacman -R --noconfirm
-
         systemctl enable gdm
         ;;
     "niri")
