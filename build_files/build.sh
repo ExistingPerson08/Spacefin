@@ -112,7 +112,6 @@ case "$1" in
 
         pacman -S --noconfirm \
             mangohud \
-            vesktop \
             wine \
             gamescope \
             vkBasalt \
@@ -190,8 +189,7 @@ systemctl enable ufw
 
 # Temporary: Steam and dykscord on all images
 pacman -S --noconfirm \
-    steam \
-    vesktop
+    steam
 
 pacman -S --noconfirm gnome-backgrounds
 
