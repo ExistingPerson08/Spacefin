@@ -113,6 +113,9 @@ pacman -S --noconfirm \
     python-pip \
     python-requests \
     fprintd \
+    ttf-liberation \
+    noto-fonts \
+    ttf-dejavu \
     borg
 
 systemctl enable tailscaled.service
@@ -120,9 +123,10 @@ systemctl enable ufw
 
 # Temporary: Steam and dykscord on all images
 pacman -S --noconfirm \
-    steam
+    steam \
+    vesktop
 
-pacman -S --noconfirm gnome-backgrounds
+pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
