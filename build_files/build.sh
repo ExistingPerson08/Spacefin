@@ -8,7 +8,29 @@ case "$1" in
     "cosmic")
         DE_NAME="main"
         # Install Cosmic
-        pacman -S --noconfirm cosmic-session cosmic-greeter
+        sudo pacman -S --noconfirm \
+            cosmic-app-library \
+            cosmic-applets \
+            cosmic-bg \
+            cosmic-comp \
+            cosmic-files \
+            cosmic-greeter \
+            cosmic-idle \
+            cosmic-launcher \
+            cosmic-notifications \
+            cosmic-osd \
+            cosmic-panel \
+            cosmic-randr \
+            cosmic-screenshot \
+            cosmic-session \
+            cosmic-settings \
+            cosmic-settings-daemon \
+            cosmic-store \
+            cosmic-terminal \
+            cosmic-text-editor \
+            cosmic-wallpapers \
+            cosmic-workspaces \
+            xdg-desktop-portal-cosmic
 
         systemctl enable cosmic-greeter
         ;;
