@@ -66,20 +66,6 @@ If you want to install Niri eddition, rebase from Fedora Silverblue or Bluefin w
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-niri:latest
 ```
 
-### KDE
-
-- Almost vanilla KDE 
-- SteamOS themes
-- Steam and lutris with Gamescope session
-- VLC, Thunderbird and Edge for media
-- Wine dobble-click to run .exe
-
-If you want to install KDE eddition, rebase from Fedora Kinoite with:
-
-```bash
-sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-kde:latest
-```
-
 ## Screenshots
 
 <div align="center">

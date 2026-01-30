@@ -1,72 +1,14 @@
 #!/bin/bash
 
 set -ouex pipefail
-
-dnf5 install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
-dnf5 install -y https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-
-dnf5 install -y terra-release-extras
-dnf5 -y copr enable ublue-os/packages
-dnf5 -y copr enable ublue-os/staging
-dnf5 -y copr enable bazzite-org/bazzite
-dnf5 -y copr enable bazzite-org/bazzite-multilib
-dnf5 -y copr enable bazzite-org/webapp-manager
-dnf5 -y copr enable bazzite-org/rom-properties
-dnf5 -y copr enable kylegospo/system76-scheduler
-dnf5 -y copr enable atim/starship
-
-# Clean base
-dnf5 remove -y htop nvtop firefox firefox-langpacks toolbox clapper fedora-bookmarks fedora-chromium-config fedora-chromium-config-gnome ublue-os-just
-
-# Swap patched packages
-declare -A toswap=(
-    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite"]="wireplumber"
-    ["copr:copr.fedorainfracloud.org:bazzite-org:bazzite-multilib"]="xorg-x11-server-Xwayland"
-    ["copr:copr.fedorainfracloud.org:ublue-os:staging"]="fwupd"
-)
-
-for repo in "${!toswap[@]}"; do
-    for package in ${toswap[$repo]}; do
-        dnf5 -y swap --repo="$repo" "$package" "$package"
-    done
-done
-
-dnf5 versionlock add \
-    wireplumber \
-    wireplumber-libs \
-    xorg-x11-server-Xwayland \
-    switcheroo-control \
-    fwupd \
-    fwupd-plugin-flashrom \
-    fwupd-plugin-modem-manager \
-    fwupd-plugin-uefi-capsule-data \
-
-# Additional drivers
-dnf5 install -y \
-    NetworkManager-wifi \
-    atheros-firmware \
-    brcmfmac-firmware \
-    iwlegacy-firmware \
-    iwlwifi-dvm-firmware \
-    iwlwifi-mvm-firmware \
-    mt7xxx-firmware \
-    nxpwireless-firmware \
-    realtek-firmware \
-    tiwilink-firmware \
-    alsa-firmware \
-    alsa-sof-firmware \
-    alsa-tools-firmware \
-    intel-audio-firmware \
-    ublue-os-udev-rules
+pacman -Syu --noconfirm
 
 # Install de specific packages
 case "$1" in
     "cosmic")
         DE_NAME="main"
-        # Using latest (nightly) Cosmic desktop until stable release
-        dnf5 copr enable -y ryanabx/cosmic-epoch
-        dnf5 install -y cosmic-desktop --exclude=okular,rhythmbox,thunderbird,nheko,ark,gnome-calculator
-        dnf5 copr remove -y ryanabx/cosmic-epoch
+        # Install Cosmic
+        pacman -S --noconfirm cosmic-session cosmic-greeter
 
         systemctl enable cosmic-greeter
         ;;
@@ -74,59 +16,41 @@ case "$1" in
         DE_NAME="gnome"
 
         # Setup GNOME
-        dnf5 remove -y \
-            gnome-classic-session \
-            gnome-tour \
-            gnome-extensions-app \
-            gnome-system-monitor \
-            gnome-software \
-            gnome-software-rpm-ostree \
-            gnome-tweaks \
-            gnome-shell-extension-apps-menu \
-            gnome-shell-extension-background-logo \
-            yelp \
-            gnome-initial-setup
+        pacman -S --noconfirm gnome-shell gnome-session gdm nautilus gnome-control-center gnome-bluetooth-3.0
 
-        dnf5 -y install \
-          nautilus-gsconnect \
+          pacman -S --noconfirm \
+          nautilus-python \
+          nautilus-open-any-terminal \
+          nautilus-share \
           gnome-shell-extension-appindicator \
-          gnome-shell-extension-user-theme \
           gnome-shell-extension-gsconnect \
-          gnome-shell-extension-compiz-windows-effect \
+          gnome-shell-extension-compiz-windows-effect-git \
           gnome-shell-extension-blur-my-shell \
-          gnome-shell-extension-hotedge \
           gnome-shell-extension-caffeine \
-          gnome-shell-extension-desktop-cube \
-          gnome-shell-extension-just-perfection \
-          gnome-shell-extension-drive-menu \
           gnome-shell-extension-logo-menu \
-          gnome-shell-extension-pop-shell \
+          gnome-shell-extension-pop-shell-git \
           ulauncher \
-          xprop \
           papers \
           loupe \
           decibels \
-          gnome-text-editor \
-          rom-properties-gtk3 \
-          --exclude=gnome-extensions-app
-          ;;
+          gnome-text-editor
+
+        systemctl enable gdm
+        ;;
     "niri")
         DE_NAME="niri"
 
         # Install and setup niri
-        dnf5 copr enable -y yalter/niri
-        dnf5 install -y niri --setopt=install_weak_deps=False --exclude=alacritty
-        dnf5 copr remove -y yalter/niri
-
-        dnf5 copr enable -y avengemedia/dms
-        dnf5 install -y dms mate-polkit wl-clipboard dms-greeter --setopt=install_weak_deps=True
-        dnf5 copr remove -y avengemedia/dms
+        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard dgop gdm
 
         # Install aditional packages and dependencies
-        dnf5 install -y \
+        pacman -S --noconfirm \
             nm-connection-editor \
-            adw-gtk3-theme \
+            adw-gtk-theme \
             nautilus \
+            nautilus-share \
+            nautilus-python \
+            nautilus-open-any-terminal \
             papers \
             decibels \
             shotwell \
@@ -144,127 +68,7 @@ case "$1" in
             xwayland-satellite \
 
         systemctl enable --global dms
-        systemctl enable --global dsearch
-        systemctl enable greetd
-        ;;
-    "miracle-wm")
-        DE_NAME="miracle-wm"
-
-        # Install and setup miracle-wm
-        dnf5 install miracle-wm
-
-        dnf5 copr enable -y avengemedia/dms
-        dnf5 install -y dms-greeter
-        dnf5 copr remove -y avengemedia/dms
-
-        # Install aditional packages and dependencies
-        dnf5 install -y \
-            nm-connection-editor \
-            blueman \
-            adw-gtk3-theme \
-            nautilus \
-            papers \
-            decibels \
-            shotwell \
-            waybar \
-            wl-mirror \
-            swaybg \
-            swaylock \
-            swayidle \
-            mako \
-            rofi \
-            libnotify \
-            gnome-keyring \
-            mate-polkit \
-            wl-clipboard
-
-        systemctl enable greetd
-        ;;
-    "budgie")
-        DE_NAME="budgie"
-
-        # Install and setup Budgie
-        dnf5 install -y budgie-desktop budgie-session budgie-backgrounds budgie-control-center
-
-        dnf5 install -y budgie-extras pocillo-gtk-theme lightdm nemo
-
-        systemctl enable lightdm
-        ;;
-    "kde")
-        DE_NAME="kde"
-
-        # Setup kde
-        dnf5 -y install \
-            qt \
-            krdp \
-            steamdeck-kde-presets-desktop \
-            kdeconnectd \
-            kdeplasma-addons \
-            rom-properties-kf6 \
-            fcitx5-mozc \
-            fcitx5-chinese-addons \
-            fcitx5-hangul \
-            kcm-fcitx5 \
-            kio-extras \
-            gwenview \
-            breeze-gtk-gtk3 \
-            breeze-gtk-gtk4 \
-            ksystemlog \
-            krunner-bazaar
-
-        dnf5 -y remove \
-            plasma-welcome \
-            plasma-welcome-fedora \
-            plasma-discover-kns \
-            kcharselect \
-            kde-partitionmanager \
-            akonadi-server \
-            akonadi-server-mysql \
-            mariadb \
-            mariadb-backup \
-            mariadb-common \
-            mariadb-cracklib-password-check \
-            mariadb-errmsg \
-            mariadb-gssapi-server \
-            mariadb-server \
-            konsole
-
-        # Install additional packages
-        dnf5 -y --setopt=install_weak_deps=False install \
-            steam \
-            lutris
-
-        dnf5 install -y \
-            mangohud \
-            discord \
-            wine \
-            gamescope \
-            vkBasalt \
-            winetricks \
-            plasma-wallpapers-dynamic
-
-        # Hide Discover entries by renaming them (allows for easy re-enabling)
-        discover_apps=(
-          "org.kde.discover.desktop"
-          "org.kde.discover.flatpak.desktop"
-          "org.kde.discover.notifier.desktop"
-          "org.kde.discover.urlhandler.desktop"
-        )
-
-        for app in "${discover_apps[@]}"; do
-          if [ -f "/usr/share/applications/${app}" ]; then
-            mv "/usr/share/applications/${app}" "/usr/share/applications/${app}.disabled"
-          fi
-        done
-
-        # Disable Discover update notifications
-        rm /etc/xdg/autostart/org.kde.discover.notifier.desktop
-
-        # Set Bazaar as default appstore
-        echo "application/vnd.flatpak.ref=io.github.kolunmi.Bazaar.desktop" >> /usr/share/applications/mimeapps.list
-
-        # Pin apps to taskbar
-        sed -i '/<entry name="launchers" type="StringList">/,/<\/entry>/ s/<default>[^<]*<\/default>/<default>preferred:\/\/browser,applications:steam.desktop,applications:net.lutris.Lutris.desktop,applications:com.mitchellh.ghostty.desktop,applications:io.github.kolunmi.Bazaar.desktop,preferred:\/\/filemanager<\/default>/' /usr/share/plasma/plasmoids/org.kde.plasma.taskmanager/contents/config/main.xml
+        systemctl enable gdm
         ;;
 esac
 
@@ -277,32 +81,23 @@ case "$2" in
 esac
 
 # Enable system76-schenduler
-dnf5 install -y system76-scheduler
+pacman -S --noconfirm system76-scheduler
 systemctl enable com.system76.Scheduler
 
-# Install tailscale
-dnf config-manager addrepo --from-repofile=https://pkgs.tailscale.com/stable/fedora/tailscale.repo
-dnf config-manager setopt tailscale-stable.enabled=0
-dnf -y install --enablerepo='tailscale-stable' tailscale
-
-systemctl enable tailscaled.service
-
 # Install additional packages
-dnf5 install -y \
+pacman -S --noconfirm \
+    zram-generator \
     fastfetch \
-    ublue-motd \
-    firewall-config \
-    dbus-x11 \
+    ufw \
     fish \
     zsh \
     just \
-    bluefin-cli-logos \
     duperemove \
     ddcutil \
-    uupd \
     gnome-disk-utility \
-    java-latest-openjdk-devel \
-    bazaar \
+    ghostty \
+    jdk-openjdk \
+    bazaar-git \
     docker \
     docker-compose \
     flatpak-builder \
@@ -310,42 +105,32 @@ dnf5 install -y \
     starship \
     quickemu \
     waydroid \
+    tailscale \
     restic \
     rclone \
     git \
-    python3-pip \
-    python3-requests \
+    python-pip \
+    python-requests \
     fprintd \
-    fprintd-pam \
-    tuned \
-    tuned-ppd
+    ttf-liberation \
+    noto-fonts \
+    ttf-dejavu \
+    borg
+
+systemctl enable tailscaled.service
+systemctl enable ufw
 
 # Temporary: Steam and dykscord on all images
-dnf5 -y --setopt=install_weak_deps=False install \
+pacman -S --noconfirm \
     steam \
-    youtube-music \
-    discord
+    vesktop
 
-# Removed packages: libgda borgbackup nerd-fonts (copr che/nerd-fonts)
+pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
-dnf5 install -y --skip-broken steamdeck-backgrounds gnome-backgrounds
-
-# Setup automatic-updates
-sed -i 's|uupd|& --disable-module-distrobox|' /usr/lib/systemd/system/uupd.service
-systemctl enable uupd
+# Setup zram
+echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
 
 systemctl disable waydroid-container.service
-
-# Add Flatpak preinstall
-dnf5 -y copr enable ublue-os/flatpak-test
-dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak flatpak
-dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-libs flatpak-libs
-dnf5 -y --repo=copr:copr.fedorainfracloud.org:ublue-os:flatpak-test swap flatpak-session-helper flatpak-session-helper
-dnf5 -y copr disable ublue-os/flatpak-test
-
-# Use ghostty instead of ptyxis
-dnf5 install -y ghostty
-dnf5 remove -y ptyxis
 
 # Write image info
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
@@ -354,6 +139,8 @@ image_flavor="main"
 IMAGE_REF="ostree-image-signed:docker://ghcr.io/$IMAGE_VENDOR/$IMAGE_NAME"
 HOME_URL="https://github.com/ExistingPerson08/Spacefin"
 
+mkdir /usr/share/ublue-os/
+touch $IMAGE_INFO
 cat >$IMAGE_INFO <<EOF
 {
   "image-name": "$IMAGE_NAME",
@@ -361,8 +148,7 @@ cat >$IMAGE_INFO <<EOF
   "image-vendor": "$IMAGE_VENDOR",
   "image-ref": "$IMAGE_REF",
   "image-tag":"latest",
-  "base-image-name": "fedora",
-  "fedora-version": "43"
+  "base-image-name": "archlinux",
 }
 EOF
 
@@ -391,30 +177,17 @@ EOF
 mkdir /nix
 mkdir /snap
 
-# Add Flathub
-mkdir -p /etc/flatpak/remotes.d/
-curl --retry 3 -Lo /etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo
-
-# Remove Fedora Flatpaks
-rm -rf /usr/lib/systemd/system/flatpak-add-fedora-repos.service
+systemd-sysusers --root=/
+systemd-tmpfiles --root=/ --create --prefix=/var/lib/polkit-1
 
 # Cleanup
-rm -f /etc/yum.repos.d/tailscale.repo
-
-dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release terra-release terra-release-extras
-dnf5 -y copr remove atim/starship
-dnf5 -y copr remove kylegospo/system76-scheduler
-dnf5 -y copr remove bazzite-org/rom-properties
-dnf5 -y copr remove ublue-os/packages
-dnf5 -y copr remove ublue-os/staging
-dnf5 -y copr remove bazzite-org/webapp-manager
-dnf5 -y copr remove bazzite-org/bazzite
-dnf5 -y copr remove bazzite-org/bazzite-multilib
-dnf5 clean all -y
+rm -rf \
+    /tmp/* \
+    /var/cache/pacman/pkg/*
 
 # Finalize
 rm -rf /tmp/* || true
-find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \;
-find /var/cache/* -maxdepth 0 -type d \! -name libdnf5 \! -name rpm-ostree -exec rm -fr {} \;
+# find /var/* -maxdepth 0 -type d \! -name cache -exec rm -fr {} \; Add when sure that it doesn't break image
+find /var/cache/* -maxdepth 0 -type d \! -name lib \! -name rpm-ostree -exec rm -fr {} \;
 mkdir -p /var/tmp
 chmod -R 1777 /var/tmp

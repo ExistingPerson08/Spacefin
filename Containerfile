@@ -6,7 +6,7 @@ ARG BASE
 FROM scratch AS ctx
 COPY build_files /
 
-FROM ghcr.io/ublue-os/${BASE}-main:43 as spacefin
+FROM ghcr.io/existingperson08/arch-base:latest as spacefin
 
 ARG DESKTOP
 ARG EDITION
@@ -40,5 +40,5 @@ RUN if [ "$DESKTOP" = "gnome" ] || [ "$DESKTOP" = "budgie" ]; then \
         glib-compile-schemas /usr/share/glib-2.0/schemas; \
     fi
 
-RUN ostree container commit
+LABEL containers.bootc 1
 RUN bootc container lint
