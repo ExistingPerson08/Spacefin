@@ -102,7 +102,6 @@ pacman -S --noconfirm \
     docker-compose \
     flatpak-builder \
     tealdeer \
-    thefuck \
     starship \
     quickemu \
     waydroid \
@@ -130,6 +129,8 @@ pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
+
+systemctl disable waydroid-container.service
 
 # Write image info
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
