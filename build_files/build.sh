@@ -110,6 +110,8 @@ systemctl enable com.system76.Scheduler
 pacman -S --noconfirm \
     zram-generator \
     fastfetch \
+    thefuck \
+    upower \
     ufw \
     fish \
     zsh \
