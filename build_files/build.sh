@@ -138,7 +138,6 @@ pacman -S --noconfirm \
     fprintd \
     ttf-liberation \
     noto-fonts \
-    cantarell-font \
     inter-font \
     ttf-dejavu \
     borg
