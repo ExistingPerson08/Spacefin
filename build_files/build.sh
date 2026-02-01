@@ -31,6 +31,8 @@ case "$1" in
             cosmic-wallpapers \
             cosmic-workspaces \
             gnome-keyring \
+            xdg-desktop-portal \
+            xdg-desktop-portal-gtk \
             xdg-desktop-portal-cosmic
 
         systemctl enable cosmic-greeter
