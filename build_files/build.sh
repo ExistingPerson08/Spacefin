@@ -31,6 +31,7 @@ case "$1" in
             cosmic-wallpapers \
             cosmic-workspaces \
             gnome-keyring \
+            xdg-user-dirs-gtk \
             xdg-desktop-portal \
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-cosmic
