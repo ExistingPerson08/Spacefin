@@ -112,6 +112,7 @@ pacman -S --noconfirm \
     zram-generator \
     fastfetch \
     thefuck \
+    xorg-xrdb \
     upower \
     ufw \
     fish \
