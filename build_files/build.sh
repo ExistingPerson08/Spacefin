@@ -108,8 +108,8 @@ case "$1" in
         # Install AUR packages
         install_aur dsearch-git
 
-        systemctl enable --global dms
-        systemctl enable gdm
+        systemctl enable --global dms dsearch
+        systemctl enable sddm
         ;;
 esac
 
