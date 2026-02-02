@@ -9,7 +9,7 @@ on:
         default: "cosmic"
         type: choice
         options:
-          - kde
+          - cosmic
           - gnome
           - niri
       edition:
