@@ -70,13 +70,15 @@ case "$1" in
           decibels \
           gnome-text-editor
 
+        install_aur gnome-shell-extension-just-perfection-desktop        
+
         systemctl enable gdm
         ;;
     "niri")
         DE_NAME="niri"
 
         # Install and setup niri
-        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard dgop sddm matugen
+        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard dgop matugen
 
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
@@ -107,9 +109,10 @@ case "$1" in
 
         # Install AUR packages
         install_aur dsearch-git
+        install_aur greetd-dms-greeter-git
 
         systemctl enable --global dms dsearch
-        systemctl enable sddm
+        systemctl enable dms-greeter
         ;;
 esac
 
@@ -152,7 +155,6 @@ pacman -S --noconfirm \
     tailscale \
     restic \
     rclone \
-    git \
     python-pip \
     python-requests \
     fprintd \
@@ -228,7 +230,7 @@ systemd-tmpfiles --root=/ --create --prefix=/var/lib/polkit-1
 # Cleanup
 userdel -r build
 sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers
-pacman -Rns --noconfirm base-devel
+pacman -Rns --noconfirm base-devel paru
 pacman -Scc --noconfirm
 
 rm -rf \
