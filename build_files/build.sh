@@ -3,6 +3,15 @@
 set -ouex pipefail
 pacman -Syu --noconfirm
 
+# Prepare build enviroment
+pacman -Sy --needed --noconfirm base-devel git paru
+useradd -m build 2>/dev/null
+echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+install_aur() {
+    sudo -u build paru -S --noconfirm "$1"
+}
+
 # Install de specific packages
 case "$1" in
     "cosmic")
@@ -67,7 +76,7 @@ case "$1" in
         DE_NAME="niri"
 
         # Install and setup niri
-        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard dgop gdm
+        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard dgop sddm matugen
 
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
@@ -78,6 +87,9 @@ case "$1" in
             nautilus-python \
             nautilus-open-any-terminal \
             papers \
+            khal \
+            cava \
+            qt6-multimedia \
             decibels \
             shotwell \
             waybar \
@@ -92,6 +104,9 @@ case "$1" in
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
             xwayland-satellite \
+
+        # Install AUR packages
+        install_aur dsearch-git
 
         systemctl enable --global dms
         systemctl enable gdm
@@ -211,6 +226,11 @@ systemd-sysusers --root=/
 systemd-tmpfiles --root=/ --create --prefix=/var/lib/polkit-1
 
 # Cleanup
+userdel -r build
+sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers
+pacman -Rns --noconfirm base-devel
+pacman -Scc --noconfirm
+
 rm -rf \
     /tmp/* \
     /var/cache/pacman/pkg/*
