@@ -112,7 +112,7 @@ case "$1" in
         install_aur greetd-dms-greeter-git
 
         systemctl enable --global dms dsearch
-        systemctl enable dms-greeter
+        systemctl enable greetd
         ;;
 esac
 
