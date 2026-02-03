@@ -78,7 +78,7 @@ case "$1" in
         DE_NAME="niri"
 
         # Install and setup niri
-        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard dgop matugen
+        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard dgop matugen sddm
 
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
@@ -109,10 +109,9 @@ case "$1" in
 
         # Install AUR packages
         install_aur dsearch-git
-        install_aur greetd-dms-greeter-git
 
         systemctl enable --global dms dsearch
-        systemctl enable greetd
+        systemctl enable sddm
         ;;
 esac
 
