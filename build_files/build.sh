@@ -88,6 +88,7 @@ case "$1" in
             nautilus-share \
             nautilus-python \
             nautilus-open-any-terminal \
+            sddm-astronaut-theme \
             papers \
             khal \
             cava \
