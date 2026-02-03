@@ -3,14 +3,13 @@
 </div>
 <br>
 
-Spacefin is my personal custom Fedora Atomic image with (not only) COSMIC desktop installed. 
+Spacefin is my personal custom Arch bootc image with (not only) COSMIC desktop installed. **Note that this is WIP personal opinionated image so things are likely going to change or break!**
 
 ## Features
 
- - Cosmic, Gnome or KDE desktops or Niri wm
+ - Cosmic or Gnome desktops or Niri wm
  - Automatic updates in background
  - Codecs and drivers out-of-the box
- - Custom just commands
  - System76-schenduler enabled by default
  - Java preinstalled and set for running .jar files
  - Homebrew, Docker and Distrobox preinstalled
