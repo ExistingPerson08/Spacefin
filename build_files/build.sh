@@ -128,7 +128,7 @@ case "$2" in
 esac
 
 # Enable ananicy-cpp
-pacman -S --noconfirm ananicy-cpp ananicy-rules-cachyos
+pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git	
 systemctl enable ananicy-cpp
 
 # Install additional packages
