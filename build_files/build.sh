@@ -12,6 +12,9 @@ install_aur() {
     sudo -u build paru -S --noconfirm "$1"
 }
 
+pacman -R --noconfirm linux
+pacman -S --noconfirm linux-zen 
+
 # Install de specific packages
 case "$1" in
     "cosmic")
@@ -124,9 +127,9 @@ case "$2" in
         ;;
 esac
 
-# Enable system76-schenduler
-pacman -S --noconfirm system76-scheduler
-systemctl enable com.system76.Scheduler
+# Enable ananicy-cpp
+pacman -S --noconfirm ananicy-cpp ananicy-rules-cachyos
+systemctl enable ananicy-cpp
 
 # Install additional packages
 pacman -S --noconfirm \
@@ -230,7 +233,7 @@ systemd-tmpfiles --root=/ --create --prefix=/var/lib/polkit-1
 # Cleanup
 userdel -r build
 sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers
-pacman -Rns --noconfirm base-devel paru
+        pacman -Rns --noconfirm base-devel paru
 pacman -Scc --noconfirm
 
 rm -rf \
