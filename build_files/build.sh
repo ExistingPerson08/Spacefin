@@ -83,7 +83,6 @@ case "$1" in
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
             nm-connection-editor \
-            adw-gtk-theme \
             nautilus \
             nautilus-share \
             nautilus-python \
@@ -132,6 +131,7 @@ systemctl enable ananicy-cpp
 pacman -S --noconfirm \
     zram-generator \
     fastfetch \
+    adw-gtk-theme \
     thefuck \
     xorg-xrdb \
     upower \
