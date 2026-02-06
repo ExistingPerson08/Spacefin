@@ -12,8 +12,8 @@ install_aur() {
     sudo -u build paru -S --noconfirm "$1"
 }
 
-pacman -R linux
-pacman -S linux-zen
+pacman -R --noconfirm linux
+pacman -S --noconfirm linux-zen
 
 # Install de specific packages
 case "$1" in
