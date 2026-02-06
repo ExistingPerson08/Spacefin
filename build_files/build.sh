@@ -12,6 +12,9 @@ install_aur() {
     sudo -u build paru -S --noconfirm "$1"
 }
 
+pacman -R linux
+pacman -S linux-zen
+
 # Install de specific packages
 case "$1" in
     "cosmic")
@@ -243,3 +246,5 @@ rm -rf /tmp/* || true
 find /var/cache/* -maxdepth 0 -type d \! -name lib \! -name rpm-ostree -exec rm -fr {} \;
 mkdir -p /var/tmp
 chmod -R 1777 /var/tmp
+
+dracut --force "$(find /usr/lib/modules -maxdepth 1 -type d | grep -v -E "*.img" | tail -n 1)/initramfs.img"
