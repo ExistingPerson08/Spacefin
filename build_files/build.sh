@@ -15,6 +15,17 @@ install_aur() {
 pacman -R --noconfirm linux
 pacman -S --noconfirm linux-zen
 
+# CachyOS repos
+pacman-key --recv-keys F3B607488DB35A47 --keyserver keyserver.ubuntu.com
+pacman-key --lsign-key F3B607488DB35A47
+pacman -U --noconfirm 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-keyring-20240331-1-any.pkg.tar.zst' \
+'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-v3-mirrorlist-22-1-any.pkg.tar.zst'
+echo -e '[cachyos-v3]\nInclude = /etc/pacman.d/cachyos-v3-mirrorlist' >> /etc/pacman.conf && \
+echo -e '[cachyos-core-v3]\nInclude = /etc/pacman.d/cachyos-v3-mirrorlist' >> /etc/pacman.conf && \
+echo -e '[cachyos-extra-v3]\nInclude = /etc/pacman.d/cachyos-v3-mirrorlist' >> /etc/pacman.conf && \
+
+pacman -Syy
+
 # Install de specific packages
 case "$1" in
     "cosmic")
@@ -172,6 +183,7 @@ systemctl enable ufw
 
 # Temporary: Steam and dykscord on all images
 pacman -S --noconfirm \
+    proton-cachyos \
     steam \
     vesktop
 
