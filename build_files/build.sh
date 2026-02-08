@@ -12,6 +12,16 @@ install_aur() {
     sudo -u build paru -S --noconfirm "$1"
 }
 
+build_spacefin_package() {
+    sudo -u build curl -L -O https://raw.githubusercontent.com/ExistingPerson08/"$1"/main/PKGBUILD
+    sudo -u build makepkg -si
+    sudo -u build rm -f PKGBUILD
+    sudo -u build rm -rf "$1"-git
+    sudo -u build rm -rf "$1"
+    sudo -u build rm -rf pkg
+    sudo -u build rm -rf src
+}
+
 pacman -R --noconfirm linux
 pacman -S --noconfirm linux-zen
 
@@ -169,6 +179,10 @@ pacman -S --noconfirm \
 
 systemctl enable tailscaled.service
 systemctl enable ufw
+
+# Build spacefin packages
+build_spacefin_package ExistingRules
+build_spacefin_package Spacefin-cli
 
 # Temporary: Steam and dykscord on all images
 pacman -S --noconfirm \
