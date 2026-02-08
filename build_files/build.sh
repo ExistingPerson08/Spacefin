@@ -18,7 +18,7 @@ build_spacefin_package() {
     cd ./build_tmp
     
     sudo -u build curl -L -O https://raw.githubusercontent.com/ExistingPerson08/"$1"/main/PKGBUILD
-    sudo -u build makepkg -si
+    sudo -u build makepkg -si --noconfirm
     sudo -u build rm -f PKGBUILD
     sudo -u build rm -rf "$1"-git
     sudo -u build rm -rf "$1"
