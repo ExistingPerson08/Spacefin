@@ -7,12 +7,16 @@ pacman -Syu --noconfirm
 pacman -Sy --needed --noconfirm base-devel git paru
 useradd -m build 2>/dev/null
 echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+mkdir -p ./build_tmp
+chown build:build ./build_tmp
 
 install_aur() {
     sudo -u build paru -S --noconfirm "$1"
 }
 
 build_spacefin_package() {
+    cd ./build_tmp
+    
     sudo -u build curl -L -O https://raw.githubusercontent.com/ExistingPerson08/"$1"/main/PKGBUILD
     sudo -u build makepkg -si
     sudo -u build rm -f PKGBUILD
@@ -20,6 +24,8 @@ build_spacefin_package() {
     sudo -u build rm -rf "$1"
     sudo -u build rm -rf pkg
     sudo -u build rm -rf src
+
+    cd ..
 }
 
 pacman -R --noconfirm linux
@@ -251,6 +257,7 @@ sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers
 pacman -Scc --noconfirm
 
 rm -rf \
+    ./build_tmp \
     /tmp/* \
     /var/cache/pacman/pkg/*
 
