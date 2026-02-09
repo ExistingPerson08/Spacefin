@@ -10,6 +10,9 @@ echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 mkdir -p ./build_tmp
 chown build:build ./build_tmp
 
+# Speed up downloads
+sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
+
 install_aur() {
     sudo -u build paru -S --noconfirm "$1"
 }
@@ -29,7 +32,7 @@ build_spacefin_package() {
 }
 
 pacman -R --noconfirm linux
-pacman -S --noconfirm linux-zen
+pacman -S --noconfirm linux-zen linux-zen-headers
 
 # Install de specific packages
 case "$1" in
@@ -142,8 +145,8 @@ case "$2" in
         ;;
 esac
 
-# Enable ananicy-cpp
-pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git	
+# Performance and battery life
+pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git	auto-cpufreq
 systemctl enable ananicy-cpp
 
 # Install additional packages
