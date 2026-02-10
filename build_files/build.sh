@@ -56,8 +56,6 @@ case "$1" in
             cosmic-session \
             cosmic-settings \
             cosmic-settings-daemon \
-            cosmic-store \
-            cosmic-terminal \
             cosmic-text-editor \
             cosmic-wallpapers \
             cosmic-workspaces \
