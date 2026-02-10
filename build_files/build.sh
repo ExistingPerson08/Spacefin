@@ -139,8 +139,8 @@ case "$2" in
         ;;
 esac
 
-# Performance and battery life
-pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git	auto-cpufreq
+# Ananicy Cpp
+pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git
 systemctl enable ananicy-cpp
 
 # Install additional packages
