@@ -116,13 +116,7 @@ case "$1" in
             qt6-multimedia \
             decibels \
             shotwell \
-            waybar \
             wl-mirror \
-            swaybg \
-            swaylock \
-            swayidle \
-            mako \
-            rofi \
             libnotify \
             gnome-keyring \
             xdg-desktop-portal-gtk \
@@ -170,8 +164,6 @@ pacman -S --noconfirm \
     docker \
     docker-compose \
     flatpak-builder \
-    tealdeer \
-    starship \
     quickemu \
     waydroid \
     tailscale \
