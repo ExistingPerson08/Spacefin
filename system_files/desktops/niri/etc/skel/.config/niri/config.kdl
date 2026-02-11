@@ -3,6 +3,8 @@
 // Check the wiki for a full description of the configuration:
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction
 include "dms/binds.kdl"
+include "dms/outputs.kdl"
+include "dms/windowrules.kdl"
 
 config-notification {
     disable-failed
@@ -82,13 +84,6 @@ overview {
     }
 }
 
-recent-windows {
-    highlight {
-        padding 20
-        corner-radius 20
-    }
-}
-
 spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
 spawn-at-startup "/usr/libexec/polkit-mate-authentication-agent-1"
 
@@ -138,6 +133,18 @@ animations {
     }
 }
 
+recent-windows {
+    highlight {
+        padding 20
+        corner-radius 20
+    }
+    previews {
+        max-height 450
+        max-scale 0.5
+    }
+}
+
+// System window rules
 window-rule {
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
@@ -145,6 +152,9 @@ window-rule {
 window-rule {
     match app-id="Spotify"
     match app-id="vesktop"
+    match app-id="firefox"
+    match app-id="GDevelop 5"
+    match app-id="discord"
     open-maximized true
 }
 window-rule {
@@ -162,6 +172,7 @@ window-rule {
 }
 window-rule {
     match app-id=r#"^gnome-calculator$"#
+    match app-id="org.quickshell"
     match app-id="org.gnome.Calculator"
     match app-id=r#"^galculator$"#
     match app-id=r#"^blueman-manager$"#
@@ -169,6 +180,11 @@ window-rule {
     match app-id="spacefin-welcome"
     match app-id=r#"^xdg-desktop-portal$"#
     open-floating true
+}
+window-rule {
+    match title="Steam"
+    open-floating false
+    default-column-width { fixed 1188; }
 }
 window-rule {
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
@@ -190,6 +206,7 @@ window-rule {
     default-window-height { fixed 270; }
     open-floating true
 }
+
 window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
@@ -201,6 +218,7 @@ binds {
     Mod+Tab repeat=false { toggle-overview; }
     Mod+Shift+Slash { show-hotkey-overlay; }
     Mod+Shift+C hotkey-overlay-title="Open Niri Config" { spawn-sh "flatpak run dev.zed.Zed ~/.config/niri/config.kdl"; }
+    Mod+Shift+S hotkey-overlay-title="Open Niri Config" { spawn-sh "flatpak run dev.zed.Zed ~/.config/niri/config.kdl"; }
 
     // === Application Launchers ===
     Mod+F hotkey-overlay-title="Open File Manager" { spawn "nautilus"; }
