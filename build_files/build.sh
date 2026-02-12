@@ -178,6 +178,7 @@ pacman -S --noconfirm \
 
 systemctl enable tailscaled.service
 systemctl enable ufw
+systemctl disable waydroid-container.service
 
 # Build spacefin packages
 build_spacefin_package ExistingRules
@@ -192,8 +193,6 @@ pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
-
-systemctl disable waydroid-container.service
 
 # Write image info
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
@@ -235,6 +234,8 @@ s|^DEFAULT_HOSTNAME=.*|DEFAULT_HOSTNAME="spacefin"|
 /^REDHAT_SUPPORT_PRODUCT_VERSION=/d
 EOF
 
+ln -sf /usr/lib/os-release /etc/os-release
+
 # Workaround to make nix and snaps work
 # They are not installed by default
 mkdir /nix
@@ -246,7 +247,7 @@ systemd-tmpfiles --root=/ --create --prefix=/var/lib/polkit-1
 # Cleanup
 userdel -r build
 sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers
-        pacman -Rns --noconfirm base-devel paru
+pacman -Rns --noconfirm base-devel paru
 pacman -Scc --noconfirm
 
 rm -rf \
