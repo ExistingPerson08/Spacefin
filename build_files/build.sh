@@ -73,7 +73,7 @@ case "$1" in
         # Setup GNOME
         pacman -S --noconfirm gnome-shell gnome-session gdm nautilus gnome-control-center gnome-bluetooth-3.0
 
-          pacman -S --noconfirm \
+        pacman -S --noconfirm \
           nautilus-python \
           nautilus-open-any-terminal \
           nautilus-share \
@@ -176,8 +176,8 @@ pacman -S --noconfirm \
     ttf-dejavu \
     borg
 
-systemctl enable tailscaled.service
 systemctl enable ufw
+systemctl disable tailscaled.service
 systemctl disable waydroid-container.service
 
 # Build spacefin packages
@@ -219,7 +219,7 @@ echo "spacefin" | tee "/etc/hostname"
 sed -i -f - /usr/lib/os-release <<EOF
 s|^NAME=.*|NAME=\"Spacefin\"|
 s|^PRETTY_NAME=.*|PRETTY_NAME=\"Spacefin\"|
-s|^VERSION_CODENAME=.*|VERSION_CODENAME=\"Forty-Three\"|
+s|^VERSION_CODENAME=.*|VERSION_CODENAME=\"Gandalf\"|
 s|^VARIANT_ID=.*|VARIANT_ID=""|
 s|^HOME_URL=.*|HOME_URL=\"${HOME_URL}\"|
 s|^BUG_REPORT_URL=.*|BUG_REPORT_URL=\"${HOME_URL}/issues\"|
