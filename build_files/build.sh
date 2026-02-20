@@ -3,13 +3,6 @@
 set -ouex pipefail
 pacman -Syu --noconfirm
 
-# Prepare build enviroment
-pacman -Sy --needed --noconfirm base-devel git paru
-useradd -m build 2>/dev/null
-echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-mkdir -p ./build_tmp
-chown build:build ./build_tmp
-
 # Speed up downloads and fix install errors
 sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
 sed -i 's/^Architecture = auto/Architecture = auto x86_64_v4/' /etc/pacman.conf
@@ -62,6 +55,13 @@ pacman -S --noconfirm \
     amd-ucode intel-ucode efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
     vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor xf86-video-amdgpu zram-generator \
     lm_sensors intel-media-driver git bootc openal ttf-twemoji curl
+
+# Prepare build enviroment
+pacman -Sy --needed --noconfirm base-devel git paru
+useradd -m build 2>/dev/null
+echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+mkdir -p ./build_tmp
+chown build:build ./build_tmp
 
 # Install de specific packages
 case "$1" in
