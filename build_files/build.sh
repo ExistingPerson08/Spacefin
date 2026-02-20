@@ -102,8 +102,6 @@ case "$1" in
           decibels \
           gnome-text-editor
 
-        install_aur gnome-shell-extension-just-perfection-desktop        
-
         systemctl enable gdm
         ;;
     "niri")
