@@ -10,8 +10,9 @@ echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 mkdir -p ./build_tmp
 chown build:build ./build_tmp
 
-# Speed up downloads
+# Speed up downloads and fix install errors
 sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
+sed -i 's/^Architecture = auto/Architecture = auto x86_64_v4/' /etc/pacman.conf
 
 install_aur() {
     sudo -u build paru -S --noconfirm "$1"
