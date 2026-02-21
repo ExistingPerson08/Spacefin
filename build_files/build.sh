@@ -2,6 +2,8 @@
 
 set -ouex pipefail
 pacman -Syu --noconfirm
+pacman-key --init
+pacman-key --populate archlinux
 
 # Speed up downloads and fix install errors
 sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
