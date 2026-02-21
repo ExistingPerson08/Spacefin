@@ -59,7 +59,7 @@ pacman -S --noconfirm \
     lm_sensors intel-media-driver git bootc openal ttf-twemoji curl
 
 # Prepare build enviroment
-pacman -Sy --needed --noconfirm base-devel git paru
+pacman -S --needed --noconfirm core/base-devel extra/git chaotic-aur/paru
 useradd -m build 2>/dev/null
 echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 mkdir -p ./build_tmp
