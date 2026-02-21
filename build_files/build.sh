@@ -47,16 +47,16 @@ echo -e '[multilib]\nInclude = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf && 
 pacman -Syy
 
 # Base system
-pacman -S --noconfirm base dracut linux-zen linux-firmware ostree btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 ostree shadow && pacman -S --clean --noconfirm
+pacman -S --noconfirm core/base core/dracut linux-zen linux-firmware ostree btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 ostree shadow && pacman -S --clean --noconfirm
 
 pacman -S --noconfirm \
-    reflector sudo bash fastfetch nano openssh unzip tar flatpak fuse2 fzf just wl-clipboard \
+    reflector sudo core/bash fastfetch nano openssh unzip tar flatpak fuse2 fzf just wl-clipboard \
     libmtp nss-mdns samba smbclient networkmanager udiskie udisks2 udisks2-btrfs lvm2 cups cups-browsed cups-pdf system-config-printer hplip wireguard-tools \
     dosfstools cryptsetup bluez bluez-utils tuned tuned-ppd distrobox podman squashfs-tools zstd \
     ffmpeg ffmpegthumbnailer libcamera libcamera-tools libheif \
     amd-ucode intel-ucode efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
     vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor xf86-video-amdgpu zram-generator \
-    lm_sensors intel-media-driver git bootc openal ttf-twemoji curl
+    lm_sensors intel-media-driver bootc openal ttf-twemoji curl
 
 # Prepare build enviroment
 pacman -S --needed --noconfirm core/base-devel extra/git chaotic-aur/paru
