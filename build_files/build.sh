@@ -34,7 +34,7 @@ pacman -U --noconfirm 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-ke
 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-mirrorlist-22-1-any.pkg.tar.zst' \
 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-v3-mirrorlist-22-1-any.pkg.tar.zst' \
 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-v4-mirrorlist-22-1-any.pkg.tar.zst'
-sed -i '/^\[core\]/i \[cachyos-znver4\]\nInclude = \/etc\/pacman.d\/cachyos-v4-mirrorlist\n\n\[cachyos-core-znver4\]\nInclude = \/etc\/pacman.d\/cachyos-v4-mirrorlist\n\n\[cachyos-extra-znver4\]\nInclude = \/etc\/pacman.d\/cachyos-v4-mirrorlist\n\n' /etc/pacman.conf
+sed -i '/^\[core\]/i \[cachyos-v4\]\nInclude = \/etc\/pacman.d\/cachyos-v4-mirrorlist\n\n\[cachyos-core-v4\]\nInclude = \/etc\/pacman.d\/cachyos-v4-mirrorlist\n\n\[cachyos-extra-v4\]\nInclude = \/etc\/pacman.d\/cachyos-v4-mirrorlist\n\n' /etc/pacman.conf
 
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com && \
 pacman-key --init && \
@@ -47,10 +47,10 @@ echo -e '[multilib]\nInclude = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf && 
 pacman -Syy
 
 # Base system
-pacman -S --noconfirm core/base core/dracut linux-zen linux-firmware ostree btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 ostree shadow && pacman -S --clean --noconfirm
+pacman -S --noconfirm base dracut linux-zen linux-firmware ostree btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 ostree shadow && pacman -S --clean --noconfirm
 
 pacman -S --noconfirm \
-    reflector sudo core/bash fastfetch nano openssh unzip tar flatpak fuse2 fzf just wl-clipboard \
+    reflector sudo bash fastfetch nano openssh unzip tar flatpak fuse2 fzf just wl-clipboard \
     libmtp nss-mdns samba smbclient networkmanager udiskie udisks2 udisks2-btrfs lvm2 cups cups-browsed cups-pdf system-config-printer hplip wireguard-tools \
     dosfstools cryptsetup bluez bluez-utils tuned tuned-ppd distrobox podman squashfs-tools zstd \
     ffmpeg ffmpegthumbnailer libcamera libcamera-tools libheif \
@@ -59,7 +59,7 @@ pacman -S --noconfirm \
     lm_sensors intel-media-driver bootc openal ttf-twemoji curl
 
 # Prepare build enviroment
-pacman -S --needed --noconfirm core/base-devel extra/git chaotic-aur/paru
+pacman -S --needed --noconfirm base-devel git paru
 useradd -m build 2>/dev/null
 echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 mkdir -p ./build_tmp
