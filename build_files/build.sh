@@ -7,7 +7,7 @@ pacman-key --populate archlinux
 
 # Speed up downloads and fix install errors
 sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
-sed -i 's/^Architecture = auto/Architecture = auto x86_64_v4/' /etc/pacman.conf
+sed -i 's/^Architecture = auto/Architecture = auto x86_64_v3/' /etc/pacman.conf
 
 install_aur() {
     sudo -u build paru -S --noconfirm "$1"
@@ -33,8 +33,7 @@ pacman-key --lsign-key F3B607488DB35A47
 pacman -U --noconfirm 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-keyring-20240331-1-any.pkg.tar.zst' \
 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-mirrorlist-22-1-any.pkg.tar.zst' \
 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-v3-mirrorlist-22-1-any.pkg.tar.zst' \
-'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-v4-mirrorlist-22-1-any.pkg.tar.zst'
-sed -i '/^\[core\]/i \[cachyos-v4\]\nInclude = \/etc\/pacman.d\/cachyos-v4-mirrorlist\n\n\[cachyos-core-v4\]\nInclude = \/etc\/pacman.d\/cachyos-v4-mirrorlist\n\n\[cachyos-extra-v4\]\nInclude = \/etc\/pacman.d\/cachyos-v4-mirrorlist\n\n' /etc/pacman.conf
+sed -i '/^\[core\]/i \[cachyos-v3\]\nInclude = \/etc\/pacman.d\/cachyos-v3-mirrorlist\n\n\[cachyos-core-v3\]\nInclude = \/etc\/pacman.d\/cachyos-v3-mirrorlist\n\n\[cachyos-extra-v3\]\nInclude = \/etc\/pacman.d\/cachyos-v3-mirrorlist\n\n' /etc/pacman.conf
 
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com && \
 pacman-key --init && \
