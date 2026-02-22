@@ -6,7 +6,7 @@ ARG BASE
 FROM scratch AS ctx
 COPY build_files /
 
-FROM docker.io/cachyos/cachyos-v4:latest as spacefin
+FROM docker.io/cachyos/cachyos-v3:latest as spacefin
 
 ARG DESKTOP
 ARG EDITION
