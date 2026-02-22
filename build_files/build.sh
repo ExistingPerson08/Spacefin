@@ -28,20 +28,12 @@ build_spacefin_package() {
 }
 
 # Add repos
-pacman-key --recv-keys F3B607488DB35A47 --keyserver keyserver.ubuntu.com
-pacman-key --lsign-key F3B607488DB35A47
-pacman -U --noconfirm 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-keyring-20240331-1-any.pkg.tar.zst' \
-'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-mirrorlist-22-1-any.pkg.tar.zst' \
-'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-v3-mirrorlist-22-1-any.pkg.tar.zst' \
-sed -i '/^\[core\]/i \[cachyos-v3\]\nInclude = \/etc\/pacman.d\/cachyos-v3-mirrorlist\n\n\[cachyos-core-v3\]\nInclude = \/etc\/pacman.d\/cachyos-v3-mirrorlist\n\n\[cachyos-extra-v3\]\nInclude = \/etc\/pacman.d\/cachyos-v3-mirrorlist\n\n' /etc/pacman.conf
-
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com && \
 pacman-key --init && \
 pacman-key --lsign-key 3056513887B78AEB && \
 pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' --noconfirm && \
 pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm && \
 echo -e '[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist' >> /etc/pacman.conf && \
-echo -e '[multilib]\nInclude = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf && \
 
 pacman -Syy
 
