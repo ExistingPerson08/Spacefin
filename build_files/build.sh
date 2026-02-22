@@ -2,16 +2,12 @@
 
 set -ouex pipefail
 pacman -Syu --noconfirm
+pacman-key --init
+pacman-key --populate archlinux
 
-# Prepare build enviroment
-pacman -Sy --needed --noconfirm base-devel git paru
-useradd -m build 2>/dev/null
-echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-mkdir -p ./build_tmp
-chown build:build ./build_tmp
-
-# Speed up downloads
+# Speed up downloads and fix install errors
 sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
+sed -i 's/^Architecture = auto/Architecture = auto x86_64_v3/' /etc/pacman.conf
 
 install_aur() {
     sudo -u build paru -S --noconfirm "$1"
@@ -31,8 +27,34 @@ build_spacefin_package() {
     cd ..
 }
 
-pacman -R --noconfirm linux
-pacman -S --noconfirm linux-zen linux-zen-headers
+# Add repos
+pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com && \
+pacman-key --init && \
+pacman-key --lsign-key 3056513887B78AEB && \
+pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' --noconfirm && \
+pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm && \
+echo -e '[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist' >> /etc/pacman.conf && \
+
+pacman -Syy
+
+# Base system
+pacman -S --noconfirm base dracut linux-zen linux-firmware ostree btrfs-progs e2fsprogs xfsprogs dosfstools skopeo dbus dbus-glib glib2 ostree shadow && pacman -S --clean --noconfirm
+
+pacman -S --noconfirm \
+    reflector sudo bash fastfetch nano openssh unzip tar flatpak fuse2 fzf just wl-clipboard \
+    libmtp nss-mdns samba smbclient networkmanager udiskie udisks2 udisks2-btrfs lvm2 cups cups-browsed cups-pdf system-config-printer hplip wireguard-tools \
+    dosfstools cryptsetup bluez bluez-utils tuned tuned-ppd distrobox podman squashfs-tools zstd \
+    ffmpeg ffmpegthumbnailer libcamera libcamera-tools libheif \
+    amd-ucode intel-ucode efibootmgr shim mesa libva-intel-driver libva-mesa-driver \
+    vpl-gpu-rt vulkan-icd-loader vulkan-intel vulkan-radeon apparmor xf86-video-amdgpu zram-generator \
+    lm_sensors intel-media-driver bootc openal ttf-twemoji curl
+
+# Prepare build enviroment
+pacman -S --needed --noconfirm base-devel git paru
+useradd -m build 2>/dev/null
+echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+mkdir -p ./build_tmp
+chown build:build ./build_tmp
 
 # Install de specific packages
 case "$1" in
@@ -89,8 +111,6 @@ case "$1" in
           loupe \
           decibels \
           gnome-text-editor
-
-        install_aur gnome-shell-extension-just-perfection-desktop        
 
         systemctl enable gdm
         ;;
@@ -176,10 +196,6 @@ pacman -S --noconfirm \
     ttf-dejavu \
     borg
 
-systemctl enable ufw
-systemctl disable tailscaled.service
-systemctl disable waydroid-container.service
-
 # Build spacefin packages
 build_spacefin_package ExistingRules
 build_spacefin_package Spacefin-cli
@@ -193,6 +209,60 @@ pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
+
+# Fix users and group after rebasing from non-arch image
+mkdir -p /usr/lib/systemd/system-preset /usr/lib/systemd/system
+echo -e '#!/bin/sh\n\
+cat /usr/lib/sysusers.d/*.conf | \
+grep -e "^g" | \
+grep -v -e "^#" | \
+awk "NF" | \
+awk '\''{print $2}'\'' | \
+grep -v -e "wheel" -e "root" -e "sudo" | \
+xargs -I{} sed -i "/{}/d" "$1"' > /usr/libexec/arch-group-fix
+chmod +x /usr/libexec/arch-group-fix
+
+echo -e '[Unit]\n\
+Description=Fix groups\n\
+DefaultDependencies=no\n\
+After=local-fs.target\n\
+Before=sysinit.target systemd-resolved.service\n\
+Wants=local-fs.target\n\
+\n\
+[Service]\n\
+Type=oneshot\n\
+ExecStart=/usr/libexec/arch-group-fix /etc/group\n\
+ExecStart=/usr/libexec/arch-group-fix /etc/gshadow\n\
+ExecStart=/usr/bin/systemd-sysusers\n\
+\n\
+[Install]\n\
+WantedBy=sysinit.target' > /usr/lib/systemd/system/arch-group-fix.service
+
+echo -e "enable arch-group-fix.service" > /usr/lib/systemd/system-preset/01-arch-group-fix.preset
+
+# Sudo for wheel group
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers || \
+    echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+echo -e 'enable systemd-resolved.service' > /usr/lib/systemd/system-preset/91-resolved-default.preset
+echo -e 'L /etc/resolv.conf - - - - ../run/systemd/resolve/stub-resolv.conf' > /usr/lib/tmpfiles.d/resolved-default.conf
+systemctl preset systemd-resolved.service
+
+systemctl enable polkit.service
+systemctl enable arch-group-fix.service
+systemctl enable NetworkManager.service
+systemctl enable cups.socket
+systemctl enable cups-browsed.service
+systemctl enable tuned-ppd.service
+systemctl enable tuned.service
+systemctl enable systemd-resolved.service
+systemctl enable systemd-resolved-varlink.socket
+systemctl enable systemd-resolved-monitor.socket
+systemctl enable bluetooth.service
+systemctl enable avahi-daemon.service
+systemctl enable ufw
+systemctl disable tailscaled.service
+systemctl disable waydroid-container.service
 
 # Write image info
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
