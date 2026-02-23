@@ -95,7 +95,7 @@ case "$1" in
         DE_NAME="niri"
 
         # Install and setup niri
-        pacman -S --noconfirm niri-git dms-shell-git mate-polkit wl-clipboard dgop matugen sddm
+        pacman -S --noconfirm niri dms-shell-git mate-polkit wl-clipboard dgop matugen sddm
 
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
