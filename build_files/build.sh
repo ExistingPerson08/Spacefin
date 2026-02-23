@@ -246,7 +246,7 @@ systemd-tmpfiles --root=/ --create --prefix=/var/lib/polkit-1
 # Cleanup
 userdel -r build
 sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers
-pacman -Rns --noconfirmsudo autoconf automake bison fakeroot flex gc gcc groff guile libisl libmpc m4 make texinfo paru
+pacman -Rns --noconfirm autoconf automake bison fakeroot flex gc gcc groff guile libisl libmpc m4 make texinfo paru
 pacman -Scc --noconfirm
 
 rm -rf \
