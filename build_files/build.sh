@@ -185,8 +185,8 @@ build_spacefin_package Spacefin-cli
 pacman -S --noconfirm \
     steam \
     vesktop \
-    gamescope \
-    gamescope-session-git
+    cachyos-v3/gamescope \
+    chaotic-aur/gamescope-session-git
 
 git clone https://github.com/OpenGamingCollective/gamescope-session-steam/
 cp -rv gamescope-session-steam/usr/* /usr/ && rm -rfv gamescope-session-steam/
