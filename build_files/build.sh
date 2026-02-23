@@ -181,12 +181,15 @@ systemctl disable waydroid-container.service
 build_spacefin_package ExistingRules
 build_spacefin_package Spacefin-cli
 
-# Temporary: Steam and dykscord on all images
+# Gaming stack: steam, vesktop & OGC gamescope-session
 pacman -S --noconfirm \
     steam \
     vesktop \
     gamescope \
     gamescope-session-git
+
+git clone https://github.com/OpenGamingCollective/gamescope-session-steam/
+rm -rf .git/ && rm -f LICENSE
 
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
