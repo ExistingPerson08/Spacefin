@@ -189,7 +189,7 @@ pacman -S --noconfirm \
     gamescope-session-git
 
 git clone https://github.com/OpenGamingCollective/gamescope-session-steam/
-rm -rf .git/ && rm -f LICENSE
+cp -rv gamescope-session-steam/usr/* /usr/ && rm -rfv gamescope-session-steam/
 
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
