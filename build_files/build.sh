@@ -250,7 +250,7 @@ pacman -Rns --noconfirm  base-devel paru
 pacman -Scc --noconfirm
 
 # For some reason, uninstalling base-devel also uninstalls sudo
-pacman -S sudo
+pacman -S --noconfirm sudo
 
 rm -rf \
     ./build_tmp \
