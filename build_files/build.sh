@@ -145,7 +145,7 @@ pacman -S --noconfirm \
     adw-gtk-theme \
     thefuck \
     xorg-xrdb \
-    sudo \
+    core/sudo \
     upower \
     ufw \
     fish \
