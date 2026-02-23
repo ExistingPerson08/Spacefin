@@ -6,7 +6,7 @@ ARG BASE
 FROM scratch AS ctx
 COPY build_files /
 
-FROM ghcr.io/existingperson08/arch-base:latest as spacefin
+FROM ghcr.io/existingperson08/arch-base-cachy:latest as spacefin
 
 ARG DESKTOP
 ARG EDITION
