@@ -31,9 +31,6 @@ build_spacefin_package() {
     cd ..
 }
 
-pacman -R --noconfirm linux
-pacman -S --noconfirm linux-zen linux-zen-headers
-
 # Install de specific packages
 case "$1" in
     "cosmic")
@@ -187,7 +184,9 @@ build_spacefin_package Spacefin-cli
 # Temporary: Steam and dykscord on all images
 pacman -S --noconfirm \
     steam \
-    vesktop
+    vesktop \
+    gamescope \
+    gamescope-session-git
 
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
