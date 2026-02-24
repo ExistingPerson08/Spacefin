@@ -190,6 +190,7 @@ pacman -S --noconfirm \
 
 git clone https://github.com/OpenGamingCollective/gamescope-session-steam/
 cp -rv gamescope-session-steam/usr/* /usr/ && rm -rfv gamescope-session-steam/
+rm /usr/share/wayland-sessions/gamescope-session.desktop
 
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
