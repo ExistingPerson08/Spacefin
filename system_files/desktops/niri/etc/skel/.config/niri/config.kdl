@@ -5,6 +5,7 @@
 include "dms/binds.kdl"
 include "dms/outputs.kdl"
 include "dms/windowrules.kdl"
+include "dms/cursor.kdl"
 
 config-notification {
     disable-failed
@@ -247,6 +248,7 @@ binds {
         spawn "dms" "ipc" "call" "lock" "lock";
     }
     Mod+Shift+E { quit; }
+    Mod+E { quit; }
     Ctrl+Alt+Delete hotkey-overlay-title="Task Manager" {
         spawn "dms" "ipc" "call" "processlist" "toggle";
     }
