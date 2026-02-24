@@ -95,7 +95,7 @@ case "$1" in
         DE_NAME="niri"
 
         # Install and setup niri
-        pacman -S --noconfirm niri dms-shell-git mate-polkit wl-clipboard dgop matugen sddm
+        pacman -S --noconfirm niri dms-shell-git mate-polkit wl-clipboard dgop matugen
 
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
@@ -104,7 +104,6 @@ case "$1" in
             nautilus-share \
             nautilus-python \
             nautilus-open-any-terminal \
-            sddm-astronaut-theme \
             papers \
             khal \
             cava \
@@ -120,9 +119,13 @@ case "$1" in
 
         # Install AUR packages
         install_aur dsearch-git
+        install_aur greetd-dms-greeter-git
 
+        # Setup dms greeter
+        printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml 
+        
         systemctl enable --global dms dsearch
-        systemctl enable sddm
+        systemctl enable greetd
         ;;
 esac
 
