@@ -8,24 +8,23 @@ Spacefin is my personal custom Arch bootc image with (not only) COSMIC desktop i
 ## Features
 
  - Cosmic or Gnome desktops or Niri wm
- - Automatic updates in background
+ - Automatic updates in background (WIP)
  - Codecs and drivers out-of-the box
- - System76-schenduler enabled by default
+ - Ananicy-cpp with [CachyOS's](https://github.com/CachyOS/ananicy-rules) and [custom](https://github.com/ExistingPerson08/ExistingRules) rules
  - Java preinstalled and set for running .jar files
  - Homebrew, Docker and Distrobox preinstalled
  - Restic and rclone out-of-the box
  - All shells (fish, bash, zsh) preinstalled
+ - Gnome Boxes and quickemu for virtualization
+ - CachyOS's optized repos and linux-zen kernel
+ - Gaming stack (Steam, gamescope, gamescope session...)
 
 ## Desktops
 
 ### Main (Cosmic)
 
  - Custom COSMIC theme
-    - with focus on tilling and minimalism
  - Spacefin-cli for changing themes
- - Preconfigured Zed and VSCodium
- - Gnome Boxes and quickemu for virtualization
- - Curated set of open-source apps
 
 If you want to install main eddition, rebase from Fedora Cosmic Atomic with:
 
@@ -38,10 +37,7 @@ sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefi
  - Preconfigured GNOME desktop
     - GSConnect set up by default
     - Layout customized for touchscreen
-    - patches to enable fractional scalling, VRR and more
     - Preinstalled useful extensions
-    - [Hanabi extension](https://github.com/jeffshee/gnome-ext-hanabi) for live wallpapers
- - Curated set of touchscreen-friendly open-source apps
 
 If you want to install GNOME eddition, rebase from Fedora Silverblue or Bluefin with:
 
@@ -56,8 +52,6 @@ sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefi
     - All needed packages preinstalled
     - Fingerprint unlock preconfigured
  - Easy to customize
- - Preconfigured Zed and VSCodium
- - Gnome Boxes and quickemu for virtualization
 
 If you want to install Niri eddition, rebase from Fedora Silverblue or Bluefin with:
 
