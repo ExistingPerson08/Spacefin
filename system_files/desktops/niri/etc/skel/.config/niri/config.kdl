@@ -152,6 +152,7 @@ window-rule {
 }
 window-rule {
     match app-id="Spotify"
+    match app-id="spotify"
     match app-id="vesktop"
     match app-id="firefox"
     match app-id="GDevelop 5"
