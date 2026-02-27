@@ -89,6 +89,8 @@ case "$1" in
         install_aur gnome-shell-extension-just-perfection-desktop 
         install_aur gnome-shell-extension-gtk4-desktop-icons-ng
 
+        build_spacefin_package Spacefin-warehouse/main/stillcontrol
+
         # Fix just perfection gschemas
         ln -s /usr/share/gnome-shell/extensions/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml /usr/share/glib-2.0/schemas/
         glib-compile-schemas /usr/share/glib-2.0/schemas/
