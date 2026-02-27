@@ -93,6 +93,11 @@ case "$1" in
 
         # Fix just perfection gschemas
         ln -s /usr/share/gnome-shell/extensions/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml /usr/share/glib-2.0/schemas/
+
+        # Fix dash to panel missing gschemas
+        DASH_TO_PANEL_SCHEMA="/usr/share/glib-2.0/schemas/org.gnome.shell.extensions.dash-to-panel.gschema.xml"
+        sed -i 's|<\/schema>|    <key type="as" name="available-monitors">\n      <default>[]<\/default>\n      <summary>Patch for still-control<\/summary>\n    <\/key>\n<\/schema>|' "$DASH_TO_PANEL_SCHEMA"
+
         glib-compile-schemas /usr/share/glib-2.0/schemas/
 
         systemctl enable gdm
