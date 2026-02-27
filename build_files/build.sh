@@ -20,7 +20,7 @@ install_aur() {
 build_spacefin_package() {
     cd ./build_tmp
     
-    sudo -u build curl -L -O https://raw.githubusercontent.com/ExistingPerson08/"$1"/main/PKGBUILD
+    sudo -u build curl -L -O https://raw.githubusercontent.com/ExistingPerson08/"$1"/PKGBUILD
     sudo -u build makepkg -si --noconfirm
     sudo -u build rm -f PKGBUILD
     sudo -u build rm -rf "$1"-git
@@ -74,20 +74,24 @@ case "$1" in
           nautilus-python \
           nautilus-open-any-terminal \
           nautilus-share \
+          gnome-shell-extension-dash-to-dock \
+          gnome-shell-extension-dash-to-panel \
+          gnome-shell-extension-arc-menu \
           gnome-shell-extension-appindicator \
           gnome-shell-extension-gsconnect \
           gnome-shell-extension-compiz-windows-effect-git \
           gnome-shell-extension-blur-my-shell \
           gnome-shell-extension-caffeine \
-          gnome-shell-extension-logo-menu \
           gnome-shell-extension-pop-shell-git \
           ulauncher \
-          papers \
-          loupe \
-          decibels \
           gnome-text-editor
 
-        install_aur gnome-shell-extension-just-perfection-desktop        
+        install_aur gnome-shell-extension-just-perfection-desktop 
+        install_aur gnome-shell-extension-gtk4-desktop-icons-ng
+
+        # Fix just perfection gschemas
+        ln -s /usr/share/gnome-shell/extensions/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml /usr/share/glib-2.0/schemas/
+        glib-compile-schemas /usr/share/glib-2.0/schemas/
 
         systemctl enable gdm
         ;;
@@ -120,6 +124,9 @@ case "$1" in
         # Install AUR packages
         install_aur dsearch-git
         install_aur greetd-dms-greeter-git
+
+        # Build stillcontrol
+        build_spacefin_package Spacefin-warehouse/main/stillcontrol
 
         # Setup dms greeter
         printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml 
@@ -181,8 +188,8 @@ systemctl disable tailscaled.service
 systemctl disable waydroid-container.service
 
 # Build spacefin packages
-build_spacefin_package ExistingRules
-build_spacefin_package Spacefin-cli
+build_spacefin_package ExistingRules/main
+build_spacefin_package Spacefin-cli/main
 
 # Gaming stack: steam, vesktop & OGC gamescope-session
 pacman -S --noconfirm \
