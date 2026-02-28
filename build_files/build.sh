@@ -100,6 +100,9 @@ case "$1" in
 
         glib-compile-schemas /usr/share/glib-2.0/schemas/
 
+        # Remove build-in extension app
+        rm /usr/share/applications/org.gnome.Extensions.desktop
+
         systemctl enable gdm
         ;;
     "niri")
