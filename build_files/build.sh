@@ -134,10 +134,7 @@ case "$1" in
         # Install AUR packages
         install_aur dsearch-git
         install_aur greetd-dms-greeter-git
-
-        # Build stillcontrol
-        build_spacefin_package Spacefin-warehouse/main/stillcontrol
-
+        
         # Setup dms greeter
         printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml 
         
@@ -163,7 +160,6 @@ pacman -S --noconfirm \
     zram-generator \
     fastfetch \
     adw-gtk-theme \
-    thefuck \
     xorg-xrdb \
     upower \
     ufw \
