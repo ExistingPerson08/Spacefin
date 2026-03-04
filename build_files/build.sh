@@ -202,7 +202,8 @@ pacman -S --noconfirm \
     steam \
     vesktop \
     cachyos-v3/gamescope \
-    chaotic-aur/gamescope-session-git
+    chaotic-aur/gamescope-session-git \
+    #chaotic-aur/icoextract
 
 git clone https://github.com/OpenGamingCollective/gamescope-session-steam/
 cp -rv gamescope-session-steam/usr/* /usr/ && rm -rfv gamescope-session-steam/
