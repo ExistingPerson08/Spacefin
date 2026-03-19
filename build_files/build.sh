@@ -195,7 +195,7 @@ systemctl disable tailscaled.service
 systemctl disable waydroid-container.service
 
 # Remove nano (swaped with micro)
-pacman -R nano
+pacman -R --noconfirm nano
 
 # Build spacefin packages
 build_spacefin_package ExistingRules/main
