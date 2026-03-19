@@ -187,11 +187,15 @@ pacman -S --noconfirm \
     noto-fonts \
     inter-font \
     ttf-dejavu \
+    micro \
     borg
 
 systemctl enable ufw
 systemctl disable tailscaled.service
 systemctl disable waydroid-container.service
+
+# Remove nano (swaped with micro)
+pacman -R nano
 
 # Build spacefin packages
 build_spacefin_package ExistingRules/main
