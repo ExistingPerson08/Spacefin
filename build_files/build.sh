@@ -273,6 +273,7 @@ userdel -r build
 sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers
 pacman -Rns --noconfirm  base-devel paru
 pacman -Scc --noconfirm
+fc-cache -fv
 
 # For some reason, uninstalling base-devel also uninstalls sudo
 pacman -S --noconfirm sudo
