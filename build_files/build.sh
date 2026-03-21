@@ -204,7 +204,7 @@ pacman -S --noconfirm \
     vesktop \
     waydroid \
     cachyos-v3/gamescope \
-    chaotic-aur/faugus-launcher
+    chaotic-aur/faugus-launcher \
     chaotic-aur/gamescope-session-git \
     #chaotic-aur/icoextract
 
