@@ -172,11 +172,10 @@ pacman -S --noconfirm \
     ghostty \
     jdk-openjdk \
     bazaar-git \
-    docker \
-    docker-compose \
+    podman \
+    podman-docker \
     flatpak-builder \
     quickemu \
-    waydroid \
     tailscale \
     restic \
     rclone \
@@ -190,9 +189,7 @@ pacman -S --noconfirm \
     micro \
     borg
 
-systemctl enable ufw
-systemctl disable tailscaled.service
-systemctl disable waydroid-container.service
+pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
 # Remove nano (swaped with micro)
 pacman -R --noconfirm nano
@@ -205,7 +202,9 @@ build_spacefin_package Spacefin-cli/main
 pacman -S --noconfirm \
     steam \
     vesktop \
+    waydroid \
     cachyos-v3/gamescope \
+    cachyos/faugus-launcher
     chaotic-aur/gamescope-session-git \
     #chaotic-aur/icoextract
 
@@ -213,7 +212,10 @@ git clone https://github.com/OpenGamingCollective/gamescope-session-steam/
 cp -rv gamescope-session-steam/usr/* /usr/ && rm -rfv gamescope-session-steam/
 rm /usr/share/wayland-sessions/gamescope-session.desktop
 
-pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
+# Systemd services
+systemctl enable ufw
+systemctl disable tailscaled.service
+systemctl disable waydroid-container.service
 
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
@@ -273,6 +275,7 @@ userdel -r build
 sed -i '/build ALL=(ALL) NOPASSWD: ALL/d' /etc/sudoers
 pacman -Rns --noconfirm  base-devel paru
 pacman -Scc --noconfirm
+find /etc/fonts/conf.d/ -xtype l -delete
 fc-cache -fv
 
 # For some reason, uninstalling base-devel also uninstalls sudo
