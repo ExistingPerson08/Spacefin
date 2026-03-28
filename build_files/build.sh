@@ -19,7 +19,7 @@ install_aur() {
 
 build_spacefin_package() {
     cd ./build_tmp
-    
+
     sudo -u build curl -L -O https://raw.githubusercontent.com/ExistingPerson08/"$1"/PKGBUILD
     sudo -u build makepkg -si --noconfirm
     sudo -u build rm -f PKGBUILD
@@ -86,7 +86,7 @@ case "$1" in
           ulauncher \
           gnome-text-editor
 
-        install_aur gnome-shell-extension-just-perfection-desktop 
+        install_aur gnome-shell-extension-just-perfection-desktop
         install_aur gnome-shell-extension-gtk4-desktop-icons-ng
 
         build_spacefin_package Spacefin-warehouse/main/stillcontrol
@@ -134,10 +134,10 @@ case "$1" in
         # Install AUR packages
         install_aur dsearch-git
         install_aur greetd-dms-greeter-git
-        
+
         # Setup dms greeter
-        printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml 
-        
+        printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml
+
         systemctl enable --global dms dsearch
         systemctl enable greetd
         ;;
@@ -219,6 +219,9 @@ systemctl disable waydroid-container.service
 
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
+
+# Tell Bazaar where to look for config (in the worst posible way)
+sed -i 's|Exec=bazaar %U|Exec=bazaar --extra-blocklist /usr/share/spacefin/bazaar/blocklist.yaml --extra-curated-config /usr/share/spacefin/bazaar/curated.yaml %U|' /usr/share/applications/io.github.kolunmi.Bazaar.desktop
 
 # Write image info
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"

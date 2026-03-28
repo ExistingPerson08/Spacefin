@@ -24,4 +24,6 @@ blocklists:
       - io.neovim.nvim
       - org.gnu.emacs
       - org.vim.Vim
+      - com.valvesoftware.Steam
+      - io.github.Faugus.faugus-launcher
       - org.kde.dolphin

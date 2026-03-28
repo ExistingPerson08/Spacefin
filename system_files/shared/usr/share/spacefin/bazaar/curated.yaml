@@ -128,7 +128,7 @@ rows:
         category:
           title: "Spacefin Recommends"
           subtitle: "Our Favorite Applications"
-          banner: file:///usr/share/ublue-os/bazaar/recommended.jpg
+          banner: file:///usr/share/spacefin/bazaar/recommended.jpg
           banner-fit: cover
           banner-text-halign: end
           banner-text-valign: start
@@ -158,7 +158,7 @@ rows:
         category:
           title: "Browsers"
           subtitle: "Use the web with your favorite browser"
-          banner: file:///usr/share/ublue-os/bazaar/internet.jpg
+          banner: file:///usr/share/spacefin/bazaar/internet.jpg
           banner-fit: cover
           banner-text-halign: start
           banner-text-valign: start
@@ -182,7 +182,7 @@ rows:
         category:
           title: "Media"
           subtitle: "The Freedom of Music"
-          banner: file:///usr/share/ublue-os/bazaar/music.png
+          banner: file:///usr/share/spacefin/bazaar/music.png
           banner-fit: cover
           banner-text-halign: end
           banner-text-valign: end
@@ -210,7 +210,7 @@ rows:
         category:
           title: "Office & Productivity"
           subtitle: "Work smart, not hard"
-          banner: file:///usr/share/ublue-os/bazaar/office.jpg
+          banner: file:///usr/share/spacefin/bazaar/office.jpg
           banner-fit: cover
           banner-text-halign: start
           banner-text-valign: end
@@ -243,7 +243,7 @@ rows:
         category:
           title: "Games"
           subtitle: "Do not forget to touch grass as well!"
-          banner: file:///usr/share/ublue-os/bazaar/games.jpg
+          banner: file:///usr/share/spacefin/bazaar/games.jpg
           banner-fit: cover
           banner-text-halign: start
           banner-text-valign: end
@@ -274,7 +274,7 @@ rows:
         category:
           title: "Utilities"
           subtitle: "Gear up and kit out"
-          banner: file:///usr/share/ublue-os/bazaar/utility.jpg
+          banner: file:///usr/share/spacefin/bazaar/utility.jpg
           banner-fit: cover
           banner-text-halign: start
           banner-text-valign: end
@@ -310,7 +310,7 @@ rows:
         category:
           title: "Developers"
           subtitle: "Unleash the power"
-          banner: file:///usr/share/ublue-os/bazaar/dev.jpg
+          banner: file:///usr/share/spacefin/bazaar/dev.jpg
           banner-fit: cover
           banner-text-halign: end
           banner-text-valign: start
@@ -346,7 +346,7 @@ rows:
         category:
           title: "Sustainability & Education"
           subtitle: "Invest in the Future"
-          banner: file:///usr/share/ublue-os/bazaar/education.jpg
+          banner: file:///usr/share/spacefin/bazaar/education.jpg
           banner-fit: cover
           banner-text-halign: start
           banner-text-valign: end
@@ -371,7 +371,7 @@ rows:
         category:
           title: "AI and Machine Learning"
           subtitle: "Explore the best of open source AI"
-          banner: file:///usr/share/ublue-os/bazaar/ai.jpg
+          banner: file:///usr/share/spacefin/bazaar/ai.jpg
           banner-fit: cover
           banner-text-halign: end
           banner-text-valign: end

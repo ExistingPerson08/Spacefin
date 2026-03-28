@@ -1,0 +1,7 @@
+yaml-blocklist-paths:
+  - /usr/share/spacefin/bazaar/blocklist.yaml
+curated-config-paths:
+  - /usr/share/spacefin/bazaar/curated.yaml
+override-eol-markings:
+  - com.obsproject.Studio
+  - net.lutris.Lutris
