@@ -79,10 +79,6 @@ jobs:
         with:
           submodules: true
 
-      - name: Install Podman via Homebrew
-        run: |
-          brew install podman
-
       - name: Maximize build space
         uses: ublue-os/remove-unwanted-software@v7
         with:
@@ -145,6 +141,11 @@ jobs:
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
         run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login --username ${{ github.actor }} --password-stdin ghcr.io
+
+      - name: Install Podman from Brew
+        if: inputs.publish
+        run: |
+          /home/linuxbrew/.linuxbrew/bin/brew install podman
 
       - name: Push Image To GHCR
         if: github.event_name != 'pull_request'
