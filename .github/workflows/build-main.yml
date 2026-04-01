@@ -128,9 +128,12 @@ jobs:
         id: rechunk
         run: |
           FULL_IMAGE_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
-
+        
           export CHUNKAH_CONFIG_STR="$(podman inspect "${FULL_IMAGE_NAME}-beta")"
-          podman run --rm "--mount=type=image,src=${FULL_IMAGE_NAME}-beta,dest=/chunkah" -e CHUNKAH_CONFIG_STR quay.io/coreos/chunkah build --label ostree.bootable=1 --compressed --max-layers 128 | \
+          podman run --rm \
+            "--mount=type=image,src=${FULL_IMAGE_NAME}-beta,target=/chunkah" \
+            -e CHUNKAH_CONFIG_STR \
+            quay.io/coreos/chunkah build --label ostree.bootable=1 --compressed --max-layers 128 | \
             podman load | \
             sort -n | \
             head -n1 | \
