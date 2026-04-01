@@ -135,7 +135,7 @@ jobs:
             -v /var/lib/containers:/var/lib/containers \
             -v /etc/containers:/etc/containers \
             -e CHUNKAH_CONFIG_STR \
-            ghcr.io/travier/chunkah:latest \
+            quay.io/coreos/chunkah \
             rechunk "${FULL_IMAGE_NAME}-bootc"
 
       - name: Login to GitHub Container Registry
@@ -143,7 +143,6 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login --username ${{ github.actor }} --password-stdin ghcr.io
 
       - name: Install Podman from Brew
-        if: inputs.publish
         run: |
           /home/linuxbrew/.linuxbrew/bin/brew install podman
 
