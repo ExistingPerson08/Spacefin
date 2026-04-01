@@ -119,7 +119,7 @@ jobs:
           podman build \
             --format=docker \
             --file ./Containerfile \
-            --tag "${FULL_IMAGE_NAME}-beta:latest" \
+            --tag "${FULL_IMAGE_NAME}:latest" \
             --build-arg DESKTOP="${{ steps.dynamic_vars.outputs.DESKTOP }}" \
             --build-arg EDITION="${{ steps.dynamic_vars.outputs.EDITION }}" \
             .
@@ -129,9 +129,9 @@ jobs:
         run: |
           FULL_IMAGE_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
         
-          export CHUNKAH_CONFIG_STR="$(podman inspect "${FULL_IMAGE_NAME}-beta")"
+          export CHUNKAH_CONFIG_STR="$(podman inspect "${FULL_IMAGE_NAME}")"
           podman run --rm \
-            "--mount=type=image,src=${FULL_IMAGE_NAME}-beta,target=/chunkah" \
+            "--mount=type=image,src=${FULL_IMAGE_NAME},target=/chunkah" \
             -e CHUNKAH_CONFIG_STR \
             quay.io/coreos/chunkah build --label ostree.bootable=1 --compressed --max-layers 128 | \
             podman load | \
@@ -139,7 +139,7 @@ jobs:
             head -n1 | \
             cut -d, -f2 | \
             cut -d: -f3 | \
-            xargs -I{} podman tag {} "${FULL_IMAGE_NAME}-beta"
+            xargs -I{} podman tag {} "${FULL_IMAGE_NAME}"
 
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request'
@@ -156,7 +156,7 @@ jobs:
           RAW_TAGS: ${{ steps.metadata.outputs.tags }}
           FULL_NAME: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
         run: |
-          IMAGE_REF="localhost/${FULL_NAME}-beta:latest"
+          IMAGE_REF="localhost/${FULL_NAME}:latest"
 
           DIGEST=$(podman inspect --format '{{.Digest}}' "$IMAGE_REF")
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
