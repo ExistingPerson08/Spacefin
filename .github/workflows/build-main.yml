@@ -152,17 +152,21 @@ jobs:
       - name: Push Image To GHCR
         if: github.event_name != 'pull_request'
         id: push
+        env:
+          RAW_TAGS: ${{ steps.metadata.outputs.tags }}
+          FULL_NAME: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
         run: |
-          FULL_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
           IMAGE_REF="localhost/${FULL_NAME}-beta:latest"
 
           DIGEST=$(podman inspect --format '{{.Digest}}' "$IMAGE_REF")
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
 
           TAGS_FOR_SIGNING=""
-          for tag in ${{ steps.metadata.outputs.tags }}; do
+          
+          for tag in $RAW_TAGS; do
+            echo "Pushing tag: $tag"
             podman push "$IMAGE_REF" "$tag"
-            TAGS_FOR_SIGNING="${TAGS_FOR_SIGNING} $tag"
+            TAGS_FOR_SIGNING="${TAGS_FOR_SIGNING}${TAGS_FOR_SIGNING:+ }$tag"
           done
 
           echo "tags_for_signing=$TAGS_FOR_SIGNING" >> "$GITHUB_OUTPUT"
@@ -174,10 +178,11 @@ jobs:
       - name: Sign main container image
         if: github.event_name != 'pull_request'
         run: |
-          for image_ref in ${{ steps.push.outputs.tags_for_signing }}; do
+          for image_ref in $TAGS_TO_SIGN; do
             echo "Signing: ${image_ref}"
-            cosign sign -y --key env://COSIGN_PRIVATE_KEY ${image_ref}
+            cosign sign -y --key env://COSIGN_PRIVATE_KEY "${image_ref}"
           done
         env:
+          TAGS_TO_SIGN: ${{ steps.push.outputs.tags_for_signing }}
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
           COSIGN_EXPERIMENTAL: false
