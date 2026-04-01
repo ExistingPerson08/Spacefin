@@ -181,7 +181,11 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
           DIGEST: ${{ steps.push.outputs.digest }}
           FULL_NAME: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
+          OWNER: ${{ github.repository_owner }}
         run: |
+          RAW_URL="ghcr.io/${OWNER}/${FULL_NAME}@${DIGEST}"
+          LOWER_URL=$(echo "$RAW_URL" | tr '[:upper:]' '[:lower:]')
+          
           echo "${{ secrets.GITHUB_TOKEN }}" | cosign login ghcr.io -u ${{ github.actor }} --password-stdin
           echo "Signing rechunked image: ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
-          cosign sign -y --key env://COSIGN_PRIVATE_KEY "ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
+          cosign sign -y --key env://COSIGN_PRIVATE_KEY "$LOWER_URL"
