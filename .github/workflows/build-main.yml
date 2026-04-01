@@ -179,10 +179,9 @@ jobs:
         if: github.event_name != 'pull_request'
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
-          COSIGN_EXPERIMENTAL: false
           DIGEST: ${{ steps.push.outputs.digest }}
           FULL_NAME: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | cosign login ghcr.io -u ${{ github.actor }} --password-stdin
-          echo "Signing: ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
+          echo "Signing rechunked image: ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
           cosign sign -y --key env://COSIGN_PRIVATE_KEY "ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
