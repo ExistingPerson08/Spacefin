@@ -177,12 +177,12 @@ jobs:
 
       - name: Sign main container image
         if: github.event_name != 'pull_request'
-        run: |
-          for image_ref in $TAGS_TO_SIGN; do
-            echo "Signing: ${image_ref}"
-            cosign sign -y --key env://COSIGN_PRIVATE_KEY "${image_ref}"
-          done
         env:
-          TAGS_TO_SIGN: ${{ steps.push.outputs.tags_for_signing }}
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
           COSIGN_EXPERIMENTAL: false
+          DIGEST: ${{ steps.push.outputs.digest }}
+          FULL_NAME: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | cosign login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo "Signing: ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
+          cosign sign -y --key env://COSIGN_PRIVATE_KEY "ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
