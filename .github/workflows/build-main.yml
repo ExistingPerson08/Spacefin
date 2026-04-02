@@ -72,15 +72,15 @@ jobs:
 
           echo "DESKTOP=$DESKTOP" >> $GITHUB_OUTPUT
           echo "EDITION=$EDITION" >> $GITHUB_OUTPUT
-          echo "BASE=$BASE" >> $GITHUB_OUTPUT
           echo "FULL_NAME=$FULL_NAME" >> $GITHUB_OUTPUT
-          echo "FULL_NAME: $FULL_NAME, BASE: $BASE" # Pro debug
 
       - name: Checkout
-        uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98 # v5
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - name: Maximize build space
-        uses: ublue-os/remove-unwanted-software@695eb75bc387dbcd9685a8e72d23439d8686cba6
+        uses: ublue-os/remove-unwanted-software@v7
         with:
           extra-squeeze: true
 
@@ -90,105 +90,104 @@ jobs:
       - name: Get current date
         id: date
         run: |
-          echo "date_iso=$(date -u +%Y-%m-%d\T%H:%M:%S\Z)" >> $GITHUB_OUTPUT
+          echo "date_iso=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
           echo "date_tag=$(date -u +%Y%m%d)" >> $GITHUB_OUTPUT
-          echo "date=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
 
       - name: Image Metadata
-        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
+        uses: docker/metadata-action@v5
         id: metadata
         with:
           images: ${{ env.IMAGE_REGISTRY }}/${{ steps.dynamic_vars.outputs.FULL_NAME }}
           tags: |
-            type=raw,value=${{ env.DEFAULT_TAG }} # Vytvoří tag :latest
-            type=raw,value=${{ steps.date.outputs.date_tag }} # Vytvoří tag :20251126
+            type=raw,value=${{ env.DEFAULT_TAG }}
+            type=raw,value=${{ steps.date.outputs.date_tag }}
             type=sha,enable=${{ github.event_name == 'pull_request' }}
             type=ref,event=pr
           labels: |
+            containers.bootc=1
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/refs/heads/main/README.md
             org.opencontainers.image.description=${{ env.IMAGE_DESC }}
             org.opencontainers.image.created=${{ steps.date.outputs.date_iso }}
-            org.opencontainers.image.documentation=https://raw.githubusercontent.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/refs/heads/main/README.md
-            org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/blob/main/Containerfile
-            type=raw,value=${{ steps.date.outputs.date_tag }}
-            org.opencontainers.image.description=${{ env.IMAGE_DESC }}
             org.opencontainers.image.title=${{ steps.dynamic_vars.outputs.FULL_NAME }}
-            org.opencontainers.image.url=https://github.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
             org.opencontainers.image.vendor=${{ github.repository_owner }}
-            org.opencontainers.image.version=${{ env.DEFAULT_TAG }}.${{ steps.date.outputs.date_tag }}
-            io.artifacthub.package.deprecated=false
-            io.artifacthub.package.keywords=${{ env.IMAGE_KEYWORDS }}
-            io.artifacthub.package.license=Apache-2.0
-            io.artifacthub.package.logo-url=${{ env.IMAGE_LOGO_URL }}
-            io.artifacthub.package.prerelease=false
-            containers.bootc=1
-          sep-tags: " "
-          sep-annotations: " "
 
       - name: Build Image
         id: build
         run: |
           FULL_IMAGE_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
-          DESKTOP="${{ steps.dynamic_vars.outputs.DESKTOP }}"
-          EDITION="${{ steps.dynamic_vars.outputs.EDITION }}"
-          BASE="${{ steps.dynamic_vars.outputs.BASE }}"
 
-          sudo buildah build \
-            --storage-driver=overlay \
+          podman build \
             --format=docker \
             --file ./Containerfile \
-            --tag "$FULL_IMAGE_NAME":${{ env.DEFAULT_TAG }} \
-            --build-arg DESKTOP="$DESKTOP" \
-            --build-arg EDITION="$EDITION" \
-            --build-arg BASE="$BASE" \
+            --tag "${FULL_IMAGE_NAME}:latest" \
+            --build-arg DESKTOP="${{ steps.dynamic_vars.outputs.DESKTOP }}" \
+            --build-arg EDITION="${{ steps.dynamic_vars.outputs.EDITION }}" \
             .
 
-          echo "full_image_name=$FULL_IMAGE_NAME" >> "$GITHUB_OUTPUT"
+      - name: Rechunk Image
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        id: rechunk
+        run: |
+          FULL_IMAGE_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
+        
+          export CHUNKAH_CONFIG_STR="$(podman inspect "${FULL_IMAGE_NAME}")"
+          podman run --rm \
+            "--mount=type=image,src=${FULL_IMAGE_NAME},target=/chunkah" \
+            -e CHUNKAH_CONFIG_STR \
+            quay.io/coreos/chunkah build --label ostree.bootable=1 --compressed --max-layers 128 | \
+            podman load | \
+            sort -n | \
+            head -n1 | \
+            cut -d, -f2 | \
+            cut -d: -f3 | \
+            xargs -I{} podman tag {} "${FULL_IMAGE_NAME}"
 
       - name: Login to GitHub Container Registry
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo skopeo login --username ${{ github.actor }} --password-stdin ghcr.io
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login --username ${{ github.actor }} --password-stdin ghcr.io
+
+      - name: Install Podman from Brew
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        run: |
+          /home/linuxbrew/.linuxbrew/bin/brew install podman
 
       - name: Push Image To GHCR
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         id: push
+        env:
+          RAW_TAGS: ${{ steps.metadata.outputs.tags }}
+          FULL_NAME: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
         run: |
-          IMAGE_REF="${{ steps.rechunk.outputs.ref || format('containers-storage:localhost/{0}:{1}', steps.dynamic_vars.outputs.FULL_NAME, env.DEFAULT_TAG) }}"
+          IMAGE_REF="localhost/${FULL_NAME}:latest"
 
-          DIGEST=$(sudo skopeo inspect --format '{{.Digest}}' "$IMAGE_REF")
+          DIGEST=$(podman inspect --format '{{.Digest}}' "$IMAGE_REF")
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
 
           TAGS_FOR_SIGNING=""
-
-          for tag in ${{ steps.metadata.outputs.tags }}; do
-            echo "Image registry: ${{ env.IMAGE_REGISTRY }}"
-            echo "Full name: ${{ steps.dynamic_vars.outputs.FULL_NAME }}"
-            echo "Image ref: $IMAGE_REF"
-
-            dest_image="ghcr.io/existingperson08/${{ steps.dynamic_vars.outputs.FULL_NAME }}:latest"
-            echo "dest_image: $dest_image"
-
-            sudo skopeo copy "$IMAGE_REF" docker://$dest_image
-            echo "Pushed $dest_image"
-            TAGS_FOR_SIGNING="${TAGS_FOR_SIGNING} $dest_image"
+          
+          for tag in $RAW_TAGS; do
+            echo "Pushing tag: $tag"
+            podman push "$IMAGE_REF" "$tag"
+            TAGS_FOR_SIGNING="${TAGS_FOR_SIGNING}${TAGS_FOR_SIGNING:+ }$tag"
           done
 
           echo "tags_for_signing=$TAGS_FOR_SIGNING" >> "$GITHUB_OUTPUT"
 
       - name: Install Cosign
-        uses: sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22 # v4.1.0
+        uses: sigstore/cosign-installer@v3
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
 
       - name: Sign main container image
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-        run: |
-          for image_ref in ${{ steps.push.outputs.tags }}; do
-            echo "Signing: ${image_ref}"
-            cosign sign -y --key env://COSIGN_PRIVATE_KEY ${image_ref}
-          done
         env:
-          TAGS: ${{ steps.metadata.outputs.tags }}
-          COSIGN_EXPERIMENTAL: false
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
-          COSIGN_REGISTRY_USERNAME: ${{ github.actor }}
-          COSIGN_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+          DIGEST: ${{ steps.push.outputs.digest }}
+          FULL_NAME: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          RAW_URL="ghcr.io/${OWNER}/${FULL_NAME}@${DIGEST}"
+          LOWER_URL=$(echo "$RAW_URL" | tr '[:upper:]' '[:lower:]')
+          
+          echo "${{ secrets.GITHUB_TOKEN }}" | cosign login ghcr.io -u ${{ github.actor }} --password-stdin
+          echo "Signing image: ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
+          cosign sign -y --key env://COSIGN_PRIVATE_KEY "$LOWER_URL"
