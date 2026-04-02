@@ -125,6 +125,7 @@ jobs:
             .
 
       - name: Rechunk Image
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         id: rechunk
         run: |
           FULL_IMAGE_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
@@ -142,15 +143,16 @@ jobs:
             xargs -I{} podman tag {} "${FULL_IMAGE_NAME}"
 
       - name: Login to GitHub Container Registry
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login --username ${{ github.actor }} --password-stdin ghcr.io
 
       - name: Install Podman from Brew
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         run: |
           /home/linuxbrew/.linuxbrew/bin/brew install podman
 
       - name: Push Image To GHCR
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         id: push
         env:
           RAW_TAGS: ${{ steps.metadata.outputs.tags }}
@@ -173,10 +175,10 @@ jobs:
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
 
       - name: Sign main container image
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
           DIGEST: ${{ steps.push.outputs.digest }}
@@ -187,5 +189,5 @@ jobs:
           LOWER_URL=$(echo "$RAW_URL" | tr '[:upper:]' '[:lower:]')
           
           echo "${{ secrets.GITHUB_TOKEN }}" | cosign login ghcr.io -u ${{ github.actor }} --password-stdin
-          echo "Signing rechunked image: ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
+          echo "Signing image: ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
           cosign sign -y --key env://COSIGN_PRIVATE_KEY "$LOWER_URL"
