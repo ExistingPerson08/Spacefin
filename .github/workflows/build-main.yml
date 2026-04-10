@@ -75,7 +75,7 @@ jobs:
           echo "FULL_NAME=$FULL_NAME" >> $GITHUB_OUTPUT
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: true
 
