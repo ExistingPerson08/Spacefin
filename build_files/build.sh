@@ -60,7 +60,11 @@ case "$1" in
             xdg-user-dirs-gtk \
             xdg-desktop-portal \
             xdg-desktop-portal-gtk \
-            xdg-desktop-portal-cosmic
+            xdg-desktop-portal-cosmic \
+            gvfs \
+            gvfs-mtp \
+            gvfs-smb \
+            gvfs-wsdd
 
         systemctl enable cosmic-greeter
         ;;
@@ -84,6 +88,13 @@ case "$1" in
           gnome-shell-extension-caffeine \
           gnome-shell-extension-pop-shell-git \
           ulauncher \
+          gnome-online-accounts \
+          gvfs \
+          gvfs-goa \
+          gvfs-onedrive \
+          gvfs-mtp \
+          gvfs-smb \
+          gvfs-wsdd \
           gnome-text-editor
 
         install_aur gnome-shell-extension-just-perfection-desktop
@@ -118,6 +129,10 @@ case "$1" in
             nautilus-share \
             nautilus-python \
             nautilus-open-any-terminal \
+            gvfs \
+            gvfs-mtp \
+            gvfs-smb \
+            gvfs-wsdd \
             papers \
             khal \
             cava \
@@ -187,9 +202,14 @@ pacman -S --noconfirm \
     inter-font \
     ttf-dejavu \
     micro \
+    nss-mdns \
+    samba \
     borg
 
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
+
+# UFW config
+ufw allow CIFS
 
 # Remove nano (swaped with micro)
 pacman -R --noconfirm nano
