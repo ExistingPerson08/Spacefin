@@ -89,6 +89,9 @@ case "$1" in
           gnome-shell-extension-pop-shell-git \
           ulauncher \
           gnome-online-accounts \
+          gnome-remote-desktop \
+          gnome-user-share \
+          malcontent \
           gvfs \
           gvfs-goa \
           gvfs-onedrive \
@@ -204,6 +207,10 @@ pacman -S --noconfirm \
     micro \
     nss-mdns \
     samba \
+    fwupd \
+    openssh \
+    openvpn \
+    networkmanager-openvpn \
     borg
 
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
