@@ -89,6 +89,7 @@ case "$1" in
           gnome-shell-extension-pop-shell-git \
           ulauncher \
           gnome-online-accounts \
+          gst-plugin-pipewire \
           gnome-remote-desktop \
           gnome-user-share \
           malcontent \
