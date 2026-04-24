@@ -149,10 +149,12 @@ case "$1" in
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
             xwayland-satellite \
+            xdotool
 
         # Install AUR packages
         install_aur dsearch-git
         install_aur greetd-dms-greeter-git
+        install_aur wl-freeze-git
 
         # Setup dms greeter
         printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml
