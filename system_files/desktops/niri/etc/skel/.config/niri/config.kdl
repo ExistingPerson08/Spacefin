@@ -100,7 +100,7 @@ hotkey-overlay {
     skip-at-startup
 }
 prefer-no-csd
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+screenshot-path "~/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 animations {
     workspace-switch {
         spring damping-ratio=0.80 stiffness=523 epsilon=0.0001
@@ -181,10 +181,13 @@ window-rule {
     match app-id=r#"^steam$"#
     match app-id="spacefin-welcome"
     match app-id=r#"^xdg-desktop-portal$"#
+    match app-id="gsr-ui"
     open-floating true
 }
 window-rule {
+    // Wider collums for apps that needs it
     match title="Steam"
+    match app-id="org.gnome.gitlab.somas.Apostrophe"
     open-floating false
     default-column-width { fixed 1188; }
 }
@@ -208,7 +211,6 @@ window-rule {
     default-window-height { fixed 270; }
     open-floating true
 }
-
 window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
@@ -216,6 +218,7 @@ window-rule {
 
 binds {
     // === System & Overview ===
+    // Super { spawn "niri" "msg" "action" "toggle-overview"; }
     Mod+D { spawn "niri" "msg" "action" "toggle-overview"; }
     Mod+Tab repeat=false { toggle-overview; }
     Mod+Shift+Slash { show-hotkey-overlay; }
@@ -243,10 +246,12 @@ binds {
     }
     Mod+N hotkey-overlay-title="Notification Center" { spawn "dms" "ipc" "call" "notifications" "toggle"; }
     Mod+Shift+N hotkey-overlay-title="Notepad" { spawn "dms" "ipc" "call" "notepad" "toggle"; }
+    Mod+P hotkey-overlay-title="Color Picker" { spawn "dms" "ipc" "color-picker" "toggle"; }
+    Mod+Shift+P { spawn "dms" "color" "pick" "-a"; }
 
     // === Security ===
-    Mod+Escape hotkey-overlay-title="Lock Screen" {
-        spawn "dms" "ipc" "call" "lock" "lock";
+    Mod+Escape hotkey-overlay-title="Supend" {
+        spawn "systemctl" "suspend" "-i";
     }
     Mod+Shift+E { quit; }
     Mod+E { quit; }
@@ -296,6 +301,9 @@ binds {
     Mod+J     { focus-window-down; }
     Mod+K     { focus-window-up; }
     Mod+L     { focus-column-right; }
+
+    Mod+MouseForward { focus-column-right; }
+    Mod+MouseBack    { focus-column-left; }
 
     // === Window Movement ===
     Mod+Shift+Left  { move-column-left; }
@@ -396,7 +404,7 @@ binds {
     Mod+R { switch-preset-column-width; }
     Mod+Shift+R { switch-preset-window-height; }
     Mod+Ctrl+R { reset-window-height; }
-    Mod+Ctrl+F { expand-column-to-available-width; }
+    // Mod+Ctrl+F { expand-column-to-available-width; }
     Mod+C { center-column; }
     Mod+Ctrl+C { center-visible-columns; }
 
@@ -415,9 +423,12 @@ binds {
     Print { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
+
     // === System Controls ===
     // Mod+Shift+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-    Mod+Shift+P { power-off-monitors; }
+    Mod+Shift+Escape { power-off-monitors; }
+    Mod+Ctrl+F { spawn "wl-freeze" "-a"; }
+    Mod+Pause { spawn "wl-freeze" "-a"; }
 }
 debug {
     honor-xdg-activation-with-invalid-serial
