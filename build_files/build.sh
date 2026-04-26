@@ -149,8 +149,10 @@ case "$1" in
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
             xwayland-satellite \
-            swayidle \
             xdotool
+
+        # Remove when quickshell hit version 3
+        pacman -S --noconfirm sway-audio-idle-inhibit-git swayidle
 
         # Install AUR packages
         install_aur dsearch-git
