@@ -76,7 +76,7 @@ case "$1" in
 
         pacman -S --noconfirm \
           nautilus-python \
-          nautilus-open-any-terminal \
+          ghostty-nautilus \
           nautilus-share \
           gnome-shell-extension-dash-to-dock \
           gnome-shell-extension-dash-to-panel \
@@ -132,7 +132,7 @@ case "$1" in
             nautilus \
             nautilus-share \
             nautilus-python \
-            nautilus-open-any-terminal \
+            ghostty-nautilus \
             gvfs \
             gvfs-mtp \
             gvfs-smb \
