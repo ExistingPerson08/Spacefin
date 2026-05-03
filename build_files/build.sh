@@ -239,6 +239,7 @@ pacman -S --noconfirm \
     cachyos-v3/gamescope \
     chaotic-aur/faugus-launcher \
     chaotic-aur/gamescope-session-git \
+    lib32-libdisplay-info
     #chaotic-aur/icoextract
 
 git clone https://github.com/OpenGamingCollective/gamescope-session-steam/

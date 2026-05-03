@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Shutdown steam if exists (otherwise it would not open)
+if pgrep -x steam > /dev/null; then
+    steam -shutdown
+    while pgrep -x steam > /dev/null; do
+        sleep 0.2
+    done
+fi
+
+RAW_RES=$(xrandr --current | grep '*' | head -n 1 | awk '{print $1}')
+
+WIDTH=$(echo "$RAW_RES" | cut -d 'x' -f1)
+HEIGHT=$(echo "$RAW_RES" | cut -d 'x' -f2)
+
+WIDTH=${WIDTH:-1920}
+HEIGHT=${HEIGHT:-1080}
+
+echo "Running gamescope with resolution: ${WIDTH}x${HEIGHT}"
+
+# Run gamescope
+# And check if mangohud is enabled
+
+MANGOHUD="$HOME/.config/steam-big-picture-mangohud.json"
+
+if [ "$(cat "$MANGOHUD")" = "true" ]; then
+    gamescope -e -f -W "$WIDTH" -H "$HEIGHT" --rt --steam --mangoapp -- steam -gamepadui -steamos3 -steamdeck
+else
+    gamescope -e -f -W "$WIDTH" -H "$HEIGHT" --rt --steam -- steam -gamepadui -steamos3 -steamdeck
+fi

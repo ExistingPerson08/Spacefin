@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Steam Big Picture
+Comment=Run Steam Big Picture (with gamescope)
+Exec=/usr/bin/steam-big-picture
+Icon=steam
+Terminal=false
+Type=Application
+Categories=Game;
+StartupWMClass=steam-big-picture
