@@ -93,6 +93,7 @@ case "$1" in
           gnome-remote-desktop \
           gnome-user-share \
           malcontent \
+          gnome-keyring \
           gvfs \
           gvfs-goa \
           gvfs-onedrive \
@@ -124,7 +125,7 @@ case "$1" in
         DE_NAME="niri"
 
         # Install and setup niri
-        pacman -S --noconfirm niri dms-shell dms-shell-niri mate-polkit wl-clipboard dgop matugen quickshell
+        pacman -S --noconfirm niri dms-shell-git mate-polkit wl-clipboard dgop matugen quickshell
 
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
@@ -141,8 +142,6 @@ case "$1" in
             khal \
             cava \
             qt6-multimedia \
-            decibels \
-            shotwell \
             wl-mirror \
             libnotify \
             gnome-keyring \
