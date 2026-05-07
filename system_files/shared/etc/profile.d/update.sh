@@ -1,2 +1,2 @@
 alias rollback="sudo bootc rollback"
-alias update="spacefin-cli run update"
+alias update="just -f /usr/share/spacefin/Justfile update"

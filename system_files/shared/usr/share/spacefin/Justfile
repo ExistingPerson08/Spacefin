@@ -1,0 +1,59 @@
+battery:
+    upower -i /org/freedesktop/UPower/devices/battery_BAT0
+
+cleanup:
+    sudo podman image prune -af
+    sudo podman volume prune -f
+    podman image prune -af
+    podman volume prune -f
+    flatpak uninstall --unused
+    brew autoremove
+    brew cleanup
+
+enable-cosmic-repo:
+    echo "Adding COSMIC repo"
+    flatpak remote-add --if-not-exists --user cosmic https://apt.pop-os.org/cosmic/cosmic.flatpakrepo
+    echo "Adding Flathub user (needed for COSMIC repo to work)"
+    flatpak --user remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+setup-modding:
+    echo ""
+    echo "Installing r2modman"
+    echo ""
+    TEMP_FILE="/tmp/r2modman.flatpak"
+    curl -L "https://github.com/ebkr/r2modmanPlus/releases/download/v3.2.15/r2modman-3.2.15-x86_64.flatpak" -o "$TEMP_FILE"
+    sudo flatpak install -y --system "$TEMP_FILE"
+    rm "$TEMP_FILE"
+    echo ""
+    echo "Installing Curseforge app"
+    echo ""
+    TEMP_FILE="/tmp/curseforge.AppImage"
+    flatpak install -y --system flathub it.mijorus.gearlever
+    curl -L "https://curseforge.overwolf.com/downloads/curseforge-latest-linux.AppImage" -o "$TEMP_FILE"
+    flatpak run it.mijorus.gearlever --integrate "$TEMP_FILE" -y --replace
+    echo ""
+    echo "Installing Proton tools"
+    echo ""
+    flatpak install -y --system flathub net.davidotek.pupgui2
+    flatpak install -y --system flathub com.github.Matoking.protontricks
+    echo ""
+    echo "Modding setup finished!"
+
+reset-niri-config:
+    rm -r ~/.config/niri/
+    rm ~/.config/ghostty/config
+    cp -r /etc/skel/.config/niri/ ~/.config/
+    cp /etc/skel/.config/ghostty/config ~/.config/ghostty/
+
+update:
+    /usr/share/spacefin/scripts/update.sh
+
+install-plex:
+    /usr/share/spacefin/scripts/plex-install.sh
+
+remove-plex:
+    /usr/share/spacefin/scripts/plex-remove.sh
+
+setup-blink:
+    # I will add more here
+    brew install trash-cli atuin

@@ -229,7 +229,6 @@ pacman -R --noconfirm nano
 
 # Build spacefin packages
 build_spacefin_package ExistingRules/main
-build_spacefin_package Spacefin-cli/main
 
 # Gaming stack: steam, vesktop & OGC gamescope-session
 pacman -S --noconfirm \
