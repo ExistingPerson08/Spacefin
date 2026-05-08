@@ -125,7 +125,7 @@ case "$1" in
         DE_NAME="niri"
 
         # Install and setup niri
-        pacman -S --noconfirm niri dms-shell-git mate-polkit wl-clipboard dgop matugen quickshell sddm
+        pacman -S --noconfirm niri dms-shell dms-shell-niri mate-polkit wl-clipboard dgop matugen quickshell
 
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
@@ -155,15 +155,14 @@ case "$1" in
 
         # Install AUR packages
         install_aur dsearch-git
-        # install_aur greetd-dms-greeter-git
+        install_aur greetd-dms-greeter-git
         install_aur wl-freeze-git
 
         # Setup dms greeter
-        # printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml
+        printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml
 
         systemctl enable --global dms dsearch
-        # systemctl enable greetd
-        systemctl enable sddm
+        systemctl enable greetd
         ;;
 esac
 
@@ -222,6 +221,8 @@ pacman -S --noconfirm \
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
 # UFW config
+ufw enable
+ufw default deny
 ufw allow CIFS
 
 # Remove nano (swaped with micro)

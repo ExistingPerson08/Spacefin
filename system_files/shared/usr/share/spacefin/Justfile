@@ -44,7 +44,7 @@ reset-niri-config:
     rm ~/.config/ghostty/config
     cp -r /etc/skel/.config/niri/ ~/.config/
     cp /etc/skel/.config/ghostty/config ~/.config/ghostty/
-
+    
 update:
     /usr/share/spacefin/scripts/update.sh
 
@@ -55,5 +55,4 @@ remove-plex:
     /usr/share/spacefin/scripts/plex-remove.sh
 
 setup-blink:
-    # I will add more here
-    brew install trash-cli atuin
+    brew install trash-cli atuin ranger scrcpy cowsay cmatrix commitizen
