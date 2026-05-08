@@ -221,7 +221,6 @@ pacman -S --noconfirm \
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
 # UFW config
-ufw enable
 ufw default deny
 ufw allow CIFS
 
