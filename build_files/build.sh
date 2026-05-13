@@ -125,7 +125,7 @@ case "$1" in
         DE_NAME="niri"
 
         # Install and setup niri
-        pacman -S --noconfirm niri dms-shell dms-shell-niri mate-polkit wl-clipboard dgop matugen quickshell
+        pacman -S --noconfirm niri dms-shell-git mate-polkit wl-clipboard dgop matugen quickshell
 
         # Install aditional packages and dependencies
         pacman -S --noconfirm \
@@ -149,9 +149,6 @@ case "$1" in
             xdg-desktop-portal-gnome \
             xwayland-satellite \
             xdotool
-
-        # Remove when quickshell hit version 3
-        pacman -S --noconfirm sway-audio-idle-inhibit-git swayidle
 
         # Install AUR packages
         install_aur dsearch-git
