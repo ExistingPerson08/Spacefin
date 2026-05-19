@@ -24,7 +24,7 @@ echo "Running gamescope with resolution: ${WIDTH}x${HEIGHT}"
 MANGOHUD="$HOME/.config/steam-big-picture-mangohud.json"
 
 if [ "$(cat "$MANGOHUD")" = "true" ]; then
-    gamescope -e -f -W "$WIDTH" -H "$HEIGHT" --rt --steam --mangoapp -- steam -gamepadui -steamos3 -steamdeck
+    gamescope -e -f -W "$WIDTH" -H "$HEIGHT" --rt --steam --mangoapp --force-grab-cursor --mouse-sensitivity 2 -- steam -gamepadui -steamos3 -steamdeck
 else
-    gamescope -e -f -W "$WIDTH" -H "$HEIGHT" --rt --steam -- steam -gamepadui -steamos3 -steamdeck
+    gamescope -e -f -W "$WIDTH" -H "$HEIGHT" --rt --steam --force-grab-cursor --mouse-sensitivity 2 -- steam -gamepadui -steamos3 -steamdeck
 fi

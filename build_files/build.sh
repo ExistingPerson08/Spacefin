@@ -36,7 +36,7 @@ case "$1" in
     "cosmic")
         DE_NAME="main"
         # Install Cosmic
-        sudo pacman -S --noconfirm \
+        pacman -S --noconfirm \
             cosmic-app-library \
             cosmic-applets \
             cosmic-bg \
@@ -148,6 +148,8 @@ case "$1" in
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
             xwayland-satellite \
+            pavucontrol \
+            blueman \
             xdotool
 
         # Install AUR packages
