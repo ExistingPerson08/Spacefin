@@ -41,7 +41,6 @@ case "$1" in
             cosmic-applets \
             cosmic-bg \
             cosmic-comp \
-            cosmic-files \
             cosmic-idle \
             cosmic-launcher \
             cosmic-notifications \
@@ -52,7 +51,6 @@ case "$1" in
             cosmic-session \
             cosmic-settings \
             cosmic-settings-daemon \
-            cosmic-text-editor \
             cosmic-wallpapers \
             cosmic-workspaces \
 
