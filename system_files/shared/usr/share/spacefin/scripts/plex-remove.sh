@@ -1,4 +1,6 @@
 #!/bin/bash
+# Remove plex server
+set -e
 
 CONTAINER_NAME="plex"
 CONFIG_DIR="$HOME/Plex/plexconfig"

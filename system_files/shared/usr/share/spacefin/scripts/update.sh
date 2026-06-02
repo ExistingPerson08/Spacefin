@@ -42,11 +42,11 @@ REBOOT_NEEDED=0
 # ---------------------------------------------------------------------
 
 # 1. Bootc Update
-run_update "bootc" "sudo LC_ALL=C.UTF-8 bootc upgrade"
+run_update "bootc" "LC_ALL=C.UTF-8 run0 bootc upgrade"
 
 # Check if we need to reboot
 if command -v bootc &> /dev/null; then
-    if sudo bootc status --json | grep -q '"staged"'; then
+    if run0 bootc status --json | grep -q '"staged"'; then
         REBOOT_NEEDED=1
     fi
 fi

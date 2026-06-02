@@ -4,7 +4,7 @@ set -ouex pipefail
 pacman -Syu --noconfirm
 
 # Prepare build enviroment
-pacman -Sy --needed --noconfirm base-devel git paru
+pacman -S --needed --noconfirm base-devel git paru
 useradd -m build 2>/dev/null
 echo "build ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 mkdir -p ./build_tmp
@@ -33,8 +33,8 @@ build_spacefin_package() {
 
 # Install de specific packages
 case "$1" in
-    "cosmic")
-        DE_NAME="main"
+    "desktop")
+        IMAGE_NAME="desktop"
         # Install Cosmic
         pacman -S --noconfirm \
             cosmic-app-library \
@@ -42,7 +42,6 @@ case "$1" in
             cosmic-bg \
             cosmic-comp \
             cosmic-files \
-            cosmic-greeter \
             cosmic-idle \
             cosmic-launcher \
             cosmic-notifications \
@@ -56,73 +55,6 @@ case "$1" in
             cosmic-text-editor \
             cosmic-wallpapers \
             cosmic-workspaces \
-            gnome-keyring \
-            xdg-user-dirs-gtk \
-            xdg-desktop-portal \
-            xdg-desktop-portal-gtk \
-            xdg-desktop-portal-cosmic \
-            gvfs \
-            gvfs-mtp \
-            gvfs-smb \
-            gvfs-wsdd
-
-        systemctl enable cosmic-greeter
-        ;;
-    "gnome")
-        DE_NAME="gnome"
-
-        # Setup GNOME
-        pacman -S --noconfirm gnome-shell gnome-session gdm nautilus gnome-control-center gnome-bluetooth-3.0
-
-        pacman -S --noconfirm \
-          nautilus-python \
-          ghostty-nautilus \
-          nautilus-share \
-          gnome-shell-extension-dash-to-dock \
-          gnome-shell-extension-dash-to-panel \
-          gnome-shell-extension-arc-menu \
-          gnome-shell-extension-appindicator \
-          gnome-shell-extension-gsconnect \
-          gnome-shell-extension-compiz-windows-effect-git \
-          gnome-shell-extension-blur-my-shell \
-          gnome-shell-extension-caffeine \
-          gnome-shell-extension-pop-shell-git \
-          ulauncher \
-          gnome-online-accounts \
-          gst-plugin-pipewire \
-          gnome-remote-desktop \
-          gnome-user-share \
-          malcontent \
-          gnome-keyring \
-          gvfs \
-          gvfs-goa \
-          gvfs-onedrive \
-          gvfs-mtp \
-          gvfs-smb \
-          gvfs-wsdd \
-          gnome-text-editor
-
-        install_aur gnome-shell-extension-just-perfection-desktop
-        install_aur gnome-shell-extension-gtk4-desktop-icons-ng
-
-        build_spacefin_package Spacefin-warehouse/main/stillcontrol
-
-        # Fix just perfection gschemas
-        ln -s /usr/share/gnome-shell/extensions/just-perfection-desktop@just-perfection/schemas/org.gnome.shell.extensions.just-perfection.gschema.xml /usr/share/glib-2.0/schemas/
-
-        # Fix dash to panel missing gschemas
-        DASH_TO_PANEL_SCHEMA="/usr/share/glib-2.0/schemas/org.gnome.shell.extensions.dash-to-panel.gschema.xml"
-        sed -i 's|<\/schema>|    <key type="as" name="available-monitors">\n      <default>[]<\/default>\n      <summary>Patch for still-control<\/summary>\n    <\/key>\n<\/schema>|' "$DASH_TO_PANEL_SCHEMA"
-
-        glib-compile-schemas /usr/share/glib-2.0/schemas/
-
-        # Remove build-in extension app
-        rm /usr/share/applications/org.gnome.Extensions.desktop
-
-        systemctl enable gdm
-        ;;
-    "niri")
-        DE_NAME="niri"
 
         # Install and setup niri
         pacman -S --noconfirm niri dms-shell-git mate-polkit wl-clipboard dgop matugen quickshell
@@ -138,7 +70,6 @@ case "$1" in
             gvfs-mtp \
             gvfs-smb \
             gvfs-wsdd \
-            papers \
             khal \
             cava \
             qt6-multimedia \
@@ -147,8 +78,16 @@ case "$1" in
             gnome-keyring \
             xdg-desktop-portal-gtk \
             xdg-desktop-portal-gnome \
+            xdg-desktop-portal-cosmic \
+            xdg-user-dirs-gtk \
             xwayland-satellite \
             pavucontrol \
+            bazaar-git \
+            quickemu \
+            ddcutil \
+            gnome-disk-utility \
+            flatpak-builder \
+            ghostty \
             blueman \
             xdotool
 
@@ -157,25 +96,28 @@ case "$1" in
         install_aur greetd-dms-greeter-git
         install_aur wl-freeze-git
 
+        # Ananicy Cpp
+        pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git
+        systemctl enable ananicy-cpp
+
         # Setup dms greeter
         printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml
 
         systemctl enable --global dms dsearch
         systemctl enable greetd
         ;;
-esac
+    "server")
+        IMAGE_NAME="server"
 
-# Install edition specific packages
-case "$2" in
-    "main")
-        # Skipping
-        IMAGE_NAME="$DE_NAME"
+        # Install snap
+        install_aur snapd
+        systemctl enable --now snapd.socket
+        systemctl enable --now snapd.apparmor.service
+        ln -s /var/lib/snapd/snap /snap
+
+        pacman -S --noconfirm sway foot rofi
         ;;
 esac
-
-# Ananicy Cpp
-pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git
-systemctl enable ananicy-cpp
 
 # Install additional packages
 pacman -S --noconfirm \
@@ -189,16 +131,9 @@ pacman -S --noconfirm \
     zsh \
     just \
     duperemove \
-    ddcutil \
-    gnome-disk-utility \
-    ghostty \
     jdk-openjdk \
-    bazaar-git \
     podman \
     podman-docker \
-    flatpak-builder \
-    quickemu \
-    tailscale \
     restic \
     rclone \
     python-pip \
@@ -223,9 +158,6 @@ pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 ufw default deny
 ufw allow CIFS
 
-# Remove nano (swaped with micro)
-pacman -R --noconfirm nano
-
 # Build spacefin packages
 build_spacefin_package ExistingRules/main
 
@@ -246,7 +178,7 @@ rm /usr/share/wayland-sessions/gamescope-session.desktop
 
 # Systemd services
 systemctl enable ufw
-systemctl disable tailscaled.service
+systemctl enable systemd-oomd
 systemctl disable waydroid-container.service
 
 # Setup zram
@@ -335,8 +267,9 @@ pacman -Scc --noconfirm
 find /etc/fonts/conf.d/ -xtype l -delete
 fc-cache -fv
 
-# For some reason, uninstalling base-devel also uninstalls sudo
-pacman -S --noconfirm sudo
+# Remove nano (swaped with micro) and sudo (swaped with run0)
+pacman -R --noconfirm nano sudo
+rm /usr/bin/su
 
 rm -rf \
     ./build_tmp \

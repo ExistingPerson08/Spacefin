@@ -7,9 +7,9 @@ Spacefin is my personal custom Arch bootc image with (not only) COSMIC desktop i
 
 ## Features
 
- - Cosmic or Gnome desktops or Niri wm
- - Automatic updates in background (WIP)
+ - Cosmic or Niri wm
  - Codecs and drivers out-of-the box
+ - Preconfigured Niri setup with [Dank material shell](https://danklinux.com/)
  - Ananicy-cpp with [CachyOS's](https://github.com/CachyOS/ananicy-rules) and [custom](https://github.com/ExistingPerson08/ExistingRules) rules
  - Java preinstalled and set for running .jar files
  - Homebrew, Docker and Distrobox preinstalled
@@ -19,50 +19,11 @@ Spacefin is my personal custom Arch bootc image with (not only) COSMIC desktop i
  - CachyOS's optized repos and linux-zen kernel
  - Gaming stack (Steam, gamescope, gamescope session...)
 
-## Desktops
+## Installation
 
-### Main (Cosmic)
-
- - Custom COSMIC theme
- - Spacefin-cli for changing themes
-
-If you want to install main eddition, rebase from Fedora Cosmic Atomic with:
+You can switch to Spacefin from Fedora Silverblue or Bluefin with:
 
 ```bash
-sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-cosmic:latest
+sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin:latest
 ```
 
-### GNOME
-
- - Preconfigured GNOME desktop
-    - GSConnect set up by default
-    - Layout customized for touchscreen
-    - Preinstalled useful extensions
-
-If you want to install GNOME eddition, rebase from Fedora Silverblue or Bluefin with:
-
-```bash
-sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-gnome:latest
-```
-
-### Niri
-
- - Preconfigured Niri setup
-    - [Dank material shell](https://danklinux.com/)
-    - All needed packages preinstalled
-    - Fingerprint unlock preconfigured
- - Easy to customize
-
-If you want to install Niri eddition, rebase from Fedora Silverblue or Bluefin with:
-
-```bash
-sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin-niri:latest
-```
-
-## Screenshots
-
-<div align="center">
-<img src="assets/Gnome.png" width="70%">
-<br><br>
-<img src="assets/niri.png" width="70%">
-</div>

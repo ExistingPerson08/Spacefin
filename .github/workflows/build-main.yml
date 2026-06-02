@@ -9,9 +9,7 @@ on:
         default: "cosmic"
         type: choice
         options:
-          - cosmic
-          - gnome
-          - niri
+          - default
       edition:
         description: "Edition"
         required: true
@@ -64,10 +62,10 @@ jobs:
           DESKTOP="${{ inputs.desktop }}"
           EDITION="${{ inputs.edition }}"
 
-          if [[ "$EDITION" == "main" ]]; then
-              FULL_NAME="${IMAGE_NAME}-${DESKTOP}"
+          if [[ "$EDITION" == "desktop" ]]; then
+              FULL_NAME="${IMAGE_NAME}
           else
-              FULL_NAME="${IMAGE_NAME}-${DESKTOP}-${EDITION}"
+              FULL_NAME="${IMAGE_NAME}-${EDITION}"
           fi
 
           echo "DESKTOP=$DESKTOP" >> $GITHUB_OUTPUT
@@ -129,7 +127,7 @@ jobs:
         id: rechunk
         run: |
           FULL_IMAGE_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
-        
+
           export CHUNKAH_CONFIG_STR="$(podman inspect "${FULL_IMAGE_NAME}")"
           podman run --rm \
             "--mount=type=image,src=${FULL_IMAGE_NAME},target=/chunkah" \
@@ -164,7 +162,7 @@ jobs:
           echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
 
           TAGS_FOR_SIGNING=""
-          
+
           for tag in $RAW_TAGS; do
             echo "Pushing tag: $tag"
             podman push "$IMAGE_REF" "$tag"
@@ -187,7 +185,7 @@ jobs:
         run: |
           RAW_URL="ghcr.io/${OWNER}/${FULL_NAME}@${DIGEST}"
           LOWER_URL=$(echo "$RAW_URL" | tr '[:upper:]' '[:lower:]')
-          
+
           echo "${{ secrets.GITHUB_TOKEN }}" | cosign login ghcr.io -u ${{ github.actor }} --password-stdin
           echo "Signing image: ghcr.io/${{ github.repository_owner }}/${FULL_NAME}@${DIGEST}"
           cosign sign -y --key env://COSIGN_PRIVATE_KEY "$LOWER_URL"

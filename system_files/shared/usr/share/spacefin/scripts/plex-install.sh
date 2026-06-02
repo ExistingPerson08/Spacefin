@@ -1,5 +1,6 @@
 #!/bin/bash
-# name: Setup Plex server
+# Setup Plex server
+set -e
 
 CONFIG_DIR="$HOME/Aplikace/Plex/plexconfig"
 TRANSCODE_DIR="$HOME/Aplikace/Plex/transcode"

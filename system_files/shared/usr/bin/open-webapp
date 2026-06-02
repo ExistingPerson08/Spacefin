@@ -1,0 +1,20 @@
+#!/bin/bash
+
+BROWSERS=(
+    "org.chromium.Chromium"
+    "io.github.ungoogled_software.ungoogled_chromium"
+    "com.vivaldi.Vivaldi"
+    "com.opera.Opera"
+    "com.opera.opera-gx"
+    "com.brave.Browser"
+    "com.microsoft.Edge"
+)
+
+for id in "${BROWSERS[@]}"; do
+    if flatpak info "$id" &>/dev/null; then
+        flatpak run "$id" --app="$1"
+        exit 0
+    fi
+done
+
+xdg-open "$1"
