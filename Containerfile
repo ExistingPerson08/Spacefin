@@ -24,7 +24,6 @@ RUN rm -f /.gitkeep
 
 # Enable custom services
 RUN systemctl --global enable bazaar.service
-RUN systemctl enable flatpak-preinstall.service
 RUN systemctl enable brew-setup.service
 RUN systemctl disable brew-upgrade.timer
 RUN systemctl disable brew-update.timer
