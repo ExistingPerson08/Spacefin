@@ -88,6 +88,7 @@ case "$1" in
             gnome-disk-utility \
             flatpak-builder \
             ghostty \
+            ufw \
             blueman \
             zed \
             xdotool
@@ -122,10 +123,10 @@ case "$1" in
         systemctl enable --now snapd.apparmor.service
         ln -s /var/lib/snapd/snap /snap
 
+        pacman -S --noconfirm sway foot rofi ufw
+
         # UFW config
         ufw default deny
-
-        pacman -S --noconfirm sway foot rofi
         ;;
 esac
 
@@ -136,7 +137,6 @@ pacman -S --noconfirm \
     adw-gtk-theme \
     xorg-xrdb \
     upower \
-    ufw \
     fish \
     zsh \
     just \
