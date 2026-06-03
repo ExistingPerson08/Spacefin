@@ -63,7 +63,7 @@ jobs:
           EDITION="${{ inputs.edition }}"
 
           if [[ "$EDITION" == "desktop" ]]; then
-              FULL_NAME="${IMAGE_NAME}
+              FULL_NAME="${IMAGE_NAME}"
           else
               FULL_NAME="${IMAGE_NAME}-${EDITION}"
           fi
