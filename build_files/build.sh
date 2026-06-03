@@ -54,6 +54,8 @@ case "$1" in
             cosmic-wallpapers \
             cosmic-workspaces \
 
+        pacman -Rdd --noconfirm cosmic-files
+
         # Install and setup niri
         pacman -S --noconfirm niri dms-shell-git mate-polkit wl-clipboard dgop matugen quickshell
 
@@ -87,6 +89,7 @@ case "$1" in
             flatpak-builder \
             ghostty \
             blueman \
+            zed \
             xdotool
 
         # Install AUR packages
@@ -101,8 +104,13 @@ case "$1" in
         # Setup dms greeter
         printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml
 
+        # UFW config
+        ufw default deny
+        ufw allow CIFS
+        ufw allow 9300
+
         systemctl enable --global dsearch dms
-        systemctl --user add-wants niri.service dms
+        systemctl --global add-wants niri.service dms
         systemctl enable greetd
         ;;
     "server")
@@ -113,6 +121,9 @@ case "$1" in
         systemctl enable --now snapd.socket
         systemctl enable --now snapd.apparmor.service
         ln -s /var/lib/snapd/snap /snap
+
+        # UFW config
+        ufw default deny
 
         pacman -S --noconfirm sway foot rofi
         ;;
@@ -152,10 +163,6 @@ pacman -S --noconfirm \
     borg
 
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
-
-# UFW config
-ufw default deny
-ufw allow CIFS
 
 # Build spacefin packages
 build_spacefin_package ExistingRules/main

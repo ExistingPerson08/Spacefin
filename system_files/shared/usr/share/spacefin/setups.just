@@ -31,7 +31,6 @@ setup-dev:
     brew tap ublue-os/tap
     brew install --cask vscodium-linux
     brew install lazygit uv
-    flatpak install --system --flathub dev.zed.Zed -y
     echo ""
     echo "Developer setup finished!"
 
