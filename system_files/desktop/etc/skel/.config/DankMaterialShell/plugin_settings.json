@@ -1,0 +1,53 @@
+{
+  "calculator": {
+    "enabled": true,
+    "trigger": "=",
+    "noTrigger": true
+  },
+  "commandRunner": {
+    "enabled": true,
+    "terminal": "ghostty",
+    "history": [
+      "bootctl",
+      "c44",
+      "c7",
+      "pls",
+      "gejmrovec",
+      "veskj",
+      "vejs",
+      "spori",
+      "zed ~/.config/gtk-4.0/gtk.css",
+      "nautilus",
+      "sudo bootc update",
+      "fastfetch",
+      "ujust changelogs",
+      "u"
+    ]
+  },
+  "gitmojiLauncher": {
+    "enabled": true,
+    "trigger": "em"
+  },
+  "niriWindows": {
+    "enabled": true,
+    "noTrigger": true,
+    "trigger": ""
+  },
+  "webSearch": {
+    "enabled": true,
+    "searchEngines": [],
+    "disabledEngines": []
+  },
+  "displayMirror": {
+    "enabled": true
+  },
+  "emojiLauncher": {
+    "enabled": true,
+    "trigger": "em",
+    "noTrigger": false,
+    "recentEmojis": "💾,💿"
+  },
+  "dankLauncherKeys": {
+    "enabled": true
+  }
+}
