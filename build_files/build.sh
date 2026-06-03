@@ -103,7 +103,8 @@ case "$1" in
         # Setup dms greeter
         printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml
 
-        systemctl enable --global dms dsearch
+        systemctl enable --global dsearch dms
+        systemctl --user add-wants niri.service dms
         systemctl enable greetd
         ;;
     "server")
@@ -171,10 +172,6 @@ pacman -S --noconfirm \
     chaotic-aur/gamescope-session-git \
     lib32-libdisplay-info
     #chaotic-aur/icoextract
-
-git clone https://github.com/OpenGamingCollective/gamescope-session-steam/
-cp -rv gamescope-session-steam/usr/* /usr/ && rm -rfv gamescope-session-steam/
-rm /usr/share/wayland-sessions/gamescope-session.desktop
 
 # Systemd services
 systemctl enable ufw

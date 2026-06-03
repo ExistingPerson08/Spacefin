@@ -1,10 +1,7 @@
 org.gnome.gitlab.somas.Apostrophe
 org.gnome.Decibels
-com.belmoussaoui.Authenticator
 com.adamcake.Bolt
-com.github.bjaraujo.Bombermaaan
 org.gnome.Boxes
-org.gnome.Builder
 org.gnome.Calculator
 org.gnome.Calendar
 org.gnome.Snapshot
@@ -15,7 +12,6 @@ net.codelogistics.clicker
 org.gnome.clocks
 org.gnome.Connections
 io.github.wartybix.Constrict
-org.gnome.Contacts
 me.iepure.devtoolbox
 org.gnome.baobab
 com.ranfdev.DistroShelf
@@ -25,7 +21,6 @@ org.gnome.FileRoller
 org.garudalinux.firedragon
 org.mozilla.firefox
 com.github.tchx84.Flatseal
-org.gnome.font-viewer
 com.github.neithern.g4music
 io.gdevelop.ide
 it.mijorus.gearlever
@@ -47,9 +42,7 @@ org.onlyoffice.desktopeditors
 io.github.nozwock.Packet
 org.nickvision.tubeconverter
 org.gnome.World.PikaBackup
-io.github.fabrialberio.pinapp
 com.github.PintaProject.Pinta
-de.schmidhuberj.tubefeeder
 com.orama_interactive.Pixelorama
 io.github.alainm23.planify
 tv.plex.PlexDesktop
