@@ -138,8 +138,8 @@ pacman -S --noconfirm \
     xorg-xrdb \
     upower \
     fish \
-    zsh \
     just \
+    eza \
     duperemove \
     jdk-openjdk \
     podman \
@@ -272,6 +272,7 @@ fc-cache -fv
 # Remove nano (swaped with micro) and sudo (swaped with run0)
 pacman -R --noconfirm nano sudo
 rm /usr/bin/su
+rm /usr/bin/ls
 
 rm -rf \
     ./build_tmp \

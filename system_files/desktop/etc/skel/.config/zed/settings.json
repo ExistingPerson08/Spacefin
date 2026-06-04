@@ -15,6 +15,10 @@
       "type": "registry",
     },
   },
+  "edit_predictions": {
+    "provider": "copilot",
+  },
+  "show_edit_predictions": false,
   "terminal": {
     "shell": {
       "with_arguments": {
@@ -25,6 +29,7 @@
     "dock": "bottom",
   },
   "cli_default_open_behavior": "new_window",
+  "restore_on_startup": "empty_tab",
   "project_panel": {
     "dock": "left",
   },

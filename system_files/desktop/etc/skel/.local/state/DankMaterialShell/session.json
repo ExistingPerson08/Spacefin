@@ -1,0 +1,41 @@
+{
+  "isLightMode": false,
+  "doNotDisturb": false,
+  "terminalOverride": "ghostty",
+  "wallpaperPath": "/usr/share/backgrounds/wow-deepholm2.jpg",
+  "perMonitorWallpaper": false,
+  "monitorWallpaperFillModes": {},
+  "wallpaperTransition": "fade",
+  "includedTransitions": [
+    "fade",
+    "wipe",
+    "disc",
+    "stripes",
+    "iris bloom",
+    "pixelate",
+    "portal"
+  ],
+  "wallpaperCyclingEnabled": false,
+  "nightModeEnabled": false,
+  "themeModeAutoEnabled": false,
+  "themeModeShareGammaSettings": false,
+  "dockLauncherPosition": 0,
+  "hiddenTrayIds": [
+    "mate-polkit",
+    "blueman::Bluetooth Disabled",
+    "blueman::Bluetooth Enabled"
+  ],
+  "showThirdPartyPlugins": true,
+  "pluginBrowserInstalledFirst": true,
+  "weatherHourlyDetailed": true,
+  "hiddenApps": [
+    "com.system76.CosmicSettings",
+    "com.system76.CosmicScreenshot"
+  ],
+  "searchAppActions": true,
+  "launcherLastMode": "all",
+  "launcherLastFileSearchType": "all",
+  "appDrawerLastMode": "apps",
+  "niriOverviewLastMode": "apps",
+  "configVersion": 3
+}

@@ -241,7 +241,7 @@ binds {
     Mod+Shift+S hotkey-overlay-title="Open Niri Config" { spawn-sh "xdg-open ~/.config/niri/config.kdl"; }
     Mod+Shift+D hotkey-overlay-title="Open Defaults Config" { spawn-sh "xdg-open ~/.config/mimeapps.list"; }
     Mod+K hotkey-overlay-title="Open Hotkey overlay" { spawn "dms" "ipc" "call" "keybinds" "toggle" "niri"; }
-    Mod+question hotkey-overlay-title="Open Spacefin Docs" { spawn-sh "xdg-open https://existingperson08.github.io/spacefin-docs/"; }
+    Mod+question hotkey-overlay-title="Open Spacefin Docs" { spawn-sh "open-webapp https://existingperson08.github.io/spacefin-docs/"; }
     Mod+comma hotkey-overlay-title="Open Spacefin Docs" { spawn-sh "open-webapp https://existingperson08.github.io/spacefin-docs/"; }
     Mod+Shift+K { show-hotkey-overlay; }
 
@@ -325,7 +325,7 @@ binds {
        spawn-sh "flatpak run org.gnome.Calculator";
     }
     XF86Mail hotkey-overlay-title="Open Mail" {
-       spawn-sh "xdg-open https://mail.proton.me";
+       spawn-sh "open-webapp https://mail.proton.me";
     }
 
     // === Window Management ===

@@ -1,0 +1,13 @@
+alias tree="eza --tree"
+alias ls="eza --icons --group-directories-first"
+alias la="eza --icons --group-directories-first -a"
+alias lsa="eza --icons --group-directories-first -a"
+alias lss="eza --icons -l --group-directories-first"
+alias lsg="eza --icons -l --git --group-directories-first"
+
+alias untar="tar -zxvf "
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."

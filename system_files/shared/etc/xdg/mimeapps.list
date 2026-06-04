@@ -12,8 +12,8 @@ application/yaml=dev.zed.Zed.desktop
 audio/mpeg=org.gnome.Decibels.desktop
 text/css=dev.zed.Zed.desktop
 text/html=org.gnome.Epiphany.desktop;app.zen_browser.zen.desktop;com.vivaldi.Vivaldi.desktop;org.garudalinux.firedragon.desktop;org.mozilla.firefox.desktop;org.chromium.Chromium.desktop;
-text/markdown=org.gnome.Builder.desktop;org.gnome.gitlab.somas.Apostrophe.desktop
-text/plain=dev.zed.Zed.desktop;org.gnome.TextEditor.desktop
+text/markdown=org.gnome.gitlab.somas.Apostrophe.desktop
+text/plain=dev.zed.Zed.desktop
 text/vnd.trolltech.linguist=dev.zed.Zed.desktop
 text/x-csrc=dev.zed.Zed.desktop
 text/x-python=dev.zed.Zed.desktop
@@ -26,6 +26,7 @@ application/vnd.flatpak=io.github.kolunmi.Bazaar.desktop;
 application/x-tiled-tsx=dev.zed.Zed.desktop;
 
 [Default Applications]
+text/plain=dev.zed.Zed.desktop
 application/java-archive=java-jar.desktop
 application/json=dev.zed.Zed.desktop
 application/ogg=com.system76.CosmicPlayer.desktop

@@ -1,0 +1,6 @@
+(
+    workspace_mode: OutputBound,
+    workspace_layout: Horizontal,
+    action_on_typing: OpenLauncher,
+    workspace_wraparound: true,
+)

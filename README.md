@@ -14,7 +14,7 @@ Spacefin is my personal custom Arch bootc image with (not only) COSMIC desktop i
  - Java preinstalled and set for running .jar files
  - Homebrew, Docker and Distrobox preinstalled
  - Restic and rclone out-of-the box
- - All shells (fish, bash, zsh) preinstalled
+ - Fish preinstalled and set
  - Gnome Boxes and quickemu for virtualization
  - CachyOS's optized repos and linux-zen kernel
  - Gaming stack (Steam, gamescope, gamescope session...)
@@ -26,4 +26,3 @@ You can switch to Spacefin from Fedora Silverblue or Bluefin with:
 ```bash
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin:latest
 ```
-
