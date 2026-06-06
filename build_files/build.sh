@@ -273,7 +273,7 @@ fc-cache -fv
 
 # Remove nano (swaped with micro) and sudo (swaped with run0) and wpa_supplicant (swapped with iwd)
 pacman -R --noconfirm nano sudo
-pacman -Rdd wpa_supplicant
+pacman -Rdd --noconfirm wpa_supplicant
 rm /usr/bin/su
 
 rm -rf \
