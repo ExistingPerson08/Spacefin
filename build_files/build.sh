@@ -139,6 +139,7 @@ pacman -S --noconfirm \
     upower \
     fish \
     just \
+    iwd \
     eza \
     duperemove \
     jdk-openjdk \
@@ -182,6 +183,7 @@ pacman -S --noconfirm \
 systemctl enable ufw
 systemctl enable systemd-oomd
 systemctl disable waydroid-container.service
+systemctl enable iwd
 
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
@@ -269,8 +271,9 @@ pacman -Scc --noconfirm
 find /etc/fonts/conf.d/ -xtype l -delete
 fc-cache -fv
 
-# Remove nano (swaped with micro) and sudo (swaped with run0)
+# Remove nano (swaped with micro) and sudo (swaped with run0) and wpa_supplicant (swapped with iwd)
 pacman -R --noconfirm nano sudo
+pacman -Rdd wpa_supplicant
 rm /usr/bin/su
 
 rm -rf \
