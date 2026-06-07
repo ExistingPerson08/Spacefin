@@ -1,9 +1,12 @@
+set quiet := true
 import '/usr/share/spacefin/setups.just'
 import '/usr/share/spacefin/utilities.just'
 
+[group("system")]
 battery:
     upower -i /org/freedesktop/UPower/devices/battery_BAT0
 
+[group("system")]
 cleanup:
     run0 podman image prune -af
     run0 podman volume prune -f
@@ -13,12 +16,14 @@ cleanup:
     brew autoremove
     brew cleanup
 
+[group("system")]
 reset-niri-config:
     rm -r ~/.config/niri/
     rm ~/.config/ghostty/config
     cp -r /etc/skel/.config/niri/ ~/.config/
     cp /etc/skel/.config/ghostty/config ~/.config/ghostty/
 
+[group("system")]
 bios:
     #!/usr/bin/bash
     if [ -d /sys/firmware/efi ]; then
@@ -30,11 +35,14 @@ bios:
         echo "Rebooting to legacy BIOS from OS is not supported."
     fi
 
+[group("system")]
 logs-this-boot:
     run0 journalctl -b 0
 
+[group("system")]
 logs-last-boot:
     run0 journalctl -b -1
 
+[group("system")]
 update:
     /usr/share/spacefin/scripts/update.sh

@@ -1,3 +1,4 @@
+[group("utilities")]
 toggle-mac-randomization:
     #! /bin/run0 /bin/bash
     RAND_MAC_FILE="/etc/NetworkManager/conf.d/rand_mac.conf"
@@ -34,8 +35,10 @@ toggle-mac-randomization:
         systemctl restart NetworkManager
     fi
 
+[group("utilities")]
 create-webapp:
     /usr/share/spacefin/scripts/install-webapp.sh
 
+[group("utilities")]
 remove-webapp:
     /usr/share/spacefin/scripts/remove-webapp.sh

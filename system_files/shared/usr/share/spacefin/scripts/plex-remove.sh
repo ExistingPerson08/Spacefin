@@ -22,4 +22,4 @@ podman rm -f $CONTAINER_NAME 2>/dev/null || true
 # Odstranění adresářů s daty (dejte pozor, smaže data)
 rm -rf "$CONFIG_DIR" "$TRANSCODE_DIR" "$MOVIES_DIR" "$MUSIC_DIR" "$TV_DIR"
 
-echo "Plex Media Server byl odinstalován a všechna data byla odstraněna."
+echo "Plex Media Server was uninstalled."
