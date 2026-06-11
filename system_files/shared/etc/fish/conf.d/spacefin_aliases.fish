@@ -5,11 +5,16 @@ function backup --argument filename
 end
 
 alias open 'xdg-open &>/dev/null'
-alias neofetch fastfetch
 alias nano micro
 alias sudo run0
 alias spacefin-cli 'just -f /usr/share/spacefin/Justfile'
 alias zed zeditor
+
+alias neofetch fastfetch
+alias f-paleofetch 'fastfetch -c /usr/share/fastfetch/presets/paleofetch.jsonc'
+alias f-neofetch 'fastfetch -c /usr/share/fastfetch/presets/neofetch.jsonc'
+alias f-ci 'fastfetch -c /usr/share/fastfetch/presets/ci.jsonc'
+alias f-all 'fastfetch -c /usr/share/fastfetch/presets/all.jsonc'
 
 alias tree 'eza --tree'
 alias ls 'eza --icons --group-directories-first'

@@ -1,0 +1,44 @@
+{
+  "policies": {
+    "Preferences": {
+      "browser.contentblocking.category": {
+        "Value": "strict",
+        "Status": "default"
+      },
+      "browser.ctrlTab.sortByRecentlyUsed": {
+        "Value": true,
+        "Status": "default"
+      },
+      "browser.link.open_newwindow.restriction": {
+        "Value": 0,
+        "Status": "default"
+      },
+      "general.autoScroll": {
+        "Value": true,
+        "Status": "default"
+      }
+    },
+    "Extensions": {
+      "Install": [
+        "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi"
+      ]
+    },
+    "Bookmarks": [
+      {
+        "Title": "DuckDuckGo",
+        "URL": "https://duckduckgo.com",
+        "Placement": "toolbar"
+      },
+      {
+        "Title": "Spacefin Github",
+        "URL": "https://github.com/ExistingPerson08/Spacefin",
+        "Placement": "toolbar"
+      },
+      {
+        "Title": "Spacefin Documentation",
+        "URL": "https://existingperson08.github.io/spacefin-docs/",
+        "Placement": "toolbar"
+      }
+    ]
+  }
+}

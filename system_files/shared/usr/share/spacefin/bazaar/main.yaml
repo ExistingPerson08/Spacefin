@@ -5,3 +5,4 @@ curated-config-paths:
 override-eol-markings:
   - com.obsproject.Studio
   - net.lutris.Lutris
+  - com.prusa3d.PrusaSlicer

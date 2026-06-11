@@ -184,6 +184,7 @@ systemctl enable ufw
 systemctl enable systemd-oomd
 systemctl disable waydroid-container.service
 systemctl enable iwd
+systemctl enable NetworkManager-wait-online.service
 
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
@@ -216,7 +217,7 @@ echo "spacefin" | tee "/etc/hostname"
 sed -i -f - /usr/lib/os-release <<EOF
 s|^NAME=.*|NAME=\"Spacefin\"|
 s|^PRETTY_NAME=.*|PRETTY_NAME=\"Spacefin\"|
-s|^VERSION_CODENAME=.*|VERSION_CODENAME=\"Gandalf\"|
+s|^VERSION_CODENAME=.*|VERSION_CODENAME=\"The Dark One\"|
 s|^VARIANT_ID=.*|VARIANT_ID=""|
 s|^HOME_URL=.*|HOME_URL=\"${HOME_URL}\"|
 s|^BUG_REPORT_URL=.*|BUG_REPORT_URL=\"${HOME_URL}/issues\"|
@@ -232,28 +233,6 @@ s|^DEFAULT_HOSTNAME=.*|DEFAULT_HOSTNAME="spacefin"|
 EOF
 
 ln -sf /usr/lib/os-release /etc/os-release
-
-# Patch bootc to not need sudo for updating
-cat << 'EOF' > /etc/profile.d/bootc.sh
-if [ "$EUID" -ne 0 ]; then
-    bootc() {
-        # Check if the command is already running with sudo
-        if [ "$EUID" -eq 0 ]; then
-            /usr/bin/bootc "$@"
-        else
-          if [ "$1" = "update" ] || [ "$1" = "upgrade" ] || [ "$1" = "status" ]; then
-            sudo /usr/bin/bootc "$@"
-          else
-            /usr/bin/bootc "$@"
-          fi
-        fi
-    }
-fi
-EOF
-
-cat << 'EOF' > /etc/sudoers.d/001-bootc
-%wheel ALL=(ALL) NOPASSWD: /usr/bin/bootc update, /usr/bin/bootc upgrade, /usr/bin/bootc status, /usr/bin/bootc status --booted
-EOF
 
 # Workaround to make nix and snaps work
 # They are not installed by default

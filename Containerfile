@@ -27,6 +27,7 @@ RUN systemctl --global enable bazaar.service
 RUN systemctl enable brew-setup.service
 RUN systemctl disable brew-upgrade.timer
 RUN systemctl disable brew-update.timer
+RUN systemctl enable first-run.service
 
 LABEL containers.bootc 1
 RUN bootc container lint

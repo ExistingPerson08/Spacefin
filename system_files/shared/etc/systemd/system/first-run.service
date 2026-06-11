@@ -1,0 +1,16 @@
+[Unit]
+Description=First run settup
+After=network-online.target
+Wants=network-online.target
+
+Before=display-manager.service gdm.service lightdm.service sddm.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/first-run.sh
+RemainAfterExit=yes
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
