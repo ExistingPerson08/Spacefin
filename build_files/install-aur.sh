@@ -11,7 +11,7 @@ _url="https://raw.githubusercontent.com/AvengeMedia/danksearch/v0.3.1"
 curl -sL "$_url/dsearch.service" -o /usr/lib/systemd/user/dsearch.service
 curl -sL "$_url/LICENSE" -o /usr/share/licenses/dsearch-bin/LICENSE
 
-chmod 644 /usr/lib/systemd/user/dsearch.service /usr/share/licenses/dsearch-bin/LICENSE /usr/share/doc/dsearch-bin/README.md
+chmod 644 /usr/lib/systemd/user/dsearch.service /usr/share/licenses/dsearch-bin/LICENSE
 
 # DMS-greeter
 tmp_dir=$(mktemp -d)
