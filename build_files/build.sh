@@ -90,7 +90,7 @@ case "$1" in
             xdotool
 
         # Install AUR packages
-        /ctx/build_files/install-aur.sh
+        /ctx/install-aur.sh
 
         # Ananicy Cpp
         pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git
