@@ -26,3 +26,5 @@ You can switch to Spacefin from Fedora Silverblue or Bluefin with:
 ```bash
 sudo bootc switch --enforce-container-sigpolicy ghcr.io/existingperson08/spacefin:latest
 ```
+
+After reboot, system flatpaks will be automaticly installed and your wifi passwords will be converted to iwd so please be patient and backup passwords.

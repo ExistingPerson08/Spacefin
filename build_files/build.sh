@@ -13,10 +13,6 @@ chown build:build ./build_tmp
 # Speed up downloads
 sed -i 's/^#ParallelDownloads.*/ParallelDownloads = 10/' /etc/pacman.conf
 
-install_aur() {
-    sudo -u build paru -S --noconfirm "$1"
-}
-
 build_spacefin_package() {
     cd ./build_tmp
 
@@ -94,16 +90,11 @@ case "$1" in
             xdotool
 
         # Install AUR packages
-        install_aur dsearch-git
-        install_aur greetd-dms-greeter-git
-        install_aur wl-freeze-git
+        /ctx/build_files/install-aur.sh
 
         # Ananicy Cpp
         pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git
         systemctl enable ananicy-cpp
-
-        # Setup dms greeter
-        printf '[terminal]\nvt = 1\n\n[default_session]\nuser = "greeter"\ncommand = "/usr/bin/dms-greeter --command niri"\n' | sudo tee /etc/greetd/config.toml
 
         # UFW config
         ufw default deny
@@ -118,10 +109,10 @@ case "$1" in
         IMAGE_NAME="server"
 
         # Install snap
-        install_aur snapd
-        systemctl enable --now snapd.socket
-        systemctl enable --now snapd.apparmor.service
-        ln -s /var/lib/snapd/snap /snap
+        # install_aur snapd
+        # systemctl enable --now snapd.socket
+        # systemctl enable --now snapd.apparmor.service
+        # ln -s /var/lib/snapd/snap /snap
 
         pacman -S --noconfirm sway foot rofi ufw
 

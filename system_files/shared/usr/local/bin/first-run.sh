@@ -1,6 +1,28 @@
+#!/bin/bash
+
+# Convert wpa_supplicant to iwd
+for file in /etc/NetworkManager/system-connections/*.nmconnection; do
+    [ -e "$file" ] || continue
+
+    ssid=$(awk -F= '/^\[wifi\]/{f=1} /^\[/{if($0!="[wifi]")f=0} f&&/^ssid=/{print $2}' "$file" | tr -d '"'\''')
+    psk=$(awk -F= '/^\[wifi-security\]/{f=1} /^\[/{if($0!="[wifi-security]")f=0} f&&/^psk=/{print $2}' "$file")
+
+    [ -z "$ssid" ] && ssid=$(awk -F= '/^\[connection\]/{f=1} /^\[/{if($0!="[connection]")f=0} f&&/^id=/{print $2}' "$file" | tr -d '"'\''')
+
+    if [ -n "$ssid" ] && [ -n "$psk" ]; then
+        iwd_file="/var/lib/iwd/$ssid.psk"
+        printf "[Security]\nPassphrase=%s\n" "$psk" > "$iwd_file"
+        chmod 600 "$iwd_file"
+    fi
+done
+
+systemctl restart iwd
+
+# Install flatpaks
 flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 xargs -a /usr/share/spacefin/flatpaks.list flatpak install --system -y
 
+# Install browser policies
 mkdir -p "/var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/x86_64/stable/policies"
 cp /usr/share/spacefin/browser/policies.json "/var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/x86_64/stable/policies/"
 
