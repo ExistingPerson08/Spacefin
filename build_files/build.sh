@@ -175,7 +175,8 @@ systemctl enable ufw
 systemctl enable systemd-oomd
 systemctl disable waydroid-container.service
 systemctl enable iwd
-systemctl enable NetworkManager-wait-online.service
+systemctl disable NetworkManager-wait-online.service
+systemctl disable systemd-networkd.service
 
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf

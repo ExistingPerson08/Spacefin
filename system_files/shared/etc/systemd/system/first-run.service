@@ -1,7 +1,7 @@
 [Unit]
 Description=First run settup
-After=network-online.target
-Wants=network-online.target
+After=NetworkManager.service
+Wants=NetworkManager.service
 
 Before=display-manager.service gdm.service lightdm.service sddm.service
 
