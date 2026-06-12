@@ -1,5 +1,20 @@
 #!/bin/bash
 
+FIRSTRUN="/etc/first-run"
+
+if [ -f "$FIRSTRUN" ]; then
+    exit 0
+fi
+
+# Wait for network
+echo "Waiting for network connection..." > /dev/tty1
+
+until ping -c 1 8.8.8.8 &>/dev/null; do
+    sleep 1
+done
+
+echo "Runing first-run setup..." > /dev/tty1
+
 # Convert wpa_supplicant to iwd
 for file in /etc/NetworkManager/system-connections/*.nmconnection; do
     [ -e "$file" ] || continue
@@ -28,3 +43,5 @@ cp /usr/share/spacefin/browser/policies.json "/var/lib/flatpak/extension/org.moz
 
 mkdir -p "/var/lib/flatpak/extension/app.zen_browser.zen.systemconfig/x86_64/stable/policies"
 cp /usr/share/spacefin/browser/policies.json "/var/lib/flatpak/extension/app.zen_browser.zen.systemconfig/x86_64/stable/policies/"
+
+touch "$FIRSTRUN"
