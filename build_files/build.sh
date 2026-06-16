@@ -66,7 +66,6 @@ case "$1" in
             gvfs-mtp \
             gvfs-smb \
             gvfs-wsdd \
-            khal \
             cava \
             qt6-multimedia \
             wl-mirror \
