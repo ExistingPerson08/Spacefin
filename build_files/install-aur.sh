@@ -43,7 +43,7 @@ TMP_DIR=$(mktemp -d)
 cd "$TMP_DIR"
 
 curl -L -O "${URL_REL}/dankcalendar-shell-${VERSION}.tar.gz"
-curl -L -O "${URL_REL}/dankcalendar-completions-${VERSION}.tar.gz"
+curl -L -O "${URL_REL}/dcal-completions-${VERSION}.tar.gz"
 curl -L -o "dcal-linux.gz" "${URL_REL}/dcal-linux-amd64.gz"
 curl -L -O "${URL_RAW}/LICENSE"
 curl -L -O "${URL_RAW}/README.md"

@@ -23,7 +23,8 @@
   "hiddenTrayIds": [
     "mate-polkit",
     "blueman::Bluetooth Disabled",
-    "blueman::Bluetooth Enabled"
+    "blueman::Bluetooth Enabled",
+    "dank-calendar::Dank Calendar"
   ],
   "showThirdPartyPlugins": true,
   "pluginBrowserInstalledFirst": true,
