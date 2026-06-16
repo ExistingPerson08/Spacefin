@@ -52,7 +52,7 @@ curl -L -o "dcal.service" "${URL_RAW}/assets/systemd/dcal.service"
 
 gunzip "dcal-linux.gz"
 tar -xzf "dankcalendar-shell-${VERSION}.tar.gz"
-tar -xzf "dankcalendar-completions-${VERSION}.tar.gz"
+tar -xzf "dcal-completions-${VERSION}.tar.gz"
 
 install -Dm755 "dcal-linux" "/usr/bin/dcal"
 install -Dm644 "dcal"  "/usr/share/bash-completion/completions/dcal"
