@@ -65,6 +65,7 @@ install -Dm644 "dankcal/assets/dankcalendar.svg" "/usr/share/icons/hicolor/scala
 install -Dm644 "${DESKTOP_ID}.desktop" "/usr/share/applications/${DESKTOP_ID}.desktop"
 install -Dm644 "dcal.service" "/usr/lib/systemd/user/dcal.service"
 install -Dm644 "LICENSE" "/usr/share/licenses/dankcalendar/LICENSE"
+cd ..
 rm -rf "$TMP_DIR"
 
 # -- WL-FREEZE --
