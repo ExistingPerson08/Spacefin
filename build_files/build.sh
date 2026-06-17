@@ -151,6 +151,7 @@ pacman -S --noconfirm \
     openssh \
     openvpn \
     networkmanager-openvpn \
+    uutils-coreutils-git \
     borg
 
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
