@@ -73,7 +73,7 @@ jobs:
           echo "FULL_NAME=$FULL_NAME" >> $GITHUB_OUTPUT
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: true
 
