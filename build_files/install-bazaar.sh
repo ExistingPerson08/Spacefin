@@ -2,6 +2,8 @@ _pkgname="bazaar"
 REPO_URL="https://github.com/kolunmi/bazaar.git"
 BUILD_DIR="build"
 
+pacman -S --noconfirm meson
+
 git clone "$REPO_URL" bazaar
 cd bazaar
 PKGVER=$(git describe --long --tags --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g')
@@ -15,3 +17,4 @@ meson setup "bazaar" "$BUILD_DIR" \
 meson compile -C "$BUILD_DIR"
 meson install -C "$BUILD_DIR"
 rm "$BUILD_DIR"
+pacman -R --noconfirm meson
