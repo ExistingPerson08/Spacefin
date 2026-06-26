@@ -31,7 +31,7 @@ setup-modding:
 
 [group("setups")]
 setup-dev:
-    brew tap ublue-os/tap
+    brew tap --trust ublue-os/tap
     brew install --cask vscodium-linux
     brew install lazygit uv gh
     echo ""

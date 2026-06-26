@@ -6,7 +6,6 @@ end
 
 alias open 'xdg-open &>/dev/null'
 alias nano micro
-alias sudo run0
 alias spacefin-cli 'just -f /usr/share/spacefin/Justfile'
 alias zed zeditor
 

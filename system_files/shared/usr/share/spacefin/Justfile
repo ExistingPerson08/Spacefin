@@ -36,6 +36,56 @@ bios:
     fi
 
 [group("system")]
+check-local-overrides:
+    #!/usr/bin/bash
+    RESET="\x1b[0m"
+    if [ "${NO_COLOR}" == 1 ]; then
+        BLUE_COLOR=""
+        GREEN_COLOR=""
+        YELLOW_COLOR=""
+    else
+        BLUE_COLOR="${BLUE_COLOR:-\x1b[38;5;117m}"
+        GREEN_COLOR="${GREEN_COLOR:-\x1b[38;5;85m}"
+        YELLOW_COLOR="${YELLOW_COLOR:-\x1b[93m}"
+    fi
+
+    diff -qr \
+      --suppress-common-lines \
+      --color="always" \
+      --exclude "passwd*" \
+      --exclude "group*" \
+      --exclude="subgid*" \
+      --exclude="subuid*" \
+      --exclude="machine-id" \
+      --exclude="adjtime" \
+      --exclude="fstab" \
+      --exclude="system-connections" \
+      --exclude="shadow*" \
+      --exclude="gshadow*" \
+      --exclude="ssh_host*" \
+      --exclude="cmdline" \
+      --exclude="crypttab" \
+      --exclude="hostname" \
+      --exclude="localtime" \
+      --exclude="locale*" \
+      --exclude="*lock" \
+      --exclude=".updated" \
+      --exclude="*LOCK" \
+      --exclude="vconsole*" \
+      --exclude="00-keyboard.conf" \
+      --exclude="grub" \
+      --exclude="system.control*" \
+      --exclude="cdi" \
+      --exclude="default.target" \
+      /usr/etc /etc 2>/dev/null | sed \
+          -e '/Binary\ files\ /d ; /Common subdirectories/d' \
+          -e "/Files/ s/^/${BLUE_COLOR}&/g" \
+          -e "/Files/ s/\$/&${RESET}/g" \
+          -e "/Only in/ s/^/${GREEN_COLOR}&/g" \
+          -e "/Only in/ s/\$/&${RESET}/g" \
+          -e "s/\:.*/${RESET}${YELLOW_COLOR}&${RESET}/g"
+
+[group("system")]
 logs-this-boot:
     run0 journalctl -b 0
 
@@ -46,3 +96,24 @@ logs-last-boot:
 [group("system")]
 update:
     /usr/share/spacefin/scripts/update.sh
+
+[group('DOOM')]
+powerwash:
+    #!/usr/bin/bash
+    if command -v bctl &>/dev/null; then
+        exec bctl powerwash
+    fi
+
+    echo "Warning: This is an experimental feature that will reset this device to its factory state."
+    read -p "Do you want to continue? (y/N): " CONFIRM
+    if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+        echo "Powerwash cancelled."
+        exit 0
+    fi
+    read -p "Are you sure? (y/N): " CONFIRM2
+    if [[ ! "$CONFIRM2" =~ ^[Yy]$ ]]; then
+        echo "Powerwash cancelled."
+        exit 0
+    fi
+
+    sudo bootc install reset --experimental

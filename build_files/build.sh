@@ -77,7 +77,6 @@ case "$1" in
             xdg-user-dirs-gtk \
             xwayland-satellite \
             pavucontrol \
-            bazaar-git \
             quickemu \
             ddcutil \
             gnome-disk-utility \
@@ -90,6 +89,7 @@ case "$1" in
 
         # Install AUR packages
         /ctx/install-aur.sh
+        /ctx/install-bazaar.sh
 
         # Ananicy Cpp
         pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git
@@ -180,9 +180,6 @@ systemctl disable systemd-networkd.service
 
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
-
-# Tell Bazaar where to look for config (in the worst posible way)
-sed -i 's|Exec=bazaar %U|Exec=bazaar --extra-blocklist /usr/share/spacefin/bazaar/blocklist.txt --extra-curated-config /usr/share/spacefin/bazaar/curated.yaml %U|' /usr/share/applications/io.github.kolunmi.Bazaar.desktop
 
 # Write image info
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"

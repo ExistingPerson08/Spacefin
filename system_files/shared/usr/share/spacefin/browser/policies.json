@@ -1,5 +1,64 @@
 {
   "policies": {
+    "DisableTelemetry": true,
+    "OfferToSaveLogins": false,
+    "PromptForDownloadLocation": true,
+    "PasswordManagerEnabled": false,
+    "SearchEngines": {
+      "Default": "DuckDuckGo",
+      "PreventInstalls": false,
+      "Add": [
+        {
+          "Name": "Github",
+          "URLTemplate": "https://github.com/search?q={searchTerms}&type=repositories",
+          "Method": "GET",
+          "IconURL": "https://github.com/favicon.ico",
+          "Alias": "@gh"
+        },
+        {
+          "Name": "Github Users",
+          "URLTemplate": "https://github.com/search?q={searchTerms}&type=users",
+          "Method": "GET",
+          "IconURL": "https://github.com/favicon.ico",
+          "Alias": "@ghu"
+        },
+        {
+          "Name": "Youtube",
+          "URLTemplate": "https://www.youtube.com/results?search_query={searchTerms}",
+          "Method": "GET",
+          "IconURL": "https://www.youtube.com/favicon.ico",
+          "Alias": "@yt"
+        },
+        {
+          "Name": "Runescape Wiki",
+          "URLTemplate": "https://runescape.wiki/?search={searchTerms}",
+          "Method": "GET",
+          "IconURL": "https://runescape.wiki/favicon.ico",
+          "Alias": "@rs"
+        },
+        {
+          "Name": "Curseforge",
+          "URLTemplate": "https://www.curseforge.com/minecraft/search?sortBy=relevancy&search={searchTerms}",
+          "Method": "GET",
+          "IconURL": "https://www.curseforge.com/favicon.ico",
+          "Alias": "@curseforge"
+        },
+        {
+          "Name": "Minecraft Wiki",
+          "URLTemplate": "https://minecraft.wiki/?search={searchTerms}",
+          "Method": "GET",
+          "IconURL": "https://minecraft.wiki/favicon.ico",
+          "Alias": "@mc"
+        },
+        {
+          "Name": "Reddit",
+          "URLTemplate": "https://www.reddit.com/search/?q={searchTerms}",
+          "Method": "GET",
+          "IconURL": "https://reddit.com/favicon.ico",
+          "Alias": "@reddit"
+        }
+      ]
+    },
     "Preferences": {
       "browser.contentblocking.category": {
         "Value": "strict",

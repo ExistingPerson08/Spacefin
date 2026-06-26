@@ -1,0 +1,135 @@
+#!/bin/bash
+# Simple alias sudo -> run0
+
+RUN0_PATH="/usr/bin/run0"
+
+RUN0_ARGS=()
+SETENV_ARGS=()
+VALIDATE=false
+
+while [[ $# -gt 0 ]]; do
+    key="$1"
+
+    if [[ "$key" == "--" ]]; then
+        shift
+        break
+    fi
+
+    if [[ ! "$key" =~ ^- ]] || [[ "$key" == "-" ]]; then
+        break
+    fi
+
+    case "$key" in
+        -h|--help)
+            RUN0_ARGS+=("--help")
+            shift
+            ;;
+        -V|--version)
+            RUN0_ARGS+=("--version")
+            shift
+            ;;
+        -u|--user)
+            RUN0_ARGS+=("-u" "$2")
+            shift 2
+            ;;
+        --user=*)
+            RUN0_ARGS+=("-u" "${key#*=}")
+            shift
+            ;;
+        -g|--group)
+            group_val="$2"
+            RUN0_ARGS+=("-g" "${group_val#\#}")
+            shift 2
+            ;;
+        --group=*)
+            group_val="${key#*=}"
+            RUN0_ARGS+=("-g" "${group_val#\#}")
+            shift
+            ;;
+        -D|--chdir)
+            RUN0_ARGS+=("-D" "$2")
+            shift 2
+            ;;
+        --chdir=*)
+            RUN0_ARGS+=("-D" "${key#*=}")
+            shift
+            ;;
+        -n|--non-interactive)
+            RUN0_ARGS+=("--no-ask-password")
+            shift
+            ;;
+        -i|--login)
+            RUN0_ARGS+=("-i")
+            shift
+            ;;
+        -s|--shell)
+            RUN0_ARGS+=("--via-shell")
+            shift
+            ;;
+        -C|--close-from)
+            RUN0_ARGS+=("--property" "LimitNOFILE=$2")
+            shift 2
+            ;;
+        --close-from=*)
+            RUN0_ARGS+=("--property" "LimitNOFILE=${key#*=}")
+            shift
+            ;;
+        -v|--validate)
+            VALIDATE=true
+            shift
+            ;;
+        -E|--preserve-env)
+            for var in $(env | cut -d= -f1); do
+                if [[ "$var" != "HOME" ]]; then
+                    SETENV_ARGS+=("--setenv=$var")
+                fi
+            done
+            shift
+            ;;
+        --preserve-env=*)
+            IFS=',' read -ra ADDR <<< "${key#*=}"
+            for var in "${ADDR[@]}"; do
+                SETENV_ARGS+=("--setenv=$var")
+            done
+            shift
+            ;;
+        -e|--edit|-l|--list|-R|--chroot|-S|--stdin|-U|--other-user)
+            echo "run0-sudo alias: run0 does't support this option" >&2
+            exit 2
+            ;;
+        *)
+            if [[ "$key" =~ ^-[AbKkP]$ ]]; then
+                shift
+            else
+                echo "run0-sudo alias: Unknown option: $key" >&2
+                exit 2
+            fi
+            ;;
+    esac
+done
+
+CMD_ARGS=()
+while [[ $# -gt 0 ]]; do
+    arg="$1"
+    if [[ "$arg" =~ ^[a-zA-Z_][a-zA-Z0-9_]*= ]]; then
+        SETENV_ARGS+=("--setenv=$arg")
+        shift
+    else
+        break
+    fi
+done
+
+while [[ $# -gt 0 ]]; do
+    CMD_ARGS+=("$1")
+    shift
+done
+
+EXEC_ARGS=("${RUN0_ARGS[@]}" "${SETENV_ARGS[@]}")
+
+if [ "$VALIDATE" = true ]; then
+    EXEC_ARGS+=("--" "true")
+elif [ ${#CMD_ARGS[@]} -gt 0 ]; then
+    EXEC_ARGS+=("--" "${CMD_ARGS[@]}")
+fi
+
+exec "$RUN0_PATH" "${EXEC_ARGS[@]}"

@@ -6,6 +6,34 @@ function fish_greeting
     fastfetch -c /usr/share/fastfetch/presets/paleofetch.jsonc
 end
 
+function fish_prompt
+    set -l last_status $status
+
+    set_color cyan
+    echo ""
+    echo -n "󰣇 "
+    set_color blue --bold
+    echo -n (prompt_pwd)
+
+    if set -l git_branch (fish_git_prompt)
+        set_color magenta
+        echo -n " on"
+        set_color purple --bold
+        echo -n "$git_branch"
+    end
+        echo ""
+
+    if test $last_status -eq 0
+        set_color green --bold
+        echo -n "❯ "
+    else
+        set_color red --bold
+        echo -n "❯ "
+    end
+
+    set_color normal
+end
+
 function fish_command_not_found
     set -l cmd $argv[1]
 
@@ -34,4 +62,4 @@ function fish_command_not_found
     end
 end
 
-set EDITOR micro
+set -gx EDITOR micro

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if command -v topgrade &>/dev/null; then
+    exec topgrade
+fi
+
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 YELLOW='\033[0;33m'
