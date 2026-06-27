@@ -1,8 +1,13 @@
+#!/bin/bash
+
+set -ouex pipefail
+
 _pkgname="bazaar"
 REPO_URL="https://github.com/kolunmi/bazaar.git"
 BUILD_DIR="build"
 
-pacman -S --noconfirm meson
+# Install dependencies
+pacman -S --noconfirm meson webkitgtk-6.0 libdex gtksourceview5
 
 git clone "$REPO_URL" bazaar
 cd bazaar
@@ -16,5 +21,7 @@ meson setup "bazaar" "$BUILD_DIR" \
 
 meson compile -C "$BUILD_DIR"
 meson install -C "$BUILD_DIR"
+
+# Cleanup
 rm "$BUILD_DIR"
 pacman -R --noconfirm meson
