@@ -23,5 +23,5 @@ meson compile -C "$BUILD_DIR"
 meson install -C "$BUILD_DIR"
 
 # Cleanup
-rm "$BUILD_DIR"
+rm -rf "$BUILD_DIR"
 pacman -R --noconfirm meson blueprint-compiler glib2-devel python-babel
