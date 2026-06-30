@@ -181,6 +181,10 @@ systemctl disable systemd-networkd.service
 # Setup zram
 echo -e '[zram0]\nzram-size = min(ram / 2, 8192)\ncompression-algorithm = zstd\nswap-priority = 100' > /usr/lib/systemd/zram-generator.conf
 
+# Add flathub to image
+mkdir -p /etc/flatpak/remotes.d
+curl --retry 3 -Lo /etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo
+
 # Write image info
 IMAGE_INFO="/usr/share/ublue-os/image-info.json"
 IMAGE_VENDOR="existingperson08"

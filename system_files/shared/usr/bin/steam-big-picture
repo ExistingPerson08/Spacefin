@@ -50,7 +50,7 @@ print(
     f"Running gamescope with resolution {WIDTH} x {HEIGHT} and mangohud {MANGOHUD} and mouse sensitivity {MOUSES}"
 )
 
-if MANGOHUD == True:
+if MANGOHUD:
     subprocess.run(
         f"gamescope -e -f -W {WIDTH} -H {HEIGHT} --rt --steam --mangoapp --force-grab-cursor --mouse-sensitivity {MOUSES} -- steam -gamepadui -steamos3 -steamdeck",
         shell=True,

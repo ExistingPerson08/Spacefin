@@ -1,6 +1,9 @@
 #!/bin/bash
 
 if command -v topgrade &>/dev/null; then
+    if [ ! -e "$HOME/.config/topgrade.toml" ]; then
+        cp /usr/share/spacefin/configs/topgrade.toml ~/.config/
+    fi
     exec topgrade
 fi
 
