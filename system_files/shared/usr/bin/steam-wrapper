@@ -1,8 +1,10 @@
 #!/bin/bash
 
-if pgrep -x "gamescopereaper" > /dev/null
-then
-    steam -shutdown
+if pgrep -x "gamescopereaper" > /dev/null; then
+    steam -shutdown > /dev/null 2>&1
+    while pgrep -x "gamescopereaper" > /dev/null; do
+        sleep 0.2
+    done
 fi
 
-steam %U
+exec steam "$@"

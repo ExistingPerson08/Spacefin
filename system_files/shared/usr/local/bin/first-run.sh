@@ -71,9 +71,9 @@ done && unset -v app
 
 # Install browser policies
 mkdir -p "/var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/x86_64/stable/policies"
-ln -s /usr/share/spacefin/browser/policies.json "/var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/x86_64/stable/policies/"
+cp /usr/share/spacefin/browser/policies.json "/var/lib/flatpak/extension/org.mozilla.firefox.systemconfig/x86_64/stable/policies/"
 
 mkdir -p "/var/lib/flatpak/extension/app.zen_browser.zen.systemconfig/x86_64/stable/policies"
-ln -s /usr/share/spacefin/browser/policies.json "/var/lib/flatpak/extension/app.zen_browser.zen.systemconfig/x86_64/stable/policies/"
+cp /usr/share/spacefin/browser/policies.json "/var/lib/flatpak/extension/app.zen_browser.zen.systemconfig/x86_64/stable/policies/"
 
 touch "$FIRSTRUN"

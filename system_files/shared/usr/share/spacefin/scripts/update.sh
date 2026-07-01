@@ -67,7 +67,7 @@ run_update "flatpak" "flatpak update --noninteractive"
 
 # 3. HOMEBREW (brew) Update
 # Brew requires to update itself first ('brew update') and then packages ('brew upgrade')
-run_update "brew" "brew update && brew upgrade"
+run_update "brew" "brew update && brew upgrade --yes"
 
 # ---------------------------------------------------------------------
 

@@ -52,11 +52,11 @@ print(
 
 if MANGOHUD:
     subprocess.run(
-        f"gamescope -e -f -W {WIDTH} -H {HEIGHT} --rt --steam --mangoapp --force-grab-cursor --mouse-sensitivity {MOUSES} -- steam -gamepadui -steamos3 -steamdeck",
+        f"gamescope -e -f -W {WIDTH} -H {HEIGHT} --steam --mangoapp --force-grab-cursor --mouse-sensitivity {MOUSES} -- steam -gamepadui -steamos3 -steamdeck",
         shell=True,
     )
 else:
     subprocess.run(
-        f"gamescope -e -f -W {WIDTH} -H {HEIGHT} --rt --steam --force-grab-cursor --mouse-sensitivity {MOUSES} -- steam -gamepadui -steamos3 -steamdeck",
+        f"gamescope -e -f -W {WIDTH} -H {HEIGHT} --steam --force-grab-cursor --mouse-sensitivity {MOUSES} -- steam -gamepadui -steamos3 -steamdeck",
         shell=True,
     )
