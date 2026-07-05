@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -ouex pipefail
+IMAGE_NAME="desktop"
 
 # UFW config
 ufw default deny

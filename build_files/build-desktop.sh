@@ -2,8 +2,6 @@
 
 set -ouex pipefail
 
-IMAGE_NAME="desktop"
-
 # Install Cosmic
 pacman -S --noconfirm \
     cosmic-app-library \
