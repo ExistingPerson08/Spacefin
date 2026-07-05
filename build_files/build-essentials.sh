@@ -38,6 +38,10 @@ pacman -S --noconfirm \
 pacman -S --noconfirm --ask=4 uutils-coreutils-git
 pacman -S --noconfirm gnome-backgrounds archlinux-wallpaper
 
+# Ananicy Cpp
+pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git
+systemctl enable ananicy-cpp
+
 # Gaming stack: steam, vesktop & OGC gamescope-session
 pacman -S --noconfirm \
     steam \

@@ -59,7 +59,3 @@ pacman -S --noconfirm \
     blueman \
     zed \
     xdotool
-
-# Ananicy Cpp
-pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git
-systemctl enable ananicy-cpp
