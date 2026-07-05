@@ -15,7 +15,6 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh
 
-COPY system_files/shared /
 COPY system_files /
 COPY --from=ghcr.io/ublue-os/brew:latest /system_files /
 
