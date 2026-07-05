@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+import json
+import os
+import subprocess
+import time
+
+CONFIG = os.path.expanduser("~/.config/steam-big-picture.json")
+
+# Check if Steam is initialized
+vdf = os.path.expanduser("~/.local/share/Steam/config/loginusers.vdf")
+is_logged = os.path.exists(vdf) and '"AccountName"' in open(vdf, "r").read()
+
+if not is_logged:
+    import gi
+
+    gi.require_version("Gtk", "3.0")
+    from gi.repository import Gtk
+
+    dialog = Gtk.MessageDialog(
+        transient_for=None,
+        flags=Gtk.DialogFlags.MODAL,
+        message_type=Gtk.MessageType.WARNING,
+        buttons=Gtk.ButtonsType.OK,
+        text="Please launch Steam in Desktop mode and log into your account before starting Gamescope Big Picture.",
+    )
+    dialog.set_title("Steam is not configured!")
+
+    dialog.run()
+    dialog.destroy()
+    exit()
+
+if subprocess.run(["pgrep", "-x", "steam"], capture_output=True).returncode == 0:
+    subprocess.run(["steam", "-shutdown"], capture_output=True)
+    while subprocess.run(["pgrep", "-x", "steam"], capture_output=True).returncode == 0:
+        time.sleep(0.2)
+
+
+def get_res():
+    cmd = "xrandr --current | grep '*' | head -n 1 | awk '{print $1}'"
+    raw_res = subprocess.check_output(cmd, shell=True).decode("utf-8").strip()
+
+    width, height = raw_res.split("x")
+    return int(width), int(height)
+
+
+json_data = {}
+try:
+    with open(CONFIG, "r") as f:
+        json_data = json.load(f)
+except FileNotFoundError:
+    print("[INFO] Config not found, using your display resolution")
+    pass
+except json.JSONDecodeError:
+    print("[ERROR] Not valid json config")
+    pass
+
+raw_width = json_data.get("width")
+raw_height = json_data.get("height")
+raw_mangohud = json_data.get("mangohud")
+raw_mouses = json_data.get("mouse-sensitivity")
+
+if raw_width is None or raw_height is None:
+    WIDTH, HEIGHT = get_res()
+else:
+    WIDTH = raw_width
+    HEIGHT = raw_height
+
+MANGOHUD = raw_mangohud if raw_mangohud is not None else False
+MOUSES = raw_mouses if raw_mouses is not None else 2
+
+# Run gamescope
+print(
+    f"Running gamescope with resolution {WIDTH} x {HEIGHT} and mangohud {MANGOHUD} and mouse sensitivity {MOUSES}"
+)
+
+if MANGOHUD:
+    subprocess.run(
+        f"gamescope -e -f -W {WIDTH} -H {HEIGHT} --steam --mangoapp --force-grab-cursor --mouse-sensitivity {MOUSES} -- steam -gamepadui -steamos3 -steamdeck -skipinitialbootstrap -skipoobe",
+        shell=True,
+    )
+else:
+    subprocess.run(
+        f"gamescope -e -f -W {WIDTH} -H {HEIGHT} --steam --force-grab-cursor --mouse-sensitivity {MOUSES} -- steam -gamepadui -steamos3 -steamdeck -skipinitialbootstrap -skipoobe",
+        shell=True,
+    )

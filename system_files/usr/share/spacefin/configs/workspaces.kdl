@@ -1,0 +1,9 @@
+// Steam workspace
+workspace "steam" {
+    open-on-output "HDMI-A-1"
+}
+window-rule {
+    match app-id=r#"^steam"#
+    match app-id="gamescope"
+    open-on-workspace "steam"
+}

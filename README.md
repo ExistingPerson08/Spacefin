@@ -7,7 +7,7 @@ Spacefin is my personal custom Arch bootc image with (not only) COSMIC desktop i
 
 ## Features
 
- - Cosmic or Niri wm
+ - Cosmic and niri
  - Codecs and drivers out-of-the box
  - Preconfigured Niri setup with [Dank material shell](https://danklinux.com/)
  - Ananicy-cpp with [CachyOS's](https://github.com/CachyOS/ananicy-rules) and [custom](https://github.com/ExistingPerson08/ExistingRules) rules
@@ -15,9 +15,10 @@ Spacefin is my personal custom Arch bootc image with (not only) COSMIC desktop i
  - Homebrew, Docker and Distrobox preinstalled
  - Restic and rclone out-of-the box
  - Fish preinstalled and set
- - Gnome Boxes and quickemu for virtualization
+ - Quickemu for virtualization
  - CachyOS's optized repos and linux-zen kernel
- - Gaming stack (Steam, gamescope, gamescope session...)
+ - Gaming stack (Steam, gamescope, gamescope Big Picture...)
+ - It just works (mostly (maybe...))
 
 ## Installation
 

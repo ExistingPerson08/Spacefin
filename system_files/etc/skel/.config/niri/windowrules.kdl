@@ -1,0 +1,86 @@
+// System window rules
+window-rule {
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    default-column-width {}
+}
+window-rule {
+    // Maximized windows
+    match app-id="Spotify"
+    match app-id="spotify"
+    match app-id="vesktop"
+    match app-id="firefox"
+    match app-id="GDevelop 5"
+    match app-id="discord"
+    match app-id="Godot"
+    match app-id="Pixelorama"
+    open-maximized true
+}
+window-rule {
+    match app-id=r#"^org\.gnome\."#
+    draw-border-with-background false
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+window-rule {
+    match app-id=r#"^gnome-control-center$"#
+    match app-id=r#"^pavucontrol$"#
+    match app-id=r#"^nm-connection-editor$"#
+    default-column-width { proportion 0.5; }
+    open-floating false
+}
+window-rule {
+    // Floating windows
+    match app-id=r#"^gnome-calculator$"#
+    match app-id="org.quickshell"
+    match app-id="com.danklinux.dms"
+    match app-id="org.gnome.Calculator"
+    match app-id=r#"^galculator$"#
+    match app-id=r#"^blueman-manager$"#
+    match app-id=r#"^steam$"#
+    match app-id="spacefin-welcome"
+    match app-id=r#"^xdg-desktop-portal$"#
+    match app-id="gsr-ui"
+    exclude title="Steam"
+    open-floating true
+}
+window-rule {
+    // Wider collums for apps that needs it
+    match title="Steam"
+    match app-id="org.gnome.gitlab.somas.Apostrophe"
+    open-floating false
+    default-column-width { fixed 1188; }
+}
+window-rule {
+    match title="Steam is not configured!"
+    match title="Sign in to Steam"
+    open-floating true
+}
+window-rule {
+    match app-id=r#"^org\.wezfurlong\.wezterm$"#
+    match app-id="Alacritty"
+    match app-id="zen"
+    match app-id="com.mitchellh.ghostty"
+    match app-id="kitty"
+    draw-border-with-background false
+}
+window-rule {
+    match is-active=false
+    opacity 0.9
+}
+window-rule {
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id="org.garudalinux.firedragon" title="Obraz v obraze"
+    match app-id="zoom"
+    default-column-width { fixed 480; }
+    default-window-height { fixed 270; }
+    open-floating true
+}
+window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+window-rule {
+    match app-id="spotify"
+    match app-id="Spotify"
+    open-on-output "eDP-1"
+}
