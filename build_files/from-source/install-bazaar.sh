@@ -7,7 +7,7 @@ REPO_URL="https://github.com/kolunmi/bazaar.git"
 BUILD_DIR="build"
 
 # Install dependencies
-pacman -S --noconfirm meson blueprint-compiler glib2-devel python-babel webkitgtk-6.0 libdex gtksourceview5
+pacman -S --noconfirm meson blueprint-compiler glib2-devel python-babel webkitgtk-6.0 libdex gtksourceview5 gcc
 
 git clone "$REPO_URL" bazaar
 cd bazaar
@@ -24,4 +24,4 @@ meson install -C "$BUILD_DIR"
 
 # Cleanup
 rm -rf "$BUILD_DIR"
-pacman -R --noconfirm meson blueprint-compiler glib2-devel python-babel
+pacman -Rs --noconfirm meson blueprint-compiler glib2-devel python-babel gcc
