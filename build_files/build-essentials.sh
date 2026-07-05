@@ -56,3 +56,6 @@ systemctl disable waydroid-container.service
 systemctl enable iwd
 systemctl disable NetworkManager-wait-online.service
 systemctl disable systemd-networkd.service
+systemctl enable --global dsearch dms
+systemctl --global add-wants niri.service dms
+systemctl enable greetd

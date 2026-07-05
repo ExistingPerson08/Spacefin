@@ -63,12 +63,3 @@ pacman -S --noconfirm \
 # Ananicy Cpp
 pacman -S --noconfirm ananicy-cpp cachyos-ananicy-rules-git
 systemctl enable ananicy-cpp
-
-# UFW config
-ufw default deny
-ufw allow CIFS
-ufw allow 9300
-
-systemctl enable --global dsearch dms
-systemctl --global add-wants niri.service dms
-systemctl enable greetd

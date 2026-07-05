@@ -2,6 +2,11 @@
 
 set -ouex pipefail
 
+# UFW config
+ufw default deny
+ufw allow CIFS
+ufw allow 9300
+
 # Auto-enable bluetooth
 sed -i 's/^[;#]*\s*AutoEnable\s*=\s*.*/AutoEnable=true/' /etc/bluetooth/main.conf
 
