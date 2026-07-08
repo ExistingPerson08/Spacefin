@@ -46,7 +46,6 @@ systemctl enable ananicy-cpp
 pacman -S --noconfirm \
     steam \
     vesktop \
-    waydroid \
     cachyos-v3/gamescope \
     chaotic-aur/faugus-launcher \
     chaotic-aur/gamescope-session-git \
