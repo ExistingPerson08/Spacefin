@@ -56,7 +56,6 @@ pacman -S --noconfirm \
 systemctl enable systemd-sysext
 systemctl enable ufw
 systemctl enable systemd-oomd
-systemctl disable waydroid-container.service
 systemctl enable iwd
 systemctl disable NetworkManager-wait-online.service
 systemctl disable systemd-networkd.service
