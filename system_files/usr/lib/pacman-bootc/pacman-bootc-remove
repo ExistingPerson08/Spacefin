@@ -19,5 +19,6 @@ echo "-> Removing package: $FILE"
 rm "$FILE"
 
 systemd-sysext merge &> /dev/null
+systemctl reload dbus
 
 echo "✓ Package removed!"

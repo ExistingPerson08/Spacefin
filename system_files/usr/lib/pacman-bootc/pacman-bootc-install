@@ -39,6 +39,7 @@ mksquashfs "$WORK_DIR" "$EXT_DIR/$PKG.raw" -noappend -comp zstd &> /dev/null
 
 systemd-sysext refresh &> /dev/null
 ldconfig &> /dev/null
+systemctl reload dbus
 
 echo "-> Package installed!"
 rm -rf "$WORK_DIR"

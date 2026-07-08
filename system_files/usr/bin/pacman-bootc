@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ $EUID -ne 0 ]] && [[ "$1" != "--help" ]] ; then
+if [[ $EUID -ne 0 ]] && [[ "$1" != "--help" ]] && [[ "$1" != "" ]] ; then
    echo "Error: This command must be executed as the root user!" >&2
    exit 1
 fi
@@ -9,54 +9,55 @@ CMD_DIR="/usr/lib/pacman-bootc"
 
 case "$1" in
     "update")
-        $LIB_DIR/pacman-bootc-update
+        $CMD_DIR/pacman-bootc-update
         ;;
     "upgrade")
-        $LIB_DIR/pacman-bootc-update
+        $CMD_DIR/pacman-bootc-update
         ;;
     "rollback")
         /usr/bin/bootc rollback
         ;;
     "reset")
-        $LIB_DIR/pacman-bootc-reset
+        $CMD_DIR/pacman-bootc-reset
         ;;
     "switch")
-        $LIB_DIR/pacman-bootc-reset
+        $CMD_DIR/pacman-bootc-reset
         /usr/bin/bootc switch "$2"
         ;;
     "usroverlay")
         /usr/bin/bootc usroverlay
+        systemd-sysext unmerge
         ;;
     "-S")
         if [[ "$2" == "" ]]; then
-            $LIB_DIR/pacman-bootc-install
+            $CMD_DIR/pacman-bootc-install
         else
-            $LIB_DIR/pacman-bootc-install "$2"
+            $CMD_DIR/pacman-bootc-install "$2"
         fi
         ;;
     "install")
         if [[ "$2" == "" ]]; then
-            $LIB_DIR/pacman-bootc-install
+            $CMD_DIR/pacman-bootc-install
         else
-            $LIB_DIR/pacman-bootc-install "$2"
+            $CMD_DIR/pacman-bootc-install "$2"
         fi
         ;;
     "-R")
         if [[ "$2" == "" ]]; then
-            $LIB_DIR/pacman-bootc-remove
+            $CMD_DIR/pacman-bootc-remove
         else
-            $LIB_DIR/pacman-bootc-remove "$2"
+            $CMD_DIR/pacman-bootc-remove "$2"
         fi
             ;;
     "remove")
         if [[ "$2" == "" ]]; then
-            $LIB_DIR/pacman-bootc-remove
+            $CMD_DIR/pacman-bootc-remove
         else
-            $LIB_DIR/pacman-bootc-remove "$2"
+            $CMD_DIR/pacman-bootc-remove "$2"
         fi
         ;;
     "list")
-        $LIB_DIR/pacman-bootc-list
+        $CMD_DIR/pacman-bootc-list
         ;;
     "status")
         /usr/bin/bootc status
@@ -68,4 +69,11 @@ case "$1" in
         echo ""
         echo "Avaible commands:"
         echo "update, rollback, reset, switch, usroverlay, install (-S), remove (-R), list, status"
+        ;;
+    "")
+        echo "Wrapper for bootc and sysexts"
+        echo ""
+        echo "Avaible commands:"
+        echo "update, rollback, reset, switch, usroverlay, install (-S), remove (-R), list, status"
+        ;;
 esac
