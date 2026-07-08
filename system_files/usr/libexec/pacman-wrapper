@@ -1,0 +1,10 @@
+#!/bin/bash
+
+BOOTC_STATUS=$(run0 bootc status --json)
+OVERLAY_MODE=$(echo "$BOOTC_STATUS" | jq -r '.status.usrOverlay.accessMode // "null"')
+
+if [[ "$OVERLAY_MODE" == "readWrite" ]]; then
+    exec run0 /usr/bin/pacman "$@"
+else
+    echo "This is atomic system so classic pacman will not work, use pacman-bootc instead."
+fi

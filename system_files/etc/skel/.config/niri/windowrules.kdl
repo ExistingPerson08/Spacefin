@@ -3,6 +3,8 @@ window-rule {
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
     default-column-width {}
 }
+
+// -- BASIC RULES --
 window-rule {
     // Maximized windows
     match app-id="Spotify"
@@ -14,19 +16,6 @@ window-rule {
     match app-id="Godot"
     match app-id="Pixelorama"
     open-maximized true
-}
-window-rule {
-    match app-id=r#"^org\.gnome\."#
-    draw-border-with-background false
-    geometry-corner-radius 12
-    clip-to-geometry true
-}
-window-rule {
-    match app-id=r#"^gnome-control-center$"#
-    match app-id=r#"^pavucontrol$"#
-    match app-id=r#"^nm-connection-editor$"#
-    default-column-width { proportion 0.5; }
-    open-floating false
 }
 window-rule {
     // Floating windows
@@ -44,12 +33,27 @@ window-rule {
     open-floating true
 }
 window-rule {
+    match app-id=r#"^org\.gnome\."#
+    draw-border-with-background false
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+window-rule {
+    match app-id=r#"^gnome-control-center$"#
+    match app-id=r#"^pavucontrol$"#
+    match app-id=r#"^nm-connection-editor$"#
+    default-column-width { proportion 0.5; }
+    open-floating false
+}
+window-rule {
     // Wider collums for apps that needs it
     match title="Steam"
     match app-id="org.gnome.gitlab.somas.Apostrophe"
     open-floating false
     default-column-width { fixed 1188; }
 }
+
+// -- OVERRIDES --
 window-rule {
     match title="Steam is not configured!"
     match title="Sign in to Steam"
@@ -63,17 +67,11 @@ window-rule {
     match app-id="kitty"
     draw-border-with-background false
 }
+
+// -- TECHNICAL --
 window-rule {
     match is-active=false
     opacity 0.9
-}
-window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    match app-id="org.garudalinux.firedragon" title="Obraz v obraze"
-    match app-id="zoom"
-    default-column-width { fixed 480; }
-    default-window-height { fixed 270; }
-    open-floating true
 }
 window-rule {
     geometry-corner-radius 12
@@ -83,4 +81,31 @@ window-rule {
     match app-id="spotify"
     match app-id="Spotify"
     open-on-output "eDP-1"
+}
+
+// -- FLOATING WINDOWS --
+window-rule {
+    // Steam Friend list
+    match title="Seznam přátel"
+    open-floating true
+    default-column-width { fixed 300; }
+    default-window-height { fixed 623; }
+    default-floating-position x=1258 y=190 relative-to="top-left"
+}
+window-rule {
+    // Window for Gnome-weather
+    match app-id="org.gnome.Weather"
+    open-floating true
+    default-column-width { fixed 838; }
+    default-window-height { fixed 498; }
+    default-floating-position x=32 y=32 relative-to="top-right"
+}
+window-rule {
+    // Picture-in-Picture
+    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id="org.garudalinux.firedragon" title="Obraz v obraze"
+    match app-id="zoom"
+    default-column-width { fixed 480; }
+    default-window-height { fixed 270; }
+    open-floating true
 }

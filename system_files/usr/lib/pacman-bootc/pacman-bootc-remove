@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: run0 pacman-bootc remove <package>"
+    exit 1
+fi
+
+PKG=$1
+FILE="/var/lib/extensions/$PKG.raw"
+
+if [ ! -f "$FILE" ]; then
+    echo "Error: '$PKG' is not installed ($FILE)."
+    exit 1
+fi
+
+systemd-sysext unmerge &> /dev/null
+
+echo "-> Removing package: $FILE"
+rm "$FILE"
+
+systemd-sysext merge &> /dev/null
+
+echo "✓ Package removed!"

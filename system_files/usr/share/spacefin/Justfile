@@ -15,13 +15,11 @@ cleanup:
     flatpak uninstall --unused
     brew autoremove
     brew cleanup
+    spacefin-dotfiles cleanup
 
 [group("system")]
 reset-niri-config:
-    rm -r ~/.config/niri/
-    rm ~/.config/ghostty/config
-    cp -r /etc/skel/.config/niri/ ~/.config/
-    cp /etc/skel/.config/ghostty/config ~/.config/ghostty/
+    spacefin-dotfiles reset
 
 [group("system")]
 bios:

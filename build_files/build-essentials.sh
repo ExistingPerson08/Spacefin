@@ -54,6 +54,7 @@ pacman -S --noconfirm \
     #chaotic-aur/icoextract
 
 # Systemd services
+systemctl enable systemd-sysext
 systemctl enable ufw
 systemctl enable systemd-oomd
 systemctl disable waydroid-container.service

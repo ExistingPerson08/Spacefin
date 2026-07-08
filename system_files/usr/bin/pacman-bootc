@@ -1,0 +1,71 @@
+#!/bin/bash
+
+if [[ $EUID -ne 0 ]] && [[ "$1" != "--help" ]] ; then
+   echo "Error: This command must be executed as the root user!" >&2
+   exit 1
+fi
+
+CMD_DIR="/usr/lib/pacman-bootc"
+
+case "$1" in
+    "update")
+        $LIB_DIR/pacman-bootc-update
+        ;;
+    "upgrade")
+        $LIB_DIR/pacman-bootc-update
+        ;;
+    "rollback")
+        /usr/bin/bootc rollback
+        ;;
+    "reset")
+        $LIB_DIR/pacman-bootc-reset
+        ;;
+    "switch")
+        $LIB_DIR/pacman-bootc-reset
+        /usr/bin/bootc switch "$2"
+        ;;
+    "usroverlay")
+        /usr/bin/bootc usroverlay
+        ;;
+    "-S")
+        if [[ "$2" == "" ]]; then
+            $LIB_DIR/pacman-bootc-install
+        else
+            $LIB_DIR/pacman-bootc-install "$2"
+        fi
+        ;;
+    "install")
+        if [[ "$2" == "" ]]; then
+            $LIB_DIR/pacman-bootc-install
+        else
+            $LIB_DIR/pacman-bootc-install "$2"
+        fi
+        ;;
+    "-R")
+        if [[ "$2" == "" ]]; then
+            $LIB_DIR/pacman-bootc-remove
+        else
+            $LIB_DIR/pacman-bootc-remove "$2"
+        fi
+            ;;
+    "remove")
+        if [[ "$2" == "" ]]; then
+            $LIB_DIR/pacman-bootc-remove
+        else
+            $LIB_DIR/pacman-bootc-remove "$2"
+        fi
+        ;;
+    "list")
+        $LIB_DIR/pacman-bootc-list
+        ;;
+    "status")
+        /usr/bin/bootc status
+        echo ""
+        echo "To check for installed packages, run pacman-bootc list."
+        ;;
+    "--help")
+        echo "Wrapper for bootc and sysexts"
+        echo ""
+        echo "Avaible commands:"
+        echo "update, rollback, reset, switch, usroverlay, install (-S), remove (-R), list, status"
+esac

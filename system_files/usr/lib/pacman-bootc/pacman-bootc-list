@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "=== Sysext files in /var/lib/extensions/ ==="
+if [ -d "/var/lib/extensions" ]; then
+    ls -lh /var/lib/extensions/*.raw 2>/dev/null || echo "No sysext files found."
+else
+    echo "Adresář /var/lib/extensions/ neexistuje."
+fi
+
+echo ""
+echo "=== Active sysexts ==="
+systemd-sysext status 2>/dev/null || echo "Žádná rozšíření nejsou aktuálně připojena."

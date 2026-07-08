@@ -1,0 +1,45 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: run0 pacman-bootc install <package>"
+    exit 1
+fi
+
+PKG=$1
+EXT_DIR="/var/lib/extensions"
+WORK_DIR=$(mktemp -d)
+CACHE_DIR="$WORK_DIR/cache"
+TMP_DB=$(mktemp -d)
+
+cp -rp /usr/lib/sysimage/lib/pacman/* "$TMP_DB/" || true
+
+mkdir -p "$CACHE_DIR"
+mkdir -p "$WORK_DIR/usr"
+
+echo "-> Downloading packages..."
+pacman --dbpath "$TMP_DB" -Sw --needed --noconfirm --cachedir "$CACHE_DIR" "$PKG"
+
+echo "-> Extracting packages..."
+for archive in "$CACHE_DIR"/*.pkg.tar.zst; do
+    [ -e "$archive" ] || continue
+    echo "   Extracting: $(basename "$archive")"
+    tar --use-compress-program=unzstd -xf "$archive" -C "$WORK_DIR" --strip-components=0
+done
+rm -rf "$CACHE_DIR"
+
+mkdir -p "$WORK_DIR/usr/lib/extension-release.d"
+cat <<EOF > "$WORK_DIR/usr/lib/extension-release.d/extension-release.$PKG"
+ID=arch
+VERSION_ID=rolling
+EOF
+
+echo "-> Generating sysext"
+mkdir -p "$EXT_DIR"
+mksquashfs "$WORK_DIR" "$EXT_DIR/$PKG.raw" -noappend -comp zstd &> /dev/null
+
+systemd-sysext refresh &> /dev/null
+ldconfig &> /dev/null
+
+echo "-> Package installed!"
+rm -rf "$WORK_DIR"
+rm -rf "$TMP_DB"

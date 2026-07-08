@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+import argparse
+import shutil
+import sys
+from pathlib import Path
+
+home = Path.home()
+niri_dir = home / ".config" / "niri"
+skel_dir = Path("/etc/skel/.config/niri")
+
+# Check if config folder exists
+if not niri_dir.exists():
+    print("Niri config folder does not exist or is corrupted!")
+    sys.exit(0)
+
+
+# Setup argparse
+def setup_argparse():
+    parser = argparse.ArgumentParser(
+        description="Spacefin dotfiles manager.", add_help=True
+    )
+
+    subparsers = parser.add_subparsers(dest="command", help="Commands")
+
+    subparsers.add_parser("reset", help="Reset config to system default")
+    subparsers.add_parser("cleanup", help="Clean old backup files")
+
+    return parser
+
+
+def sync():
+    config_file = niri_dir / "config.kdl"
+    window_file = niri_dir / "windowrules.kdl"
+
+    config_backup = niri_dir / "config.kdl.backup"
+    window_backup = niri_dir / "windowrules.kdl.backup"
+
+    if config_file.exists():
+        shutil.copy2(config_file, config_backup)
+    if window_file.exists():
+        shutil.copy2(window_file, window_backup)
+
+    config_file.unlink(missing_ok=True)
+    window_file.unlink(missing_ok=True)
+
+    if (skel_dir / "config.kdl").exists():
+        shutil.copy2(skel_dir / "config.kdl", config_file)
+    if (skel_dir / "windowrules.kdl").exists():
+        shutil.copy2(skel_dir / "windowrules.kdl", window_file)
+
+
+def main():
+    parser = setup_argparse()
+    args = parser.parse_args()
+
+    if args.command == "reset":
+        sync()
+        print("Config succesfully reset.")
+
+    elif args.command == "cleanup":
+        print("Removing files:\n")
+        for path in niri_dir.rglob("*backup*"):
+            if path.is_file():
+                print(path)
+                path.unlink()
+
+    else:
+        parser.print_help()
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

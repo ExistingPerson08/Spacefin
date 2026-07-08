@@ -1,0 +1,25 @@
+#!/bin/bash
+# NÁZEV: update_all_sysexts.sh
+
+EXT_DIR="/var/lib/extensions"
+
+bootc update
+
+if [ -d "$EXT_DIR" ] && ls "$EXT_DIR"/*.raw &>/dev/null; then
+    echo ""
+    echo "-> Updating sysext packages."
+
+    for file in "$EXT_DIR"/*.raw; do
+        PKG=$(basename "$file" .raw)
+
+        echo "-> Updating $PKG"
+
+        "./pacman-bootc-remove" "$PKG" &>/dev/null
+        "./pacman-bootc-install" "$PKG" &>/dev/null
+
+        echo "✓ Package $PKG was updated!"
+        echo ""
+    done
+
+    echo "✓ All sysext packages were updated!"
+fi
