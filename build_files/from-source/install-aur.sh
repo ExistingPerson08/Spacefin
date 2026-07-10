@@ -42,7 +42,7 @@ DESKTOP_ID="com.danklinux.dankcalendar"
 TMP_DIR=$(mktemp -d)
 cd "$TMP_DIR"
 
-curl -L -O "${URL_REL}/dankcalendar-shell-${VERSION}.tar.gz"
+curl -L -O "${URL_REL}/dankcalendar-qml-${VERSION}.tar.gz"
 curl -L -O "${URL_REL}/dcal-completions-${VERSION}.tar.gz"
 curl -L -o "dcal-linux.gz" "${URL_REL}/dcal-linux-amd64.gz"
 curl -L -O "${URL_RAW}/LICENSE"
@@ -51,7 +51,7 @@ curl -L -o "${DESKTOP_ID}.desktop" "${URL_RAW}/assets/${DESKTOP_ID}.desktop"
 curl -L -o "dcal.service" "${URL_RAW}/assets/systemd/dcal.service"
 
 gunzip "dcal-linux.gz"
-tar -xzf "dankcalendar-shell-${VERSION}.tar.gz"
+tar -xzf "dankcalendar-qml-${VERSION}.tar.gz"
 tar -xzf "dcal-completions-${VERSION}.tar.gz"
 
 install -Dm755 "dcal-linux" "/usr/bin/dcal"
