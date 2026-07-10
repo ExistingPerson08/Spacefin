@@ -6,11 +6,19 @@ if [ -d "$EXT_DIR" ] && ls "$EXT_DIR"/*.raw &>/dev/null; then
     echo ""
     echo "-> Reseting system image (removing sysexts)."
 
+    for dir in "$EXT_DIR"/*/; do
+        [ -d "$dir" ] || continue
+        PKG=$(basename "$dir")
+
+        echo "-> Removing $PKG"
+        "/usr/lib/pacman-bootc/pacman-bootc-remove" "$PKG" &> /dev/null
+    done
+
     for file in "$EXT_DIR"/*.raw; do
         PKG=$(basename "$file" .raw)
 
         echo "-> Removing $PKG"
-        "./pacman-bootc-remove" "$PKG" &>/dev/null
+        "/usr/lib/pacman-bootc/pacman-bootc-remove" "$PKG" &> /dev/null
     done
 
     echo "✓ System was reset!"

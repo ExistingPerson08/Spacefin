@@ -1,17 +1,17 @@
 #!/bin/bash
 
-if [[ $EUID -ne 0 ]] && [[ "$1" != "--help" ]] && [[ "$1" != "" ]] ; then
-   echo "Error: This command must be executed as the root user!" >&2
+if [[ $EUID -ne 0 && ! "$1" =~ ^(info|-Qi|--help|)$ ]]; then
+   echo "Error: This command must be executed as the root user!"
    exit 1
 fi
 
 CMD_DIR="/usr/lib/pacman-bootc"
 
-case "$1" in
-    "update")
-        $CMD_DIR/pacman-bootc-update
-        ;;
-    "upgrade")
+COMMAND="$1"
+shift
+
+case "$COMMAND" in
+    "update"|"upgrade")
         $CMD_DIR/pacman-bootc-update
         ;;
     "rollback")
@@ -22,58 +22,46 @@ case "$1" in
         ;;
     "switch")
         $CMD_DIR/pacman-bootc-reset
-        /usr/bin/bootc switch "$2"
+        /usr/bin/bootc switch "$1"
         ;;
     "usroverlay")
         /usr/bin/bootc usroverlay
         systemd-sysext unmerge
         ;;
-    "-S")
-        if [[ "$2" == "" ]]; then
-            $CMD_DIR/pacman-bootc-install
-        else
-            $CMD_DIR/pacman-bootc-install "$2"
-        fi
+    "install"|"-S")
+        $CMD_DIR/pacman-bootc-install "$@"
         ;;
-    "install")
-        if [[ "$2" == "" ]]; then
-            $CMD_DIR/pacman-bootc-install
-        else
-            $CMD_DIR/pacman-bootc-install "$2"
-        fi
-        ;;
-    "-R")
-        if [[ "$2" == "" ]]; then
-            $CMD_DIR/pacman-bootc-remove
-        else
-            $CMD_DIR/pacman-bootc-remove "$2"
-        fi
-            ;;
-    "remove")
-        if [[ "$2" == "" ]]; then
-            $CMD_DIR/pacman-bootc-remove
-        else
-            $CMD_DIR/pacman-bootc-remove "$2"
-        fi
+    "remove"|"-R")
+        $CMD_DIR/pacman-bootc-remove "$@"
         ;;
     "list")
         $CMD_DIR/pacman-bootc-list
+        ;;
+    "info"|"-Qi")
+        /usr/bin/pacman -Qi "$@"
         ;;
     "status")
         /usr/bin/bootc status
         echo ""
         echo "To check for installed packages, run pacman-bootc list."
         ;;
-    "--help")
-        echo "Wrapper for bootc and sysexts"
-        echo ""
-        echo "Avaible commands:"
-        echo "update, rollback, reset, switch, usroverlay, install (-S), remove (-R), list, status"
+    "disable-sysext")
+        $CMD_DIR/pacman-bootc-reset
+        systemd-sysext unmerge
+        systemctl disable --now systemd-sysext
         ;;
-    "")
+    "enable-sysext")
+        systemctl enable --now systemd-sysext
+        systemd-sysext merge
+        ;;
+    ""|"--help")
         echo "Wrapper for bootc and sysexts"
         echo ""
-        echo "Avaible commands:"
-        echo "update, rollback, reset, switch, usroverlay, install (-S), remove (-R), list, status"
+        echo "Available commands:"
+        echo "update, rollback, reset, switch, usroverlay, install (-S), remove (-R), list, info (-Q), status, disable/enable-sysext"
+        ;;
+    *)
+        echo "Error: Unknown command '$COMMAND'"
+        exit 1
         ;;
 esac

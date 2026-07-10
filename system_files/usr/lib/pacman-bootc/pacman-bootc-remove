@@ -1,22 +1,33 @@
 #!/bin/bash
 
-if [ "$#" -ne 1 ]; then
+if [ "$#" = 0 ]; then
     echo "Usage: run0 pacman-bootc remove <package>"
     exit 1
 fi
 
 PKG=$1
 FILE="/var/lib/extensions/$PKG.raw"
+SUBVOL_DIR="/var/lib/extensions/$PKG"
 
-if [ ! -f "$FILE" ]; then
-    echo "Error: '$PKG' is not installed ($FILE)."
+if [ -d "$SUBVOL_DIR" ]; then
+    # btrfs sysext
+    systemd-sysext unmerge &> /dev/null
+    echo "-> Removing package: $SUBVOL_DIR"
+    btrfs subvolume delete "$SUBVOL_DIR" &> /dev/null
+    if [ -d "$SUBVOL_DIR" ]; then
+        rm -rf "$SUBVOL_DIR"
+    fi
+
+elif [ -f "$FILE" ]; then
+    #.raw sysext
+    systemd-sysext unmerge &> /dev/null
+    echo "-> Removing package: $FILE"
+    rm "$FILE"
+
+else
+    echo "Error: '$PKG' is not installed!"
     exit 1
 fi
-
-systemd-sysext unmerge &> /dev/null
-
-echo "-> Removing package: $FILE"
-rm "$FILE"
 
 systemd-sysext merge &> /dev/null
 systemctl reload dbus

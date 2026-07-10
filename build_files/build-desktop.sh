@@ -24,7 +24,7 @@ pacman -S --noconfirm \
 pacman -Rdd --noconfirm cosmic-files
 
 # Install and setup niri
-pacman -S --noconfirm niri dms-shell-git mate-polkit wl-clipboard dgop matugen quickshell
+pacman -S --noconfirm niri dms-shell dms-shell-niri mate-polkit wl-clipboard dgop matugen quickshell
 
 # Install aditional packages and dependencies
 pacman -S --noconfirm \
@@ -48,7 +48,6 @@ pacman -S --noconfirm \
     xdg-user-dirs-gtk \
     xwayland-satellite \
     pavucontrol \
-    quickemu \
     ddcutil \
     gnome-disk-utility \
     flatpak-builder \

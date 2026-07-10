@@ -49,7 +49,7 @@ REBOOT_NEEDED=0
 # ---------------------------------------------------------------------
 
 # 1. Bootc Update
-run_update "bootc" "LC_ALL=C.UTF-8 run0 pacman-bootc update"
+run_update "bootc" "LC_ALL=C.UTF-8 run0 bootc update"
 
 # Check if we need to reboot
 if command -v bootc &> /dev/null; then

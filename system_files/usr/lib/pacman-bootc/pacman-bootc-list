@@ -1,12 +1,17 @@
 #!/bin/bash
+EXT_DIR="/var/lib/extensions"
 
-echo "=== Sysext files in /var/lib/extensions/ ==="
-if [ -d "/var/lib/extensions" ]; then
-    ls -lh /var/lib/extensions/*.raw 2>/dev/null || echo "No sysext files found."
-else
-    echo "Adresář /var/lib/extensions/ neexistuje."
+if ls "$EXT_DIR"/*.raw &>/dev/null; then
+    echo "=== Sysext files in $EXT_DIR ==="
+    ls -lh $EXT_DIR/*.raw 2>/dev/null
+    echo ""
 fi
 
-echo ""
+if [ -n "$(btrfs subvolume list -o "$EXT_DIR" 2>/dev/null)" ]; then
+    echo "=== Sysext Btrfs subvolumes in $EXT_DIR ==="
+    du -sh "$EXT_DIR"/*/ 2>/dev/null | awk '{print $1, $2}'
+    echo ""
+fi
+
 echo "=== Active sysexts ==="
 systemd-sysext status 2>/dev/null || echo "Žádná rozšíření nejsou aktuálně připojena."

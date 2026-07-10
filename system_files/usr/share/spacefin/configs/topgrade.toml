@@ -92,8 +92,8 @@ no_self_update = true
 
 # Custom commands
 [commands]
-"System update (bootc)" = "run0 pacman-bootc update"
-"Dotfiles update" = "spacefin-dotfiles update"
+"System update (bootc)" = "run0 bootc update"
+# "Dotfiles update" = "spacefin-dotfiles update"
 
 # "Custom command using interactive shell (unix)" = "-i vim_upgrade"
 

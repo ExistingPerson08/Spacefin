@@ -5,17 +5,29 @@ EXT_DIR="/var/lib/extensions"
 
 bootc update
 
-if [ -d "$EXT_DIR" ] && ls "$EXT_DIR"/*.raw &>/dev/null; then
-    echo ""
+if [ -d "$EXT_DIR" ] && ( ls "$EXT_DIR"/*.raw &>/dev/null || [ -n "$(btrfs subvolume list -o "$EXT_DIR" 2>/dev/null)" ] ); then    echo ""
     echo "-> Updating sysext packages."
+
+    for dir in "$EXT_DIR"/*/; do
+        [ -d "$dir" ] || continue
+        PKG=$(basename "$dir")
+
+        echo "-> Updating $PKG"
+
+        "/usr/lib/pacman-bootc/pacman-bootc-remove" "$PKG" &>/dev/null
+        "/usr/lib/pacman-bootc/pacman-bootc-install -y" "$PKG" &>/dev/null
+
+        echo "✓ Package $PKG was updated!"
+        echo ""
+    done
 
     for file in "$EXT_DIR"/*.raw; do
         PKG=$(basename "$file" .raw)
 
         echo "-> Updating $PKG"
 
-        "./pacman-bootc-remove" "$PKG" &>/dev/null
-        "./pacman-bootc-install" "$PKG" &>/dev/null
+        "/usr/lib/pacman-bootc/pacman-bootc-remove" "$PKG" &>/dev/null
+        "/usr/lib/pacman-bootc/pacman-bootc-install --raw -y" "$PKG" &>/dev/null
 
         echo "✓ Package $PKG was updated!"
         echo ""

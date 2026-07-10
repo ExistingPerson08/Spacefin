@@ -62,3 +62,5 @@ systemctl disable systemd-networkd.service
 systemctl enable --global dsearch dms
 systemctl --global add-wants niri.service dms
 systemctl enable greetd
+systemctl enable cups-browsed.service
+systemctl enable cups.socket

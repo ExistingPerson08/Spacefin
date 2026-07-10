@@ -4,3 +4,4 @@ output
 _build-*/**
 build-iso-local.json
 build_iso.sh
+_tests/
