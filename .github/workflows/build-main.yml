@@ -3,13 +3,6 @@ name: Build Container Image
 on:
   workflow_dispatch:
     inputs:
-      desktop:
-        description: "Desktop Environment"
-        required: true
-        default: "cosmic"
-        type: choice
-        options:
-          - default
       edition:
         description: "Edition"
         required: true
@@ -19,17 +12,13 @@ on:
           - main
   workflow_call:
     inputs:
-      desktop:
-        description: "Desktop Environment"
-        required: true
-        type: string
       edition:
         description: "Edition"
         required: true
         type: string
 
 env:
-  IMAGE_DESC: "Custom Fedora Atomic image with COSMIC™ desktop"
+  IMAGE_DESC: "Opinionated Arch image with (not only) COSMIC™ desktop"
   IMAGE_KEYWORDS: "bootc,ublue,universal-blue"
   IMAGE_LOGO_URL: "https://avatars.githubusercontent.com/u/120078124?s=200&v=4"
   IMAGE_NAME: "${{ github.event.repository.name }}"
@@ -52,14 +41,8 @@ jobs:
 
     steps:
       - name: Prepare environment
+        id: prepare
         run: |
-          echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> "${GITHUB_ENV}"
-          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> "${GITHUB_ENV}"
-
-      - name: Set Dynamic Variables
-        id: dynamic_vars
-        run: |
-          DESKTOP="${{ inputs.desktop }}"
           EDITION="${{ inputs.edition }}"
 
           if [[ "$EDITION" == "desktop" ]]; then
@@ -68,9 +51,10 @@ jobs:
               FULL_NAME="${IMAGE_NAME}-${EDITION}"
           fi
 
-          echo "DESKTOP=$DESKTOP" >> $GITHUB_OUTPUT
-          echo "EDITION=$EDITION" >> $GITHUB_OUTPUT
-          echo "FULL_NAME=$FULL_NAME" >> $GITHUB_OUTPUT
+          echo "EDITION=$EDITION" >> "${GITHUB_ENV}"
+          echo "FULL_NAME=$FULL_NAME" >> "${GITHUB_ENV}"
+          echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> "${GITHUB_ENV}"
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> "${GITHUB_ENV}"
 
       - name: Checkout
         uses: actions/checkout@v7
@@ -95,7 +79,7 @@ jobs:
         uses: docker/metadata-action@v6
         id: metadata
         with:
-          images: ${{ env.IMAGE_REGISTRY }}/${{ steps.dynamic_vars.outputs.FULL_NAME }}
+          images: ${{ env.IMAGE_REGISTRY }}/${{ env.FULL_NAME }}
           tags: |
             type=raw,value=${{ env.DEFAULT_TAG }}
             type=raw,value=${{ steps.date.outputs.date_tag }}
@@ -106,27 +90,26 @@ jobs:
             io.artifacthub.package.readme-url=https://raw.githubusercontent.com/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}/refs/heads/main/README.md
             org.opencontainers.image.description=${{ env.IMAGE_DESC }}
             org.opencontainers.image.created=${{ steps.date.outputs.date_iso }}
-            org.opencontainers.image.title=${{ steps.dynamic_vars.outputs.FULL_NAME }}
+            org.opencontainers.image.title=${{ env.FULL_NAME }}
             org.opencontainers.image.vendor=${{ github.repository_owner }}
 
       - name: Build Image
         id: build
         run: |
-          FULL_IMAGE_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
+          FULL_IMAGE_NAME="${{ env.FULL_NAME }}"
 
           podman build \
             --format=docker \
             --file ./Containerfile \
-            --tag "${FULL_IMAGE_NAME}:latest" \
-            --build-arg DESKTOP="${{ steps.dynamic_vars.outputs.DESKTOP }}" \
-            --build-arg EDITION="${{ steps.dynamic_vars.outputs.EDITION }}" \
+            --tag "${FULL_IMAGE_NAME}:${{ env.DEFAULT_TAG }}" \
+            --build-arg EDITION="${{ env.EDITION }}" \
             .
 
       - name: Rechunk Image
         if: github.event_name != 'pull_request' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
         id: rechunk
         run: |
-          FULL_IMAGE_NAME="${{ steps.dynamic_vars.outputs.FULL_NAME }}"
+          FULL_IMAGE_NAME="${{ env.FULL_NAME }}"
 
           export CHUNKAH_CONFIG_STR="$(podman inspect "${FULL_IMAGE_NAME}")"
           podman run --rm \
@@ -154,7 +137,7 @@ jobs:
         id: push
         env:
           RAW_TAGS: ${{ steps.metadata.outputs.tags }}
-          FULL_NAME: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
+          FULL_NAME: ${{ env.FULL_NAME }}
         run: |
           IMAGE_REF="localhost/${FULL_NAME}:latest"
 
@@ -180,7 +163,7 @@ jobs:
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
           DIGEST: ${{ steps.push.outputs.digest }}
-          FULL_NAME: ${{ steps.dynamic_vars.outputs.FULL_NAME }}
+          FULL_NAME: ${{ env.FULL_NAME }}
           OWNER: ${{ github.repository_owner }}
         run: |
           RAW_URL="ghcr.io/${OWNER}/${FULL_NAME}@${DIGEST}"

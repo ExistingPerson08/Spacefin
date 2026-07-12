@@ -26,4 +26,4 @@ BUILD_DIR="build"
 # rm -rf "$BUILD_DIR"
 # pacman -Rs --noconfirm meson blueprint-compiler glib2-devel python-babel gcc
 
-pacman -S bazaar-git
+pacman -S --noconfirm bazaar-git

@@ -10,6 +10,8 @@ ufw allow 9300
 
 # Auto-enable bluetooth
 sed -i 's/^[;#]*\s*AutoEnable\s*=\s*.*/AutoEnable=true/' /etc/bluetooth/main.conf
+sed -i 's/^[;#]*\s*DiscoverableTimeout\s*=\s*.*/DiscoverableTimeout = 0/' /etc/bluetooth/main.conf
+sed -i 's/^[;#]*\s*PairableTimeout\s*=\s*.*/PairableTimeout = 0/' /etc/bluetooth/main.conf
 
 # Change user lock after wrong password
 sed -i 's/^[#]*\s*deny\s*=\s*.*/deny = 5/' /etc/security/faillock.conf

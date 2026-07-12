@@ -7,6 +7,10 @@ if [ "$#" = 0 ]; then
     echo "--keep-etc   don't touch /etc"
     echo "--raw        install package as .raw image"
     echo "-y           skip confirmation promtps"
+    echo ""
+    echo "Debug options:"
+    echo "--tree       show package content tree"
+    echo "--ranger     open package with ranger"
     exit 1
 fi
 
@@ -17,7 +21,9 @@ while [[ "$1" =~ ^- ]]; do
         --refresh) REFRESH=true ;;
         --keep-etc) KEEP_ETC=true ;;
         --raw) USE_RAW=true ;;
-        --noconfirm)   NOCONFIRM=true ;;
+        --noconfirm) NOCONFIRM=true ;;
+        --tree) SHOW_TREE=true ;;
+        --ranger) RANGER=true ;;
         -y)   NOCONFIRM=true ;;
         *)     break ;;
     esac
@@ -68,11 +74,25 @@ for archive in "$CACHE_DIR"/*.pkg.tar.zst; do
     echo "   Extracting: $(basename "$archive")"
     tar --use-compress-program=unzstd -xf "$archive" -C "$WORK_DIR" --strip-components=0
 done
+
 rm -rf "$CACHE_DIR"
 
 if [ "$HAS_DOWNLOADED" = false ]; then
     rm -rf "$WORK_DIR" "$TMP_DB"
     exit 0
+fi
+
+if [ "$RANGER" = true ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    ranger "$WORK_DIR"
+    rm -rf "$WORK_DIR" "$TMP_DB"
+    exit
+fi
+
+if [ "$SHOW_TREE" = true ]; then
+    echo ""
+    eza --tree "$WORK_DIR"
+    exit
 fi
 
 # Compile gschemas
@@ -82,14 +102,17 @@ if [ -d "$SCHEMA_DIR" ]; then
 fi
 
 # Move etc
-mkdir "$WORK_DIR/usr/etc"
-cp -r "$WORK_DIR/etc" "$WORK_DIR/usr"
 mkdir -p "$WORK_DIR/usr/lib/pacman-bootc/pkgs"
 touch "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG"
-(cd "$WORK_DIR/etc" && find . -mindepth 1 | sed 's|^\.|/etc|') >> "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG"
 
-if [ "$KEEP_ETC" = false ]; then
-    cp -r "$WORK_DIR/etc" "/"
+if [ -d "$WORK_DIR/etc" ]; then
+    mkdir "$WORK_DIR/usr/etc"
+    cp -r "$WORK_DIR/etc" "$WORK_DIR/usr"
+    (cd "$WORK_DIR/etc" && find . -mindepth 1 | sed 's|^\.|/etc|') >> "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG"
+
+    if [ "$KEEP_ETC" = false ]; then
+        cp -r "$WORK_DIR/etc" "/"
+    fi
 fi
 
 if [ "$USE_RAW" = true ]; then
@@ -102,7 +125,7 @@ EOF
 
     echo "-> Generating sysext"
     mkdir -p "$EXT_DIR"
-    mksquashfs "$WORK_DIR" "$EXT_DIR/$PKG.raw" -noappend -comp zstd &> /dev/null
+    mksquashfs "$WORK_DIR" "$EXT_DIR/$PKG.raw" -noappend -comp zstd &>/dev/null
 else
     # Generate btrfs sysext
     FINAL_DEST="$EXT_DIR/$PKG"
@@ -121,9 +144,26 @@ VERSION_ID=rolling
 EOF
 fi
 
-systemd-sysext refresh &> /dev/null
-ldconfig &> /dev/null
+systemd-sysext refresh &>/dev/null
+ldconfig &>/dev/null
 systemctl reload dbus
+
+# Post install hooks
+if [ -d "$WORK_DIR/usr/lib/sysusers.d" ]; then
+    systemd-sysusers &>/dev/null
+fi
+if [ -d "$WORK_DIR/usr/lib/tmpfiles.d" ]; then
+    systemd-tmpfiles --create &>/dev/null
+fi
+if [ -d "$WORK_DIR/usr/lib/systemd/system" ]; then
+    systemctl --system daemon-reload &>/dev/null
+fi
+if [ -d "$WORK_DIR/etc/dconf/db" ]; then
+    dconf update &>/dev/null
+fi
+if [ -d "$WORK_DIR/usr/share/applications/" ]; then
+    update-desktop-database --quite &>/dev/null
+fi
 
 echo "-> Package installed!"
 rm -rf "$WORK_DIR"

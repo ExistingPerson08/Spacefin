@@ -55,5 +55,6 @@ pacman -S --noconfirm \
     ghostty \
     ufw \
     blueman \
+    bluez-obex \
     zed \
     xdotool
