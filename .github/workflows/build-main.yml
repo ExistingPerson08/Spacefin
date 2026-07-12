@@ -53,7 +53,7 @@ jobs:
               FULL_NAME="${IMAGE_NAME}-${EDITION}"
           fi
 
-          eho "$FULL_NAME"
+          echo "$FULL_NAME"
 
           echo "EDITION=$EDITION" >> "${GITHUB_ENV}"
           echo "FULL_NAME=$FULL_NAME" >> "${GITHUB_ENV}"
