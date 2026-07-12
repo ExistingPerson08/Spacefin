@@ -7,22 +7,23 @@ REPO_URL="https://github.com/kolunmi/bazaar.git"
 BUILD_DIR="build"
 
 # Install dependencies
-pacman -S --noconfirm meson blueprint-compiler glib2-devel python-babel webkitgtk-6.0 libdex gtksourceview5 gcc
+# pacman -S --noconfirm meson blueprint-compiler glib2-devel python-babel webkitgtk-6.0 libdex gtksourceview5 gcc
 
-git clone "$REPO_URL" bazaar
-cd bazaar
-PKGVER=$(git describe --long --tags --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g')
-cd ..
+# git clone "$REPO_URL" bazaar
+# cd bazaar
+# PKGVER=$(git describe --long --tags --abbrev=7 | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g')
+# cd ..
 
-meson setup "bazaar" "$BUILD_DIR" \
-    --prefix=/usr \
-    --libdir=/usr/lib64 \
-    --buildtype=release \
-    -Dhardcoded_main_config_path="/usr/share/spacefin/bazaar/main.yaml"
+# meson setup "bazaar" "$BUILD_DIR" \
+#     --prefix=/usr \
+#     --buildtype=release \
+#     -Dhardcoded_main_config_path="/usr/share/spacefin/bazaar/main.yaml"
 
-meson compile -C "$BUILD_DIR"
-meson install -C "$BUILD_DIR"
+# meson compile -C "$BUILD_DIR"
+# meson install -C "$BUILD_DIR"
 
 # Cleanup
-rm -rf "$BUILD_DIR"
-pacman -Rs --noconfirm meson blueprint-compiler glib2-devel python-babel gcc
+# rm -rf "$BUILD_DIR"
+# pacman -Rs --noconfirm meson blueprint-compiler glib2-devel python-babel gcc
+
+pacman -S bazaar-git

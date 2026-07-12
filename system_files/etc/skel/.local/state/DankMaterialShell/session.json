@@ -5,7 +5,7 @@
   "wallpaperPath": "/usr/share/backgrounds/wow-deepholm2.jpg",
   "perMonitorWallpaper": false,
   "monitorWallpaperFillModes": {},
-  "wallpaperTransition": "fade",
+  "wallpaperTransition": "iris bloom",
   "includedTransitions": [
     "fade",
     "wipe",
