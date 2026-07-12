@@ -31,5 +31,4 @@ jobs:
     uses: ./.github/workflows/build-main.yml
     secrets: inherit
     with:
-      desktop: default
       edition: desktop
