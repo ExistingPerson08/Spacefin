@@ -16,6 +16,7 @@ cd ..
 
 meson setup "bazaar" "$BUILD_DIR" \
     --prefix=/usr \
+    --libdir=/usr/lib64 \
     --buildtype=release \
     -Dhardcoded_main_config_path="/usr/share/spacefin/bazaar/main.yaml"
 

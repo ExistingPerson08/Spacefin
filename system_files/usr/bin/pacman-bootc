@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $EUID -ne 0 && ! "$1" =~ ^(info|-Qi|--help|)$ ]]; then
-   echo "Error: This command must be executed as the root user!"
+   echo "Error: This command must be executed as root!"
    exit 1
 fi
 
@@ -12,6 +12,7 @@ shift
 
 case "$COMMAND" in
     "update"|"upgrade")
+        bootc update
         $CMD_DIR/pacman-bootc-update
         ;;
     "rollback")
@@ -25,8 +26,20 @@ case "$COMMAND" in
         /usr/bin/bootc switch "$1"
         ;;
     "usroverlay")
-        /usr/bin/bootc usroverlay
-        systemd-sysext unmerge
+        case "$1" in
+            "")
+                /usr/bin/bootc usroverlay
+                ;;
+            "--force")
+                /usr/bin/bootc usroverlay
+                systemd-sysext unmerge
+                ;;
+            *)
+                echo "Unknown option"
+                echo "Options:"
+                echo "--force     Also unmerge sysexts"
+                ;;
+        esac
         ;;
     "install"|"-S")
         $CMD_DIR/pacman-bootc-install "$@"
@@ -45,12 +58,15 @@ case "$COMMAND" in
         echo ""
         echo "To check for installed packages, run pacman-bootc list."
         ;;
-    "disable-sysext")
+    "update-sysexts")
+        $CMD_DIR/pacman-bootc-update
+        ;;
+    "disable-sysexts")
         $CMD_DIR/pacman-bootc-reset
         systemd-sysext unmerge
         systemctl disable --now systemd-sysext
         ;;
-    "enable-sysext")
+    "enable-sysexts")
         systemctl enable --now systemd-sysext
         systemd-sysext merge
         ;;
@@ -58,7 +74,7 @@ case "$COMMAND" in
         echo "Wrapper for bootc and sysexts"
         echo ""
         echo "Available commands:"
-        echo "update, rollback, reset, switch, usroverlay, install (-S), remove (-R), list, info (-Q), status, disable/enable-sysext"
+        echo "update, rollback, reset, switch, usroverlay, install (-S), remove (-R), list, info (-Q), status, disable/enable-sysexts"
         ;;
     *)
         echo "Error: Unknown command '$COMMAND'"

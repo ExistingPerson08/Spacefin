@@ -1,8 +1,7 @@
 #!/bin/bash
-
 EXT_DIR="/var/lib/extensions"
 
-if [ -d "$EXT_DIR" ] && ls "$EXT_DIR"/*.raw &>/dev/null; then
+if [ -d "$EXT_DIR" ] && ( ls "$EXT_DIR"/*.raw &>/dev/null || [ -n "$(btrfs subvolume list -o "$EXT_DIR" 2>/dev/null)" ] ); then    echo ""
     echo ""
     echo "-> Reseting system image (removing sysexts)."
 

@@ -1,9 +1,5 @@
 #!/bin/bash
-# NÁZEV: update_all_sysexts.sh
-
 EXT_DIR="/var/lib/extensions"
-
-bootc update
 
 if [ -d "$EXT_DIR" ] && ( ls "$EXT_DIR"/*.raw &>/dev/null || [ -n "$(btrfs subvolume list -o "$EXT_DIR" 2>/dev/null)" ] ); then    echo ""
     echo "-> Updating sysext packages."
@@ -14,8 +10,8 @@ if [ -d "$EXT_DIR" ] && ( ls "$EXT_DIR"/*.raw &>/dev/null || [ -n "$(btrfs subvo
 
         echo "-> Updating $PKG"
 
-        "/usr/lib/pacman-bootc/pacman-bootc-remove" "$PKG" &>/dev/null
-        "/usr/lib/pacman-bootc/pacman-bootc-install -y" "$PKG" &>/dev/null
+        "/usr/lib/pacman-bootc/pacman-bootc-remove --keep-etc" "$PKG" &>/dev/null
+        "/usr/lib/pacman-bootc/pacman-bootc-install -y --keep-etc" "$PKG" &>/dev/null
 
         echo "✓ Package $PKG was updated!"
         echo ""
@@ -26,8 +22,8 @@ if [ -d "$EXT_DIR" ] && ( ls "$EXT_DIR"/*.raw &>/dev/null || [ -n "$(btrfs subvo
 
         echo "-> Updating $PKG"
 
-        "/usr/lib/pacman-bootc/pacman-bootc-remove" "$PKG" &>/dev/null
-        "/usr/lib/pacman-bootc/pacman-bootc-install --raw -y" "$PKG" &>/dev/null
+        "/usr/lib/pacman-bootc/pacman-bootc-remove --keep-etc" "$PKG" &>/dev/null
+        "/usr/lib/pacman-bootc/pacman-bootc-install --raw -y --keep-etc" "$PKG" &>/dev/null
 
         echo "✓ Package $PKG was updated!"
         echo ""

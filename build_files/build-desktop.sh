@@ -38,6 +38,7 @@ pacman -S --noconfirm \
     gvfs-smb \
     gvfs-wsdd \
     cava \
+    wtype \
     qt6-multimedia \
     wl-mirror \
     libnotify \

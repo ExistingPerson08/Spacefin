@@ -52,6 +52,31 @@ setup-workspace-rules:
     cp /usr/share/spacefin/configs/workspaces.kdl ~/.config/niri/
 
 [group("setups")]
+setup-nix:
+    #!/usr/bin/bash
+    echo "Installing Nix"
+    echo "Note: you'll need to enter your password multiple times"
+    echo ""
+
+    # Setup sudo needed for installation
+    run0 bootc usroverlay
+    run0 mv /usr/bin/sudo /usr/bin/sudo.backup
+    run0 pacman -S --noconfirm sudo
+    run0 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers || \
+    run0 echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+    # Install Nix
+    curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+
+    # Remove sudo
+    run0 pacman -R --noconfirm sudo
+    run0 mv /usr/bin/sudo.backup /usr/bin/sudo
+
+    echo ""
+    echo "Nix is installed!"
+    echo "Reboot is recommended to apply all changes"
+
+[group("setups")]
 install-plex:
     /usr/share/spacefin/scripts/plex-install.sh
 

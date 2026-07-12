@@ -1,13 +1,32 @@
 #!/bin/bash
 
 if [ "$#" = 0 ]; then
-    echo "Usage: run0 pacman-bootc remove <package>"
+    echo "Usage: run0 pacman-bootc remove <options> <package>"
+    echo "Options:"
+    echo "--keep-etc   don't touch /etc"
     exit 1
 fi
+
+KEEP_ETC=false
+
+while [[ "$1" =~ ^- ]]; do
+    case "$1" in
+        --keep-etc) KEEP_ETC=true ;;
+        *)     break ;;
+    esac
+    shift
+done
 
 PKG=$1
 FILE="/var/lib/extensions/$PKG.raw"
 SUBVOL_DIR="/var/lib/extensions/$PKG"
+
+if [[ -f "/usr/lib/pacman-bootc/pkgs/$PKG" && "$KEEP_ETC" = false ]]; then
+    tac "/usr/lib/pacman-bootc/pkgs/$PKG" | while read -r file; do
+        [ -z "$file" ] && continue
+        rm -fd "$file" 2>/dev/null
+    done
+fi
 
 if [ -d "$SUBVOL_DIR" ]; then
     # btrfs sysext

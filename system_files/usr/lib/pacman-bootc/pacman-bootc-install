@@ -1,17 +1,21 @@
 #!/bin/bash
 
 if [ "$#" = 0 ]; then
-    echo "Usage: run0 pacman-bootc install <options> <package>"
+    echo "Usage: run0 pacman-bootc install <options> <package> <additional packages>"
     echo "Options:"
-    echo "--refresh  refresh repos"
-    echo "--raw      install package as .raw image"
-    echo "-y         skip confirmation promtps"
+    echo "--refresh    refresh repos"
+    echo "--keep-etc   don't touch /etc"
+    echo "--raw        install package as .raw image"
+    echo "-y           skip confirmation promtps"
     exit 1
 fi
+
+KEEP_ETC=false
 
 while [[ "$1" =~ ^- ]]; do
     case "$1" in
         --refresh) REFRESH=true ;;
+        --keep-etc) KEEP_ETC=true ;;
         --raw) USE_RAW=true ;;
         --noconfirm)   NOCONFIRM=true ;;
         -y)   NOCONFIRM=true ;;
@@ -27,7 +31,12 @@ CACHE_DIR="$WORK_DIR/cache"
 TMP_DB=$(mktemp -d)
 HAS_DOWNLOADED=false
 
-PKGS_INSTALL=("$PKG")
+PKGS_INSTALL=("$@")
+
+if [ -z "$PKG" ]; then
+    echo "No packages to install!" >&2
+    exit 1
+fi
 
 cp -rp /usr/lib/sysimage/lib/pacman/* "$TMP_DB/" || true
 mkdir -p "$CACHE_DIR"
@@ -66,9 +75,21 @@ if [ "$HAS_DOWNLOADED" = false ]; then
     exit 0
 fi
 
+# Compile gschemas
 SCHEMA_DIR="$WORK_DIR/usr/share/glib-2.0/schemas"
 if [ -d "$SCHEMA_DIR" ]; then
     glib-compile-schemas "$SCHEMA_DIR"
+fi
+
+# Move etc
+mkdir "$WORK_DIR/usr/etc"
+cp -r "$WORK_DIR/etc" "$WORK_DIR/usr"
+mkdir -p "$WORK_DIR/usr/lib/pacman-bootc/pkgs"
+touch "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG"
+(cd "$WORK_DIR/etc" && find . -mindepth 1 | sed 's|^\.|/etc|') >> "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG"
+
+if [ "$KEEP_ETC" = false ]; then
+    cp -r "$WORK_DIR/etc" "/"
 fi
 
 if [ "$USE_RAW" = true ]; then
