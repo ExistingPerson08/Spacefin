@@ -45,12 +45,10 @@ jobs:
         run: |
           EDITION="${{ inputs.edition }}"
 
-          echo "${IMAGE_NAME}"
-
           if [[ "$EDITION" == "desktop" ]]; then
-              FULL_NAME="${IMAGE_NAME}"
+              FULL_NAME="${{IMAGE_NAME},,}"
           else
-              FULL_NAME="${IMAGE_NAME}-${EDITION}"
+              FULL_NAME="${{IMAGE_NAME},,}-${EDITION}"
           fi
 
           echo "$FULL_NAME"
