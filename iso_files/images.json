@@ -1,0 +1,21 @@
+{
+  "default_image": "ghcr.io/existingperson08/spacefin:latest",
+  "fallback_flatpaks": [],
+  "images": [
+    {
+      "name": "Spacefin",
+      "icon": "/usr/share/pixmaps/my-distro.svg",
+      "needs_user_creation": true,
+      "composefs": true,
+      "bootloader": "systemd",
+      "filesystem": "btrfs",
+      "children": [
+        {
+          "name": "Stable",
+          "imgref": "ghcr.io/existingperson08/spacefin:latest",
+          "desc": "The stable release"
+        }
+      ]
+    }
+  ]
+}
