@@ -1,0 +1,19 @@
+---
+name: Build stable container images
+on:
+  schedule:
+    - cron: "0 17 * * 5"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  build-image:
+    uses: ./.github/workflows/build-main.yml
+    secrets: inherit
+    with:
+      edition: desktop
+      tag: stable

@@ -1,0 +1,116 @@
+#!/bin/bash
+
+if [ "$#" = 0 ]; then
+    echo "Usage: run0 pacman-bootc build <options> <folder with files> <package name>"
+    echo "Options:"
+    echo "--keep-etc   don't touch /etc"
+    echo "--raw        install package as .raw image"
+    echo ""
+    echo "Debug options:"
+    echo "--tree       show package content tree"
+    echo "--ranger     open package with ranger"
+    exit 1
+fi
+
+KEEP_ETC=false
+
+while [[ "$1" =~ ^- ]]; do
+    case "$1" in
+        --keep-etc) KEEP_ETC=true ;;
+        --raw) USE_RAW=true ;;
+        --tree) SHOW_TREE=true ;;
+        --ranger) RANGER=true ;;
+        *)     break ;;
+    esac
+    shift
+done
+
+FOLDER=$1
+PKG=$2
+EXT_DIR="/var/lib/extensions"
+WORK_DIR=$(mktemp -d)
+FILESYSTEM=$(stat -f -c %T /var/lib/extensions/)
+
+if [ -z "$FOLDER" ]; then
+    echo "You need to enter path to folder with files to build!" >&2
+    exit 1
+fi
+
+if [ ! -d "$FOLDER" ]; then
+    echo "Non existent folder (or is not folder): $FOLDER!" >&2
+    exit 1
+fi
+
+cp -r "$FOLDER/." "$WORK_DIR"
+
+if [ "$RANGER" = true ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    ranger "$WORK_DIR"
+    rm -rf "$WORK_DIR"
+    exit
+fi
+
+if [ "$SHOW_TREE" = true ]; then
+    echo ""
+    eza --tree "$WORK_DIR"
+    rm -rf "$WORK_DIR"
+    exit
+fi
+
+# Disable updates (updates don't support manually build packages)
+mkdir -p "$WORK_DIR/usr/lib/pacman-bootc/pkgs"
+touch "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG-noupdates"
+
+# Move etc
+touch "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG"
+
+if [ -d "$WORK_DIR/etc" ]; then
+    mkdir "$WORK_DIR/usr/etc"
+    cp -r "$WORK_DIR/etc" "$WORK_DIR/usr"
+    (cd "$WORK_DIR/etc" && find . -mindepth 1 | sed 's|^\.|/etc|') >> "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG"
+
+    if [ "$KEEP_ETC" = false ]; then
+        cp -r "$WORK_DIR/etc" "/"
+    fi
+fi
+
+if [ "$FILESYSTEM" != "btrfs" ]; then
+    echo "-> Your filesystem is not btrfs! Using .raw..."
+    USE_RAW=true
+fi
+
+if [ "$USE_RAW" = true ]; then
+    # Generate .raw sysext
+    mkdir -p "$WORK_DIR/usr/lib/extension-release.d"
+cat <<EOF > "$WORK_DIR/usr/lib/extension-release.d/extension-release.$PKG"
+ID=arch
+VERSION_ID=rolling
+EOF
+
+    echo "-> Generating sysext"
+    mkdir -p "$EXT_DIR"
+    mksquashfs "$WORK_DIR" "$EXT_DIR/$PKG.raw" -noappend -comp zstd &>/dev/null
+else
+    # Generate btrfs sysext
+    FINAL_DEST="$EXT_DIR/$PKG"
+    if [ -d "$FINAL_DEST" ]; then
+        btrfs subvolume delete "$FINAL_DEST" &> /dev/null || rm -rf "$FINAL_DEST"
+    fi
+
+    echo "-> Generating sysext"
+    btrfs subvolume create "$FINAL_DEST"
+
+    cp -rp "$WORK_DIR"/. "$FINAL_DEST/"
+    mkdir -p "$FINAL_DEST/usr/lib/extension-release.d"
+cat <<EOF > "$FINAL_DEST/usr/lib/extension-release.d/extension-release.$PKG"
+ID=arch
+VERSION_ID=rolling
+EOF
+fi
+
+systemd-sysext refresh &>/dev/null
+ldconfig &>/dev/null
+systemctl reload dbus
+
+echo "-> Package installed!"
+rm -rf "$WORK_DIR"

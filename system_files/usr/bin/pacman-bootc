@@ -25,6 +25,25 @@ case "$COMMAND" in
         $CMD_DIR/pacman-bootc-reset
         /usr/bin/bootc switch "$1"
         ;;
+    "switch-stream")
+        case "$1" in
+            "stable")
+                $CMD_DIR/pacman-bootc-update
+                /usr/bin/bootc switch ghcr.io/existingperson/spacefin:stable
+                ;;
+            "latest")
+                $CMD_DIR/pacman-bootc-update
+                /usr/bin/bootc switch ghcr.io/existingperson/spacefin:latest
+                ;;
+            ""|*)
+                echo "Choose one of these streams:"
+                echo "stable     Stable stream (build weekly)"
+                echo "latest     Always latest features and packages (build daily and on-demand)"
+                echo ""
+                echo "Changing streams will also update sysexts to prevent partial updates"
+                ;;
+        esac
+        ;;
     "usroverlay")
         case "$1" in
             "")
@@ -46,6 +65,9 @@ case "$COMMAND" in
         ;;
     "remove"|"-R")
         $CMD_DIR/pacman-bootc-remove "$@"
+        ;;
+    "build")
+        $CMD_DIR/pacman-bootc-build "$@"
         ;;
     "list")
         $CMD_DIR/pacman-bootc-list
@@ -74,7 +96,7 @@ case "$COMMAND" in
         echo "Wrapper for bootc and sysexts"
         echo ""
         echo "Available commands:"
-        echo "update, rollback, reset, switch, usroverlay, install (-S), remove (-R), list, info (-Q), status, disable/enable-sysexts"
+        echo "update, rollback, reset, switch, switch-stream, usroverlay, install (-S), remove (-R), build list, info (-Q), status, disable/enable-sysexts"
         ;;
     *)
         echo "Error: Unknown command '$COMMAND'"

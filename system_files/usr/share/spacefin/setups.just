@@ -136,6 +136,48 @@ remove-millennium:
     echo "Millennium was removed."
     echo "Restart Steam to apply changes"
 
+[group("steam")]
+install-bigpicture-session:
+    #! /bin/run0 /bin/bash
+    WORK_DIR=$(mktemp -d)
+    mkdir -p "${WORK_DIR}/usr/share/wayland-sessions"
+    mkdir -p "${WORK_DIR}/usr/share/gamescope-session-plus/sessions.d"
+
+    curl -L -o "${WORK_DIR}/usr/share/wayland-sessions/gamescope-session-steam.desktop" "https://raw.githubusercontent.com/OpenGamingCollective/gamescope-session-steam/refs/heads/main/usr/share/wayland-sessions/gamescope-session-steam.desktop"
+    curl -L -o "${WORK_DIR}/usr/share/gamescope-session-plus/sessions.d/steam" "https://raw.githubusercontent.com/OpenGamingCollective/gamescope-session-steam/refs/heads/main/usr/share/gamescope-session-plus/sessions.d/steam"
+    /var/home/vlasta/Dokumenty/code/Spacefin/Spacefin/system_files/usr/lib/pacman-bootc/pacman-bootc-build "${WORK_DIR}" "big-picture-session" &>/dev/null
+    #/usr/lib/pacman-bootc/pacman-bootc-build "${WORK_DIR}" "big-picture-session" &>/dev/null
+
+    rm -r "${WORK_DIR}"
+    echo ""
+    echo "Steam big picture session installed!"
+    echo "Log out to open it"
+
+[group("steam")]
+remove-bigpicture-session:
+    run0 /usr/lib/pacman-bootc/pacman-bootc-remove big-picture-session &>/dev/null
+    echo ""
+    echo "Steam big picture session was removed!"
+
+[group("steam")]
+install-deckloader:
+    /usr/share/spacefin/scripts/deckloader-patch.sh
+
+[group("steam")]
+remove-deckloader:
+    #!/usr/bin/bash
+    HOMEBREW_FOLDER="/home/${USER}/homebrew"
+
+    run0 systemctl disable --now plugin_loader.service > /dev/null
+    run0 rm -f "/var/home/${USER}/.config/systemd/user/plugin_loader.service"
+    run0 rm -f "/etc/systemd/system/plugin_loader.service"
+    run0 rm -r "${HOMEBREW_FOLDER}"
+    run0 rm "/var/home/${USER}/.steam/steam/.cef-enable-remote-debugging"
+
+    echo "Deckloader was removed."
+    echo "Restart Steam to apply changes"
+
+
 [group("setups")]
 install-system-flatpaks:
     flatpak remote-add --if-not-exists --system flathub https://dl.flathub.org/repo/flathub.flatpakrepo

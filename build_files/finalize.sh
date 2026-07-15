@@ -2,15 +2,18 @@
 
 set -ouex pipefail
 
-# Cleanup
-pacman -Scc --noconfirm
+# Generate fonts
 find /etc/fonts/conf.d/ -xtype l -delete
-fc-cache -fv
+locale-gen
+fc-cache -frv
 
 # Remove nano (swaped with micro) and sudo (swaped with run0) and wpa_supplicant (swapped with iwd)
 pacman -R --noconfirm nano sudo
 pacman -Rdd --noconfirm wpa_supplicant
 rm /usr/bin/su
+
+# Cleanup
+pacman -Scc --noconfirm
 
 rm -rf \
     ./build_tmp \

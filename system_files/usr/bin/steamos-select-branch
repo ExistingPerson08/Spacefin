@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+echo "Spacefin has only Stable branch"

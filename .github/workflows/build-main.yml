@@ -10,10 +10,22 @@ on:
         type: choice
         options:
           - main
+      tag:
+        description: "Stream (tag)"
+        required: true
+        default: "latest"
+        type: choice
+        options:
+          - latest
+          - stable
   workflow_call:
     inputs:
       edition:
         description: "Edition"
+        required: true
+        type: string
+      tag:
+        description: "Stream (tag)"
         required: true
         type: string
 
@@ -23,7 +35,6 @@ env:
   IMAGE_LOGO_URL: "https://avatars.githubusercontent.com/u/120078124?s=200&v=4"
   IMAGE_NAME: "${{ github.event.repository.name }}"
   IMAGE_REGISTRY: "ghcr.io/${{ github.repository_owner }}"
-  DEFAULT_TAG: "latest"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -44,6 +55,7 @@ jobs:
         id: prepare
         run: |
           EDITION="${{ inputs.edition }}"
+          DEFAULT_TAG="${{ inputs.tag }}"
 
           if [[ "$EDITION" == "desktop" ]]; then
               FULL_NAME="${IMAGE_NAME,,}"
@@ -54,6 +66,7 @@ jobs:
           echo "$FULL_NAME"
 
           echo "EDITION=$EDITION" >> "${GITHUB_ENV}"
+          echo "DEFAULT_TAG=$DEFAULT_TAG" >> "${GITHUB_ENV}"
           echo "FULL_NAME=$FULL_NAME" >> "${GITHUB_ENV}"
           echo "IMAGE_REGISTRY=${IMAGE_REGISTRY,,}" >> "${GITHUB_ENV}"
           echo "IMAGE_NAME=${IMAGE_NAME,,}" >> "${GITHUB_ENV}"

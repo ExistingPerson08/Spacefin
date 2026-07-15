@@ -1,7 +1,0 @@
-{
-  "hostname": "Spacefin",
-  "filesystem": "btrfs",
-  "btrfsSubvolumes": true,
-  "encryption": { "type": "tpm2-luks" },
-  "unifiedStorage": true
-}

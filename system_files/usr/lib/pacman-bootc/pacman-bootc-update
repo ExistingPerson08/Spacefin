@@ -1,32 +1,62 @@
 #!/bin/bash
 EXT_DIR="/var/lib/extensions"
 
-if [ -d "$EXT_DIR" ] && ( ls "$EXT_DIR"/*.raw &>/dev/null || [ -n "$(btrfs subvolume list -o "$EXT_DIR" 2>/dev/null)" ] ); then    echo ""
+if [ -d "$EXT_DIR" ] && ( ls "$EXT_DIR"/*.raw &>/dev/null || [ -n "$(btrfs subvolume list -o "$EXT_DIR" 2>/dev/null)" ] ); then
     echo "-> Updating sysext packages."
 
     for dir in "$EXT_DIR"/*/; do
         [ -d "$dir" ] || continue
         PKG=$(basename "$dir")
+        if [ "$PKG" = "*" ]; then
+            continue
+        fi
 
-        echo "-> Updating $PKG"
+        if [ -f "/usr/lib/pacman-bootc/pkgs/$PKG-noupdates" ]; then
+            echo "-> Package $PKG has disabled updates, skiping"
+            echo "(Propabbly manualy build or system sysext)"
+            echo ""
+        else
+            echo "-> Updating $PKG"
 
-        "/usr/lib/pacman-bootc/pacman-bootc-remove --keep-etc" "$PKG" &>/dev/null
-        "/usr/lib/pacman-bootc/pacman-bootc-install -y --keep-etc" "$PKG" &>/dev/null
+            if [ -f "/usr/lib/pacman-bootc/pkgs/$PKG-list" ]; then
+                PKGS_INSTALL=($(<"/usr/lib/pacman-bootc/pkgs/$PKG-list"))
+            else
+                PKGS_INSTALL=("$PKG")
+            fi
 
-        echo "✓ Package $PKG was updated!"
-        echo ""
+            "/usr/lib/pacman-bootc/pacman-bootc-remove" "--keep-etc" "$PKG" &>/dev/null
+            "/usr/lib/pacman-bootc/pacman-bootc-install" "-y" "--keep-etc" "${PKGS_INSTALL[@]}"
+
+            echo "✓ Package $PKG was updated!"
+            echo ""
+        fi
     done
 
     for file in "$EXT_DIR"/*.raw; do
         PKG=$(basename "$file" .raw)
+        if [ "$PKG" = "*" ]; then
+            continue
+        fi
 
-        echo "-> Updating $PKG"
+        if [ -f "/usr/lib/pacman-bootc/pkgs/$PKG-noupdates" ]; then
+            echo "-> Packages $PKG has disabled updates, skiping"
+            echo "(Propabbly manualy build or system sysext)"
+            echo ""
+        else
+            echo "-> Updating $PKG"
 
-        "/usr/lib/pacman-bootc/pacman-bootc-remove --keep-etc" "$PKG" &>/dev/null
-        "/usr/lib/pacman-bootc/pacman-bootc-install --raw -y --keep-etc" "$PKG" &>/dev/null
+            if [ -f "/usr/lib/pacman-bootc/pkgs/$PKG-list" ]; then
+                PKGS_INSTALL=($(<"/usr/lib/pacman-bootc/pkgs/$PKG-list"))
+            else
+                PKGS_INSTALL=("$PKG")
+            fi
 
-        echo "✓ Package $PKG was updated!"
-        echo ""
+            "/usr/lib/pacman-bootc/pacman-bootc-remove" "--keep-etc" "$PKG" &>/dev/null
+            "/usr/lib/pacman-bootc/pacman-bootc-install" "--raw" "-y" "--keep-etc" "${PKGS_INSTALL[@]}" &>/dev/null
+
+            echo "✓ Package $PKG was updated!"
+            echo ""
+        fi
     done
 
     echo "✓ All sysext packages were updated!"

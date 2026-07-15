@@ -12,7 +12,10 @@ KEEP_ETC=false
 while [[ "$1" =~ ^- ]]; do
     case "$1" in
         --keep-etc) KEEP_ETC=true ;;
-        *)     break ;;
+        *)
+            echo "Unknown option $1"
+            exit 1
+            ;;
     esac
     shift
 done

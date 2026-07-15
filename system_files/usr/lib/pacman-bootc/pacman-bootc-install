@@ -11,6 +11,9 @@ if [ "$#" = 0 ]; then
     echo "Debug options:"
     echo "--tree       show package content tree"
     echo "--ranger     open package with ranger"
+    echo "--lock-version"
+    echo "             disable updates for this package"
+    echo "             Can break your system!"
     exit 1
 fi
 
@@ -22,10 +25,14 @@ while [[ "$1" =~ ^- ]]; do
         --keep-etc) KEEP_ETC=true ;;
         --raw) USE_RAW=true ;;
         --noconfirm) NOCONFIRM=true ;;
+        --lock-version) NO_UPDATES=true ;;
         --tree) SHOW_TREE=true ;;
         --ranger) RANGER=true ;;
         -y)   NOCONFIRM=true ;;
-        *)     break ;;
+        *)
+            echo "Unknown option $1"
+            exit 1
+            ;;
     esac
     shift
 done
@@ -36,6 +43,7 @@ WORK_DIR=$(mktemp -d)
 CACHE_DIR="$WORK_DIR/cache"
 TMP_DB=$(mktemp -d)
 HAS_DOWNLOADED=false
+FILESYSTEM=$(stat -f -c %T /var/lib/extensions/)
 
 PKGS_INSTALL=("$@")
 
@@ -92,6 +100,7 @@ fi
 if [ "$SHOW_TREE" = true ]; then
     echo ""
     eza --tree "$WORK_DIR"
+    rm -rf "$WORK_DIR" "$TMP_DB"
     exit
 fi
 
@@ -101,8 +110,23 @@ if [ -d "$SCHEMA_DIR" ]; then
     glib-compile-schemas "$SCHEMA_DIR"
 fi
 
-# Move etc
 mkdir -p "$WORK_DIR/usr/lib/pacman-bootc/pkgs"
+
+if [ "$NO_UPDATES" = true ]; then
+    # Disable updates
+    touch "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG-noupdates"
+fi
+
+if [ "${#PKGS_INSTALL[@]}" -gt 1 ]; then
+    # Fix update
+    echo "-> Fixing updates ($2)"
+    touch "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG-list"
+    cho "$@" > "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG-list"
+    # (temporary fix until this code works)
+    touch "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG-noupdates"
+fi
+
+# Move etc
 touch "$WORK_DIR/usr/lib/pacman-bootc/pkgs/$PKG"
 
 if [ -d "$WORK_DIR/etc" ]; then
@@ -113,6 +137,11 @@ if [ -d "$WORK_DIR/etc" ]; then
     if [ "$KEEP_ETC" = false ]; then
         cp -r "$WORK_DIR/etc" "/"
     fi
+fi
+
+if [ "$FILESYSTEM" != "btrfs" ]; then
+    echo "-> Your filesystem is not btrfs! Using .raw..."
+    USE_RAW=true
 fi
 
 if [ "$USE_RAW" = true ]; then

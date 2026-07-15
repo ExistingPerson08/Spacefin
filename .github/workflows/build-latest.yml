@@ -1,5 +1,5 @@
 ---
-name: Build all container images
+name: Build latest container images
 on:
   schedule:
     - cron: "05 10 * * *" # 10:05am UTC everyday
@@ -11,6 +11,7 @@ on:
       - "README.md"
       - ".github/workflows/**"
       - "system_files/**"
+      - "iso_files/**"
   push:
     branches:
       - main
@@ -32,3 +33,4 @@ jobs:
     secrets: inherit
     with:
       edition: desktop
+      tag: latest
