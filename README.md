@@ -3,6 +3,11 @@
 </div>
 <br>
 
+<div align="center">
+ <b><big>This is no longer mantained and splited into these projects: <a href="https://gitlab.com/rakuos/images/rakuos-niri)">RakuOS Niri</a>, <a href="https://github.com/ExistingPerson08/.dotfiles">.dotfiles</a> and <a href="https://github.com/ExistingPerson08/gamescope-session-pp">gamescope session++</a>!</big></b>
+</div>
+<br>
+
 Spacefin is my personal custom Arch bootc image with (not only) COSMIC desktop installed. **Note that this is WIP personal opinionated image so things are likely going to change or break!**
 
 ## Features
